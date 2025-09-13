@@ -1,5 +1,5 @@
-// screens/tracking_steps_screens/step_01_screen.dart
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'step_02_screen.dart';
 import '../../widgets/big_action_button.dart';
 import 'package:provider/provider.dart';
@@ -9,12 +9,26 @@ class StepOneScreen extends StatefulWidget {
   const StepOneScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _StepOneScreenState createState() => _StepOneScreenState();
+  State<StepOneScreen> createState() => _StepOneScreenState();
 }
 
 class _StepOneScreenState extends State<StepOneScreen> {
   final TextEditingController _noteController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedUsername();
+  }
+
+  void _loadSavedUsername() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedName = prefs.getString('name');
+    if (savedName != null && mounted) {
+      Provider.of<TrackingData>(context, listen: false)
+          .setPersonName(savedName);
+    }
+  }
 
   @override
   void dispose() {
@@ -26,44 +40,69 @@ class _StepOneScreenState extends State<StepOneScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Step 1'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        foregroundColor: Colors.black,
+        title: const Text('Paso 1 de 7'),
+        centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Text(
-              'The person you supported:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: _noteController,
-              decoration: const InputDecoration(
-                hintText: 'Write your answer',
-                border: OutlineInputBorder(),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                '¿Qué hiciste hoy?',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              maxLines: 3,
-            ),
-            const SizedBox(height: 20),
-            BigActionButton(
-              text: 'Next Step',
-              onPressed: () {
-                Provider.of<TrackingData>(context, listen: false)
-                    .setPersonName(_noteController.text);
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => StepTwoScreen(
-                      previousStepNote: _noteController.text,
-                    ),
+              const SizedBox(height: 12),
+              const Text(
+                'Escribí una breve descripción de la actividad que realizaste.',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black54,
+                ),
+              ),
+              const SizedBox(height: 24),
+              TextField(
+                controller: _noteController,
+                maxLines: 6,
+                decoration: InputDecoration(
+                  hintText: 'Ej: Ayudé a un traductor piaroa a...',
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
                   ),
-                );
-              },
-            ),
-          ],
+                ),
+              ),
+              const Spacer(),
+              BigActionButton(
+                text: 'Siguiente',
+                onPressed: () {
+                  if (_noteController.text.isNotEmpty) {
+                    Provider.of<TrackingData>(context, listen: false)
+                        .setNote(_noteController.text);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const StepTwoScreen()),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Por favor completá la nota.')),
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

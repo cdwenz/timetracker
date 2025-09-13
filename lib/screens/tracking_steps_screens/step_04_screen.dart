@@ -17,7 +17,7 @@ class _StepDateScreenState extends State<StepDateScreen> {
 
   Future<void> _selectDate({required bool isStart}) async {
     final now = DateTime.now();
-    final DateTime? picked = await showDatePicker(
+    final picked = await showDatePicker(
       context: context,
       initialDate: now,
       firstDate: DateTime(2000),
@@ -29,7 +29,7 @@ class _StepDateScreenState extends State<StepDateScreen> {
         if (isStart) {
           _startDate = picked;
           if (_endDate != null && _endDate!.isBefore(_startDate!)) {
-            _endDate = _startDate; // igualarlas si están mal ordenadas
+            _endDate = _startDate;
           }
         } else {
           _endDate = picked;
@@ -41,61 +41,83 @@ class _StepDateScreenState extends State<StepDateScreen> {
     }
   }
 
+  String _formatDate(DateTime? date) {
+    if (date == null) return 'Seleccionar';
+    return '${date.day}/${date.month}/${date.year}';
+  }
+
   @override
   Widget build(BuildContext context) {
-    final tracking = Provider.of<TrackingData>(context, listen: false);
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Step 4'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Start date:',
-              style: TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: () => _selectDate(isStart: true),
-              child: Text(
-                _startDate != null
-                    ? _startDate!.toLocal().toString().split(' ')[0]
-                    : 'Select start date',
+      appBar: AppBar(title: const Text('Paso 4 de 7')),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                '¿Cuándo ocurrió?',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'End date:',
-              style: TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: () => _selectDate(isStart: false),
-              child: Text(
-                _endDate != null
-                    ? _endDate!.toLocal().toString().split(' ')[0]
-                    : 'Select end date',
+              const SizedBox(height: 12),
+              const Text(
+                'Seleccioná la fecha de inicio y de fin de la actividad.',
+                style: TextStyle(fontSize: 16, color: Colors.black54),
               ),
-            ),
-            const SizedBox(height: 24),
-            BigActionButton(
-              text: 'Next Step',
-              onPressed: () {
-                if (_startDate != null && _endDate != null) {
-                  tracking.setStartEndDates(_startDate!, _endDate!);
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const StepTimeScreen(),
-                    ),
-                  );
-                }
-              },
-            ),
-          ],
+              const SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: () => _selectDate(isStart: true),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.grey[100],
+                  foregroundColor: Colors.black,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Inicio'),
+                    Text(_formatDate(_startDate)),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () => _selectDate(isStart: false),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.grey[100],
+                  foregroundColor: Colors.black,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Fin'),
+                    Text(_formatDate(_endDate)),
+                  ],
+                ),
+              ),
+              const Spacer(),
+              BigActionButton(
+                text: 'Siguiente',
+                onPressed: () {
+                  if (_startDate != null && _endDate != null) {
+                    Provider.of<TrackingData>(context, listen: false)
+                        .setStartEndDates(_startDate!, _endDate!);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const StepTimeScreen()),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Por favor, completá ambas fechas.')),
+                    );
+                  }
+                },
+              )
+            ],
+          ),
         ),
       ),
     );

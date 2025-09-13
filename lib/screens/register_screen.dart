@@ -1,157 +1,148 @@
-// import 'package:flutter/material.dart';
-// import '../services/auth_service.dart';
-// import 'home_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:ihadi_time_tracker/services/auth_service.dart';
+import 'package:ihadi_time_tracker/screens/login_screen.dart';
 
-// class RegisterScreen extends StatefulWidget {
-//   const RegisterScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
-//   @override
-//   // ignore: library_private_types_in_public_api
-//   _RegisterScreenState createState() => _RegisterScreenState();
-// }
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
 
-// class _RegisterScreenState extends State<RegisterScreen> {
-//   final AuthService _authService = AuthService();
-//   final _emailController = TextEditingController();
-//   final _passwordController = TextEditingController();
-//   final _confirmPasswordController = TextEditingController();
-//   final _formKey = GlobalKey<FormState>();
-//   bool _isLoading = false;
+class _RegisterScreenState extends State<RegisterScreen> {
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
-//   void _register() async {
-//     if (_formKey.currentState!.validate()) {
-//       setState(() {
-//         _isLoading = true;
-//       });
+  bool _obscurePassword = true;
+  bool _obscureConfirm = true;
+  bool _isLoading = false;
+  String? _error;
 
-//       try {
-//         final result = await _authService.register(
-//           _emailController.text.trim(), 
-//           _passwordController.text.trim()
-//         );
+  void _register() async {
+    final name = _nameController.text.trim();
+    final email = _emailController.text.trim();
+    final pass = _passwordController.text;
+    final confirm = _confirmPasswordController.text;
 
-//         if (result != null) {
-//           // ignore: use_build_context_synchronously
-//           Navigator.of(context).pushReplacement(
-//             MaterialPageRoute(builder: (context) => const HomeScreen())
-//           );
-//         } else {
-//           // ignore: use_build_context_synchronously
-//           ScaffoldMessenger.of(context).showSnackBar(
-//             const SnackBar(content: Text('Error en el registro'))
-//           );
-//         }
-//       } catch (e) {
-//         // ignore: use_build_context_synchronously
-//         ScaffoldMessenger.of(context).showSnackBar(
-//           SnackBar(content: Text('Error: ${e.toString()}'))
-//         );
-//       } finally {
-//         setState(() {
-//           _isLoading = false;
-//         });
-//       }
-//     }
-//   }
+    if (name.isEmpty || email.isEmpty || pass.isEmpty || confirm.isEmpty) {
+      setState(() => _error = 'Todos los campos son obligatorios');
+      return;
+    }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Center(
-//         child: SingleChildScrollView(
-//           padding: const EdgeInsets.all(20),
-//           child: Form(
-//             key: _formKey,
-//             child: Column(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 const FlutterLogo(size: 100),
-//                 const SizedBox(height: 20),
-//                 const Text(
-//                   'Crear Cuenta',
-//                   style: TextStyle(
-//                     fontSize: 24, 
-//                     fontWeight: FontWeight.bold
-//                   ),
-//                 ),
-//                 const SizedBox(height: 20),
-//                 TextFormField(
-//                   controller: _emailController,
-//                   decoration: const InputDecoration(
-//                     labelText: 'Correo Electrónico',
-//                     border: OutlineInputBorder(),
-//                     prefixIcon: Icon(Icons.email),
-//                   ),
-//                   validator: (value) {
-//                     if (value == null || value.isEmpty) {
-//                       return 'Por favor ingresa tu correo';
-//                     }
-//                     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-//                       return 'Correo electrónico inválido';
-//                     }
-//                     return null;
-//                   },
-//                 ),
-//                 const SizedBox(height: 15),
-//                 TextFormField(
-//                   controller: _passwordController,
-//                   obscureText: true,
-//                   decoration: const InputDecoration(
-//                     labelText: 'Contraseña',
-//                     border: OutlineInputBorder(),
-//                     prefixIcon: Icon(Icons.lock),
-//                   ),
-//                   validator: (value) {
-//                     if (value == null || value.isEmpty) {
-//                       return 'Por favor ingresa tu contraseña';
-//                     }
-//                     if (value.length < 6) {
-//                       return 'La contraseña debe tener al menos 6 caracteres';
-//                     }
-//                     return null;
-//                   },
-//                 ),
-//                 const SizedBox(height: 15),
-//                 TextFormField(
-//                   controller: _confirmPasswordController,
-//                   obscureText: true,
-//                   decoration: const InputDecoration(
-//                     labelText: 'Confirmar Contraseña',
-//                     border: OutlineInputBorder(),
-//                     prefixIcon: Icon(Icons.lock_outline),
-//                   ),
-//                   validator: (value) {
-//                     if (value == null || value.isEmpty) {
-//                       return 'Por favor confirma tu contraseña';
-//                     }
-//                     if (value != _passwordController.text) {
-//                       return 'Las contraseñas no coinciden';
-//                     }
-//                     return null;
-//                   },
-//                 ),
-//                 const SizedBox(height: 20),
-//                 _isLoading 
-//                   ? const CircularProgressIndicator()
-//                   : ElevatedButton(
-//                       onPressed: _register,
-//                       style: ElevatedButton.styleFrom(
-//                         minimumSize: const Size(double.infinity, 50),
-//                       ),
-//                       child: const Text('Registrarse'),
-//                     ),
-//                 const SizedBox(height: 15),
-//                 TextButton(
-//                   onPressed: () {
-//                     Navigator.of(context).pop();
-//                   },
-//                   child: const Text('¿Ya tienes una cuenta? Inicia sesión'),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+    if (pass != confirm) {
+      setState(() => _error = 'Las contraseñas no coinciden');
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+
+    final success = await AuthService.register(
+      name: name,
+      email: email,
+      password: pass,
+      passwordConfirmation: confirm,
+      country: 'Argentina', // Valor por defecto o puedes agregar un campo para seleccionarlo
+      role: 'FIELD_MANAGER',
+    );
+
+    print(success);
+    if (success) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Registro exitoso. Iniciá sesión.')),
+      );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
+      );
+    } else {
+      setState(() => _error = 'Hubo un problema al registrarse');
+    }
+
+    setState(() => _isLoading = false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Crear cuenta')),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(height: 12),
+                TextField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(labelText: 'Nombre'),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(labelText: 'Email'),
+                ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: _obscurePassword,
+                  decoration: InputDecoration(
+                    labelText: 'Contraseña',
+                    suffixIcon: IconButton(
+                      tooltip: _obscurePassword ? 'Mostrar' : 'Ocultar',
+                      icon: Icon(_obscurePassword
+                          ? Icons.visibility
+                          : Icons.visibility_off),
+                      onPressed: () =>
+                          setState(() => _obscurePassword = !_obscurePassword),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: _confirmPasswordController,
+                  obscureText: _obscureConfirm,
+                  decoration: InputDecoration(
+                    labelText: 'Confirmar contraseña',
+                    suffixIcon: IconButton(
+                      tooltip: _obscureConfirm ? 'Mostrar' : 'Ocultar',
+                      icon: Icon(_obscureConfirm
+                          ? Icons.visibility
+                          : Icons.visibility_off),
+                      onPressed: () =>
+                          setState(() => _obscureConfirm = !_obscureConfirm),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                _isLoading
+                    ? const CircularProgressIndicator()
+                    : ElevatedButton(
+                        onPressed: _register,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFFC6502),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 48,
+                            vertical: 14,
+                          ),
+                        ),
+                        child: const Text('Registrarme',
+                            style: TextStyle(color: Colors.black)),
+                      ),
+                if (_error != null) ...[
+                  const SizedBox(height: 16),
+                  Text(_error!, style: const TextStyle(color: Colors.red)),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

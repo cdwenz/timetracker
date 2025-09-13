@@ -11,18 +11,34 @@ class TrackingData extends ChangeNotifier {
   List<String> tasks = [];
   String taskDescription = '';
 
+  // Nuevos campos para step_01 y step_02
+  String? note;
+  String? recipient;
+  String? supportedCountry;
+  String? workingLanguage;
+
+  void setNote(String newNote) {
+    note = newNote;
+    notifyListeners();
+  }
+
+  void setRecipient(String newRecipient) {
+    recipient = newRecipient;
+    notifyListeners();
+  }
+
+  void setSupportedCountry(String value) {
+    supportedCountry = value;
+    notifyListeners();
+  }
+
+  void setWorkingLanguage(String value) {
+    workingLanguage = value;
+    notifyListeners();
+  }
+
   void setPersonName(String name) {
     personName = name;
-    notifyListeners();
-  }
-
-  void setCountry(String c) {
-    country = c;
-    notifyListeners();
-  }
-
-  void setLanguage(String l) {
-    language = l;
     notifyListeners();
   }
 
@@ -44,17 +60,46 @@ class TrackingData extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clear() {
+    personName = null;
+    country = null;
+    language = null;
+    startDate = null;
+    endDate = null;
+    startTimeOfDay = null;
+    endTimeOfDay = null;
+    tasks = [];
+    taskDescription = '';
+    note = null;
+    recipient = null;
+    supportedCountry = null;
+    workingLanguage = null;
+
+    notifyListeners();
+  }
+
   Map<String, String?> toMap() {
     return {
+      'note': note,
+      'recipient': recipient,
       'personName': personName,
-      'country': country,
-      'language': language,
+      'supportedCountry': supportedCountry,
+      'workingLanguage': workingLanguage,
       'startDate': startDate?.toIso8601String(),
       'endDate': endDate?.toIso8601String(),
-      'startTimeOfDay': startTimeOfDay?.toString(),
-      'endTimeOfDay': endTimeOfDay?.toString(),
+      'startTimeOfDay': startTimeOfDay?.format24(),
+      'endTimeOfDay': endTimeOfDay?.format24(),
       'tasks': tasks.isNotEmpty ? tasks.join(', ') : null,
       'taskDescription': taskDescription.isNotEmpty ? taskDescription : null,
     };
+  }
+}
+
+// Util para formatear TimeOfDay en formato HH:mm
+extension TimeOfDayExtension on TimeOfDay {
+  String format24() {
+    final h = hour.toString().padLeft(2, '0');
+    final m = minute.toString().padLeft(2, '0');
+    return '$h:$m';
   }
 }

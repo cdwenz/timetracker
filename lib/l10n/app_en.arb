@@ -1,0 +1,22 @@
+{
+  "@@locale": "en",
+  "app_name": "TimeTracker",
+  "login_title": "Sign in",
+  "login_button": "Log in",
+  "logout_button": "Log out",
+  "home_greeting": "Hi {name}!",
+  "@home_greeting": {
+    "description": "Personalized greeting on home",
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "report_items_count": "{count, plural, =0{No entries} one{1 entry} other{{count} entries}}",
+  "@report_items_count": {
+    "description": "Entries counter in reports",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "date_format_hint": "MMM d, y • HH:mm"
+}

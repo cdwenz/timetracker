@@ -14,18 +14,20 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String? _username;
+  String? _role;
+
 
   @override
   void initState() {
     super.initState();
-    _loadUsername();
+    _loadUserData();
   }
 
-  Future<void> _loadUsername() async {
+  void _loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
-    final savedUsername = prefs.getString('username');
     setState(() {
-      _username = savedUsername ?? 'User';
+      _username = prefs.getString('name') ?? 'Usuario';
+      _role = prefs.getString('role') ?? 'Invitado';
     });
   }
 

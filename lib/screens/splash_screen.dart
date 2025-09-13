@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ihadi_time_tracker/screens/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ihadi_time_tracker/screens/home_screen.dart';
-import 'package:ihadi_time_tracker/screens/loginScreen.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});

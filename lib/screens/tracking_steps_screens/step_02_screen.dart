@@ -1,69 +1,140 @@
 import 'package:flutter/material.dart';
-import 'step_03_screen.dart';
-import '../../widgets/big_action_button.dart';
 import 'package:provider/provider.dart';
 import '../../models/tracking_data.dart';
+import 'step_04_screen.dart' show StepDateScreen; // ajustá el import/alias según tu estructura
+import '../../widgets/big_action_button.dart';
 
 class StepTwoScreen extends StatefulWidget {
   final String? previousStepNote;
-
   const StepTwoScreen({super.key, this.previousStepNote});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _StepTwoScreenState createState() => _StepTwoScreenState();
+  State<StepTwoScreen> createState() => _StepTwoScreenState();
 }
 
 class _StepTwoScreenState extends State<StepTwoScreen> {
-  final TextEditingController _noteController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final _recipientCtrl = TextEditingController();
+  final _countryCtrl = TextEditingController();
+  final _languageCtrl = TextEditingController();
+
+  bool _submitting = false;
 
   @override
   void initState() {
     super.initState();
+    // Prefill desde Provider (esperamos al primer frame para usar context)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final t = context.read<TrackingData>();
+      _recipientCtrl.text = t.recipient ?? '';
+      _countryCtrl.text = t.supportedCountry ?? '';
+      _languageCtrl.text = t.workingLanguage ?? '';
+    });
+  }
+
+  @override
+  void dispose() {
+    _recipientCtrl.dispose();
+    _countryCtrl.dispose();
+    _languageCtrl.dispose();
+    super.dispose();
+  }
+
+  Future<void> _onSubmit() async {
+    if (!_formKey.currentState!.validate()) return;
+    setState(() => _submitting = true);
+
+    // Normalización suave para coherencia con backend futuro
+    final recipient = _recipientCtrl.text.trim();
+    final supportedCountry = _countryCtrl.text.trim().toUpperCase();
+    final workingLanguage = _languageCtrl.text.trim().toLowerCase();
+
+    // ✅ Guardar en Provider (no se llama al backend acá)
+    final tracking = context.read<TrackingData>();
+    tracking.setRecipient(recipient);
+    tracking.setSupportedCountry(supportedCountry);
+    tracking.setWorkingLanguage(workingLanguage);
+
+    if (!mounted) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const StepDateScreen()),
+    );
+
+    if (mounted) setState(() => _submitting = false);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Step 2'),
+     appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        foregroundColor: Colors.black,
+        title: const Text('Paso 2 de 7'),
+        centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Text(
-              "Person's country  you supported:",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: _noteController,
-              decoration: const InputDecoration(
-                hintText: 'Write your answer',
-                border: OutlineInputBorder(),
-              ),
-              maxLines: 3,
-            ),
-            const SizedBox(height: 20),
-            BigActionButton(
-              text: 'Next Step',
-              onPressed: () {
-                Provider.of<TrackingData>(context, listen: false)
-                    .setCountry(_noteController.text);
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => StepThreeScreen(
-                      previousStepNote: _noteController.text,
-                    ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('¿A quien ayudaste hoy?',
+                    style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                )),
+                const SizedBox(height: 16),
+
+                TextFormField(
+                  controller: _recipientCtrl,
+                  textInputAction: TextInputAction.next,
+                  decoration: const InputDecoration(
+                    labelText: 'Nombre',
+                    hintText: 'Nombre',
+                    border: OutlineInputBorder(),
                   ),
-                );
-              },
+                  validator: (v) =>
+                      (v == null || v.trim().isEmpty) ? 'Completá el destinatario.' : null,
+                ),
+                const SizedBox(height: 12),
+
+                TextFormField(
+                  controller: _countryCtrl,
+                  textInputAction: TextInputAction.next,
+                  decoration: const InputDecoration(
+                    labelText: 'País soportado',
+                    hintText: 'Ej: AR, United States, etc.',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (v) =>
+                      (v == null || v.trim().isEmpty) ? 'supportedCountry es requerido' : null,
+                ),
+                const SizedBox(height: 12),
+
+                TextFormField(
+                  controller: _languageCtrl,
+                  textInputAction: TextInputAction.done,
+                  decoration: const InputDecoration(
+                    labelText: 'Idioma de trabajo',
+                    hintText: 'Ej: es, en, portugués...',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (v) =>
+                      (v == null || v.trim().isEmpty) ? 'workingLanguage es requerido' : null,
+                ),
+
+                const Spacer(),
+                BigActionButton(
+                  text: _submitting ? 'Guardando...' : 'Continuar',
+                  onPressed: _submitting ? null :  _onSubmit,
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

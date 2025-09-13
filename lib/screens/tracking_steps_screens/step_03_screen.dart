@@ -10,58 +10,64 @@ class StepThreeScreen extends StatefulWidget {
   const StepThreeScreen({super.key, this.previousStepNote});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _StepThreeScreenState createState() => _StepThreeScreenState();
+  State<StepThreeScreen> createState() => _StepThreeScreenState();
 }
 
 class _StepThreeScreenState extends State<StepThreeScreen> {
-  final TextEditingController _noteController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Step 3'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Text(
-              "Working language:",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: _noteController,
-              decoration: const InputDecoration(
-                hintText: 'Write your answer',
-                border: OutlineInputBorder(),
+      appBar: AppBar(title: const Text('Paso 3 de 7')),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                '¿Cuál es tu nombre?',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              maxLines: 3,
-            ),
-            const SizedBox(height: 20),
-            BigActionButton(
-              text: 'Next Step',
-              onPressed: () {
-                 Provider.of<TrackingData>(context, listen: false)
-                    .setLanguage(_noteController.text);
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const StepDateScreen(),
-                  ),
-                );
-              },
-            ),
-          ],
+              const SizedBox(height: 12),
+              const Text(
+                'Este nombre se usará para registrar tu participación.',
+                style: TextStyle(fontSize: 16, color: Colors.black54),
+              ),
+              const SizedBox(height: 24),
+              TextField(
+                controller: _nameController,
+                decoration: const InputDecoration(
+                  hintText: 'Ej: Juan Pérez',
+                ),
+              ),
+              const Spacer(),
+              BigActionButton(
+                text: 'Siguiente',
+                onPressed: () {
+                  if (_nameController.text.isNotEmpty) {
+                    Provider.of<TrackingData>(context, listen: false)
+                        .setPersonName(_nameController.text);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const StepDateScreen()),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Completá tu nombre.')),
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
