@@ -5,7 +5,12 @@ import 'package:ihadi_time_tracker/screens/splash_screen.dart';
 import 'models/tracking_data.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'localization/language_controller.dart'; // lo creamos abajo
+import 'localization/language_controller.dart';
+
+// Servicios offline
+import 'services/connectivity_service.dart';
+import 'services/sync_service.dart';
+import 'services/local_database.dart';
 
 final ThemeData appTheme = ThemeData(
   scaffoldBackgroundColor: Colors.white,
@@ -43,14 +48,33 @@ final ThemeData appTheme = ThemeData(
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Inicializar servicios
   final lang = LanguageController();
   await lang.load();
+  
+  // Inicializar servicios offline
+  final connectivityService = ConnectivityService();
+  final syncService = SyncService();
+  
+  await connectivityService.initialize();
+  await syncService.initialize();
+  
+  // Verificar base de datos
+  await LocalDatabase.database;
+  
+  print('🚀 Servicios offline inicializados correctamente');
+  
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => TrackingData()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider<LanguageController>.value(value: lang),
+        
+        // Servicios offline
+        ChangeNotifierProvider<ConnectivityService>.value(value: connectivityService),
+        ChangeNotifierProvider<SyncService>.value(value: syncService),
       ],
       child: const MyApp(),
     ),

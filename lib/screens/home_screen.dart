@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/custom_drawer.dart';
 import '../widgets/big_action_button.dart';
+import '../widgets/offline_status_widget.dart';
 import './tracking_steps_screens/step_01_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -36,12 +37,21 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tracking App'),
+        actions: [
+          const OfflineStatusWidget(compact: true),
+          const SizedBox(width: 16),
+        ],
       ),
       drawer: const CustomDrawer(),
-      body: Center(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Estado de sincronización offline
+            const OfflineStatusWidget(),
+            const SizedBox(height: 20),
+            
+            // Contenido principal
             Text(
               "Hi, ${_username ?? ''}!",
               style: const TextStyle(
