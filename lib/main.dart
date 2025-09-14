@@ -5,8 +5,6 @@ import 'package:ihadi_time_tracker/screens/splash_screen.dart';
 import 'models/tracking_data.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'localization/language_controller.dart'; // lo creamos abajo
 
 final ThemeData appTheme = ThemeData(
@@ -67,9 +65,9 @@ class MyApp extends StatelessWidget {
     final lang = context.watch<LanguageController>();
     return MaterialApp(
       locale: lang.locale, // null => sigue idioma del sistema
-      supportedLocales: AppLocalizations.supportedLocales,
+      // supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: const [
-        AppLocalizations.delegate,
+        // AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,

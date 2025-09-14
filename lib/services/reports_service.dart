@@ -6,7 +6,7 @@ import 'package:ihadi_time_tracker/models/tracking.dart';
 import 'package:ihadi_time_tracker/utils/jwt_helper.dart';
 
 class ReportsService {
-  static const String baseUrl = 'http://localhost:8000/api';
+  static const String baseUrl = 'http://10.0.2.2:8000/api';
 
   static Future<String?> _getToken() async {
     final prefs = await SharedPreferences.getInstance();
