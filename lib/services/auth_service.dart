@@ -5,39 +5,39 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthService {
   static const String baseUrl = 'http://localhost:8000/api';
 
-static Future<bool> login(String email, String password) async {
-  try {
-    final url = Uri.parse('$baseUrl/auth/login');
+  static Future<bool> login(String email, String password) async {
+    try {
+      final url = Uri.parse('$baseUrl/auth/login');
 
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'email': email, 'password': password}),
-    );
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email, 'password': password}),
+      );
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      final user = data['user'];
-      final token = data['access_token'];
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final user = data['user'];
+        final token = data['access_token'];
 
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('isLoggedIn', true);
-      await prefs.setString('name', user['name']);
-      await prefs.setString('email', user['email']);
-      await prefs.setString('role', user['role'] ?? '');
-      await prefs.setString('access_token', token);
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isLoggedIn', true);
+        await prefs.setString('name', user['name']);
+        await prefs.setString('userId', user['id']);
+        await prefs.setString('email', user['email']);
+        await prefs.setString('role', user['role'] ?? '');
+        await prefs.setString('access_token', token);
 
-      return true;
-    } else {
-      print('Error login: ${response.body}');
+        return true;
+      } else {
+        print('Error login: ${response.body}');
+        return false;
+      }
+    } catch (e) {
+      print('Excepción en login: $e');
       return false;
     }
-  } catch (e) {
-    print('Excepción en login: $e');
-    return false;
   }
-}
-
 
   static Future<bool> register({
     required String name,
@@ -70,5 +70,10 @@ static Future<bool> login(String email, String password) async {
       print('Excepción en register: $e');
       return false;
     }
+  }
+
+  static Future<String?> currentUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('userId');
   }
 }

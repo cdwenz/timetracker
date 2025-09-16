@@ -1,247 +1,250 @@
 // lib/screens/reports_screen.dart
 import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:ihadi_time_tracker/widgets/custom_drawer.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ihadi_time_tracker/widgets/report_detail_modal.dart';
-import 'package:ihadi_time_tracker/models/tracking.dart';
-import 'package:ihadi_time_tracker/services/reports_service.dart';
 
-class ReportsScreen extends StatefulWidget {
+import '../services/api_service.dart';
+import '../services/reports_metrics_service.dart';
+import 'reports_detail_screen.dart'; // para ReportsDetailArgs
+
+class ReportsScreen extends StatelessWidget {
   const ReportsScreen({super.key});
 
-  @override
-  State<ReportsScreen> createState() => _ReportsScreenState();
-}
-
-class _ReportsScreenState extends State<ReportsScreen> {
-  final _searchCtrl = TextEditingController();
-  DateTimeRange? _range;
-  List<Tracking> _items = [];
-  bool _loading = true;
-  String _role = 'USER';
-  String _fmt(DateTime d) {
-    final y = d.year.toString().padLeft(4, '0');
-    final m = d.month.toString().padLeft(2, '0');
-    final day = d.day.toString().padLeft(2, '0');
-    return '$y-$m-$day';
+  Future<ReportsDashboardData> _load() async {
+    final svc = ReportsMetricsService(ApiService());
+    return svc.loadDashboardLast30Days();
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _bootstrap();
-  }
-
-  Future<void> _bootstrap() async {
-    await _loadRole();
-    await _load();
-  }
-
-  Future<void> _loadRole() async {
-    final prefs = await SharedPreferences.getInstance();
-    _role = prefs.getString('user_role') ?? prefs.getString('role') ?? _role;
-  }
-
-  Future<void> _load() async {
-    setState(() => _loading = true);
-    try {
-      final list = await ReportsService.fetchTrackings(
-        from: _range?.start,
-        to: _range?.end,
-        search:
-            _searchCtrl.text.trim().isEmpty ? null : _searchCtrl.text.trim(),
-      );
-      _items = list;
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('No se pudieron cargar los reportes: $e')),
-        );
-      }
-    } finally {
-      if (mounted) setState(() => _loading = false);
-    }
-  }
-
-  Future<void> _pickRange() async {
-    final now = DateTime.now();
-    final last30 = DateTimeRange(
-      start: now.subtract(const Duration(days: 30)),
-      end: now,
+  void _goToDetail(
+    BuildContext ctx, { 
+    required String title,
+    required ReportsDetailFilter filter,
+  }) {
+    Navigator.pushNamed(
+      ctx,
+      '/reports/detail',
+      arguments: ReportsDetailArgs(title: title, filter: filter),
     );
-    final picked = await showDateRangePicker(
-      context: context,
-      firstDate: DateTime(now.year - 2),
-      lastDate: DateTime(now.year + 1),
-      initialDateRange: _range ?? last30,
-    );
-    if (picked != null) {
-      setState(() => _range = picked);
-      await _load();
-    }
-  }
-
-  @override
-  void dispose() {
-    _searchCtrl.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Reports'),
-        actions: [
-          IconButton(
-            tooltip: 'Seleccionar rango',
-            onPressed: _pickRange,
-            icon: const Icon(Icons.date_range),
-          ),
-          IconButton(
-            tooltip: 'Recargar',
-            onPressed: _loading ? null : _load,
-            icon: const Icon(Icons.refresh),
-          ),
-        ],
-      ),
       drawer: const CustomDrawer(),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      Chip(
-                        label: Text('Rol: $_role'),
-                        avatar: const Icon(Icons.security, size: 18),
+      drawerEnableOpenDragGesture: true,
+      appBar: AppBar(title: const Text("Reports")),
+      body: FutureBuilder<ReportsDashboardData>(
+        future: _load(),
+        builder: (context, snap) {
+          if (snap.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snap.hasError) {
+            return Center(child: Text('Error: ${snap.error}'));
+          }
+          final data = snap.data!;
+
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Tarjetas resumen
+                Row(
+                  children: [
+                    Expanded(
+                      child: _SummaryCard(
+                        title: "Equipo",
+                        value: "${data.teamCount}",
+                        subtitle: "Reportes último mes",
+                        color: Colors.deepPurple,
+                        onTap: () => _goToDetail(context, title: "Equipo", filter: ReportsDetailFilter.team),
                       ),
-                      Chip(
-                        label: Text('Ámbito: ${switch (_role) {
-                          'ADMIN' => 'Todos',
-                          'FIELD_MANAGER' => 'Mi equipo',
-                          _ => 'Mis registros'
-                        }}'),
-                        avatar: const Icon(Icons.filter_list, size: 18),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _SummaryCard(
+                        title: "Yo",
+                        value: "${data.meCount}",
+                        subtitle: "Reportes último mes",
+                        color: Colors.orange,
+                        onTap: () => _goToDetail(context, title: "Yo", filter: ReportsDetailFilter.me),
                       ),
-                    ],
-                  ),
-                  if (_range != null) ...[
-                    const SizedBox(height: 6),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        const Icon(Icons.schedule, size: 16),
-                        const SizedBox(width: 6),
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              '${_fmt(_range!.start)} → ${_fmt(_range!.end)}',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
                   ],
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-              child: TextField(
-                controller: _searchCtrl,
-                onSubmitted: (_) => _load(),
-                decoration: InputDecoration(
-                  hintText: 'Buscar por nombre, nota, etc.',
-                  prefixIcon: const Icon(Icons.search),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.clear),
-                    onPressed: () {
-                      _searchCtrl.clear();
-                      _load();
-                    },
-                  ),
-                  border: const OutlineInputBorder(),
                 ),
-              ),
-            ),
-            Expanded(
-              child: _loading
-                  ? const Center(child: CircularProgressIndicator())
-                  : RefreshIndicator(
-                      onRefresh: _load,
-                      child: _items.isEmpty
-                          ? ListView(
-                              children: const [
-                                SizedBox(height: 120),
-                                Center(
-                                    child:
-                                        Text('No hay trackings para mostrar')),
-                              ],
-                            )
-                          : ListView.separated(
-                              itemCount: _items.length,
-                              separatorBuilder: (_, __) =>
-                                  const Divider(height: 0),
-                              itemBuilder: (_, i) {
-                                final t = _items[i];
-                                final date = (t.startDate ?? '').toString();
-                                final day = date.isNotEmpty && date.length >= 10
-                                    ? date.substring(0, 10)
-                                    : '';
-                                final timeRange = [
-                                  if (t.startTimeOfDay != null)
-                                    t.startTimeOfDay,
-                                  if (t.endTimeOfDay != null) t.endTimeOfDay,
-                                ].whereType<String>().join(' - ');
 
-                                final title = t.personName?.isNotEmpty == true
-                                    ? t.personName!
-                                    : (t.recipient?.isNotEmpty == true
-                                        ? t.recipient!
-                                        : (t.note ?? 'Tracking'));
+                const SizedBox(height: 24),
 
-                                final subtitle = [
-                                  if (t.note?.isNotEmpty == true)
-                                    'Nota: ${t.note}',
-                                  if (t.supportedCountry?.isNotEmpty == true)
-                                    'País: ${t.supportedCountry}',
-                                  if (t.workingLanguage?.isNotEmpty == true)
-                                    'Idioma: ${t.workingLanguage}',
-                                  if (timeRange.isNotEmpty)
-                                    'Horario: $timeRange',
-                                  if (t.tasks.isNotEmpty)
-                                    'Tareas: ${t.tasks.join(", ")}',
-                                ].join(' • ');
-
-
-                                return ListTile(
-                                  leading:
-                                      const Icon(Icons.assignment_outlined),
-                                  title: Text(title),
-                                  subtitle: Text(subtitle),
-                                  trailing: Text(day),
-                                  onTap: () => showReportDetailForTracking(context, t),
+                // Gráfico: Comparación diaria (Yo vs Equipo)
+                _TappableCard(
+                  title: "Comparación diaria",
+                  onTap: () => _goToDetail(context, title: "Comparación diaria", filter: ReportsDetailFilter.compare),
+                  child: SizedBox(
+                    height: 220,
+                    child: BarChart(
+                      BarChartData(
+                        barGroups: List.generate(data.dailyCompare.length, (i) {
+                          final dc = data.dailyCompare[i];
+                          return BarChartGroupData(
+                            x: i,
+                            barRods: [
+                              BarChartRodData(toY: dc.myCount.toDouble(), color: Colors.orange),
+                              BarChartRodData(toY: dc.teamCount.toDouble(), color: Colors.deepPurple),
+                            ],
+                          );
+                        }),
+                        titlesData: FlTitlesData(
+                          leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                          rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                          topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 28,
+                              getTitlesWidget: (value, _) {
+                                final i = value.toInt();
+                                if (i < 0 || i >= data.dailyCompare.length) return const SizedBox.shrink();
+                                final d = data.dailyCompare[i].day;
+                                return Padding(
+                                  padding: const EdgeInsets.only(top: 8),
+                                  child: Text('${d.day}', style: const TextStyle(fontSize: 10)),
                                 );
                               },
                             ),
+                          ),
+                        ),
+                        gridData: const FlGridData(show: false),
+                        borderData: FlBorderData(show: false),
+                      ),
                     ),
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                // Gráfico: Evolución (Yo)
+                _TappableCard(
+                  title: "Evolución (Yo)",
+                  onTap: () => _goToDetail(context, title: "Evolución (Yo)", filter: ReportsDetailFilter.trend),
+                  child: SizedBox(
+                    height: 220,
+                    child: LineChart(
+                      LineChartData(
+                        lineBarsData: [
+                          LineChartBarData(
+                            spots: List.generate(data.myTrend.length, (i) {
+                              final p = data.myTrend[i];
+                              return FlSpot(i.toDouble(), p.count.toDouble());
+                            }),
+                            isCurved: true,
+                            color: Colors.orange,
+                            barWidth: 3,
+                            dotData: FlDotData(show: false),
+                          ),
+                        ],
+                        titlesData: FlTitlesData(
+                          leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                          rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                          topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 28,
+                              getTitlesWidget: (value, _) {
+                                final i = value.toInt();
+                                if (i < 0 || i >= data.myTrend.length) return const SizedBox.shrink();
+                                final d = data.myTrend[i].day;
+                                return Padding(
+                                  padding: const EdgeInsets.only(top: 8),
+                                  child: Text('${d.day}', style: const TextStyle(fontSize: 10)),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        gridData: const FlGridData(show: false),
+                        borderData: FlBorderData(show: false),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+// ---- UI helpers (cards) ----
+class _SummaryCard extends StatelessWidget {
+  final String title;
+  final String value;
+  final String subtitle;
+  final Color color;
+  final VoidCallback? onTap;
+
+  const _SummaryCard({
+    required this.title,
+    required this.value,
+    required this.subtitle,
+    required this.color,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: color.withOpacity(0.1),
+      borderRadius: BorderRadius.circular(16),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: color, fontSize: 16)),
+            const SizedBox(height: 8),
+            Text(value, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28, color: color)),
+            const SizedBox(height: 4),
+            Text(subtitle, style: TextStyle(color: Colors.grey.shade700, fontSize: 12)),
+          ]),
         ),
       ),
     );
   }
 }
 
+class _TappableCard extends StatelessWidget {
+  final String title;
+  final Widget child;
+  final VoidCallback? onTap;
+
+  const _TappableCard({required this.title, required this.child, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Theme.of(context).cardColor,
+      borderRadius: BorderRadius.circular(16),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Row(children: [
+              Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+              const Spacer(),
+              Icon(Icons.chevron_right, color: Colors.grey.shade600),
+            ]),
+            const SizedBox(height: 8),
+            child,
+          ]),
+        ),
+      ),
+    );
+  }
+}

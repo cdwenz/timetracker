@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ihadi_time_tracker/widgets/custom_drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'step_02_screen.dart';
 import '../../widgets/big_action_button.dart';
@@ -39,6 +40,8 @@ class _StepOneScreenState extends State<StepOneScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const CustomDrawer(),
+      drawerEnableOpenDragGesture: true,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
