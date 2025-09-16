@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ihadi_time_tracker/providers/user_providers.dart';
+import 'package:ihadi_time_tracker/screens/home_screen.dart';
+import 'package:ihadi_time_tracker/screens/reports_detail_screen.dart';
+import 'package:ihadi_time_tracker/screens/reports_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:ihadi_time_tracker/screens/splash_screen.dart';
 import 'models/tracking_data.dart';
@@ -101,7 +104,36 @@ class MyApp extends StatelessWidget {
       title: 'Tracking App',
       debugShowCheckedModeBanner: false,
       theme: appTheme,
-      home: const SplashScreen(),
+      initialRoute: '/home',
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/home':
+            return MaterialPageRoute(builder: (_) => const HomeScreen());
+
+          case '/reports':
+            return MaterialPageRoute(builder: (_) => const ReportsScreen());
+
+          case '/reports/detail':
+            final args = settings.arguments as ReportsDetailArgs?;
+            if (args == null) {
+              return MaterialPageRoute(
+                builder: (_) => const Scaffold(
+                  body: Center(child: Text("Error: faltan argumentos")),
+                ),
+              );
+            }
+            return MaterialPageRoute(
+              builder: (_) => ReportsDetailScreen(args: args),
+            );
+
+          default:
+            return MaterialPageRoute(
+              builder: (_) => const Scaffold(
+                body: Center(child: Text("Ruta no encontrada")),
+              ),
+            );
+        }
+      },
     );
   }
 }

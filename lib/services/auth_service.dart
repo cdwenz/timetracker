@@ -6,20 +6,15 @@ import 'connectivity_service.dart';
 class AuthService {
   static const String baseUrl = 'http://10.0.2.2:8000/api';
 
-static Future<bool> login(String email, String password) async {
-  try {
-    // Verificar conectividad
-    final isConnected = await ConnectivityService.quickConnectivityCheck();
-    
-    if (isConnected) {
-      print('🟢 Intentando login online...');
-      
+  static Future<bool> login(String email, String password) async {
+    try {
       final url = Uri.parse('$baseUrl/auth/login');
+
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email, 'password': password}),
-      ).timeout(const Duration(seconds: 10));
+      );
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -29,32 +24,21 @@ static Future<bool> login(String email, String password) async {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('isLoggedIn', true);
         await prefs.setString('name', user['name']);
+        await prefs.setString('userId', user['id']);
         await prefs.setString('email', user['email']);
         await prefs.setString('role', user['role'] ?? '');
         await prefs.setString('access_token', token);
-        
-        // Guardar credenciales para uso offline
-        await _saveCredentialsForOffline(email, password);
-        await prefs.setBool('hasValidOfflineLogin', true);
-        
-        print('✅ Login online exitoso');
+
         return true;
       } else {
-        print('❌ Error login online: ${response.body}');
+        print('Error login: ${response.body}');
         return false;
       }
-    } else {
-      print('📵 Sin conexión, intentando login offline...');
-      return await _tryOfflineLogin(email, password);
+    } catch (e) {
+      print('Excepción en login: $e');
+      return false;
     }
-  } catch (e) {
-    print('❌ Excepción en login online: $e');
-    // Si falla el login online, intentar offline
-    print('🔄 Intentando fallback a login offline...');
-    return await _tryOfflineLogin(email, password);
   }
-}
-
 
   /// Guardar credenciales de forma segura para uso offline
   static Future<void> _saveCredentialsForOffline(String email, String password) async {
@@ -164,5 +148,10 @@ static Future<bool> login(String email, String password) async {
       print('Excepción en register: $e');
       return false;
     }
+  }
+
+  static Future<String?> currentUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('userId');
   }
 }

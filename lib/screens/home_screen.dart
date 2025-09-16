@@ -1,142 +1,149 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:provider/provider.dart';
-import '../l10n/app_localizations.dart';
+import 'package:ihadi_time_tracker/widgets/custom_drawer.dart';
+import 'package:ihadi_time_tracker/screens/reports_screen.dart';
+import 'package:ihadi_time_tracker/screens/account_screen.dart';
+import 'package:ihadi_time_tracker/screens/tracking_steps_screens/step_01_screen.dart';
 
-import '../widgets/custom_drawer.dart';
-import '../widgets/big_action_button.dart';
-import '../widgets/offline_status_widget.dart';
-import '../services/sync_service.dart';
-import '../services/connectivity_service.dart';
-import './tracking_steps_screens/step_01_screen.dart';
-import './login_screen.dart';
-
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  String? _username;
-  String? _role;
-
-
-  @override
-  void initState() {
-    super.initState();
-    _loadUserData();
-    _checkPendingSync();
-  }
-
-  void _checkPendingSync() async {
-    // Forzar actualización de estadísticas al cargar la pantalla
-    final syncService = context.read<SyncService>();
-    await syncService.updateSyncStats();
-  }
-
-  /// Verificar si hay un token de autenticación válido
-  Future<bool> _hasValidToken() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('access_token');
-      return token != null && token.isNotEmpty;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  /// Construir notificación con verificación de token
-  Widget _buildSyncNotificationWithTokenCheck(SyncService syncService, int pendingCount, int failedCount, int totalPending) {
-    return FutureBuilder<bool>(
-      future: _hasValidToken(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Container(
-            width: double.infinity,
-            margin: const EdgeInsets.only(bottom: 16),
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.grey.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                ),
-                SizedBox(width: 12),
-                Text(AppLocalizations.of(context).verifyingAuthStatus),
-              ],
-            ),
-          );
-        }
-        
-        final hasToken = snapshot.data ?? false;
-        
-        if (!hasToken) {
-          // No hay token válido - mostrar mensaje de login
-          return _buildLoginRequiredNotification(totalPending);
-        } else {
-          // Hay token válido - mostrar botones de sincronización
-          return _buildPendingSyncNotification(syncService, pendingCount, failedCount);
-        }
-      },
+// helper local, mismo patrón que el Drawer
+void _go(BuildContext context, Widget page, {bool replace = false}) {
+  if (replace) {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => page),
+    );
+  } else {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => page),
     );
   }
+}
 
-  void _loadUserData() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _username = prefs.getString('name') ?? AppLocalizations.of(context).defaultUserName;
-      _role = prefs.getString('role') ?? AppLocalizations.of(context).guestRole;
-    });
-  }
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context).appTitle),
-        actions: [
-          const OfflineStatusWidget(compact: true),
-          const SizedBox(width: 16),
-        ],
-      ),
       drawer: const CustomDrawer(),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            // Notificación de sincronización (incluye estado offline y login)
-            _buildSyncNotification(),
-            const SizedBox(height: 20),
-            
-            // Contenido principal
-            Text(
-              AppLocalizations.of(context).homeGreeting(_username ?? ''),
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+      drawerEnableOpenDragGesture: true,
+      appBar: AppBar(
+        title: const Text('Panel'),
+        centerTitle: false,
+        leading: Builder(
+          builder: (ctx) => IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () => Scaffold.of(ctx).openDrawer(),
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            // 2 columnas en móvil, 3 si hay ancho grande
+            final crossAxisCount = constraints.maxWidth >= 900
+                ? 3
+                : constraints.maxWidth >= 600
+                    ? 3
+                    : 2;
+
+            return GridView.count(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+              crossAxisCount: crossAxisCount,
+              mainAxisSpacing: 16,
+              crossAxisSpacing: 16,
+              childAspectRatio: 1.35, // parecido a tu mock
+              children: [
+                _DashboardTile(
+                  title: 'Tracking',
+                  subtitle: 'Iniciar y detener',
+                  icon: Icons.timer_outlined,
+                  onTap: () =>
+                      _go(context, const StepOneScreen(), replace: true),
+                ),
+                _DashboardTile(
+                  title: 'Reports',
+                  subtitle: 'Tiempos y métricas',
+                  icon: Icons.bar_chart_rounded,
+                  onTap: () =>
+                      _go(context, const ReportsScreen(), replace: true),
+                ),
+                _DashboardTile(
+                  title: 'Account',
+                  subtitle: 'Perfil y sesión',
+                  icon: Icons.person_rounded,
+                  onTap: () =>
+                      _go(context, const AccountScreen(), replace: true),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _DashboardTile extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final String? routeName; // opcional (fallback)
+  final VoidCallback? onTap; // NUEVO
+
+  const _DashboardTile({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    this.routeName,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cardColor = theme.colorScheme.surface;
+    final primary = theme.colorScheme.primary;
+    final textTheme = theme.textTheme;
+    final tap = onTap ??
+        (routeName != null
+            ? () => Navigator.of(context).pushReplacementNamed(routeName!)
+            : null);
+
+    return InkWell(
+      onTap: tap,
+      borderRadius: BorderRadius.circular(16),
+      child: Ink(
+        decoration: BoxDecoration(
+          color: cardColor,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: kElevationToShadow[1],
+          border: Border.all(
+            color: theme.colorScheme.outlineVariant.withOpacity(0.35),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(18),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(icon, size: 32, color: theme.colorScheme.onSurface),
+              const SizedBox(height: 12),
+              Text(
+                title,
+                style: textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 20),
-            BigActionButton(
-              text: AppLocalizations.of(context).startTrackingButton,
-              icon: Icons.fast_forward_sharp,
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const StepOneScreen(),
-                  ),
-                );
-              },
-            ),
-          ],
+              const SizedBox(height: 6),
+              // línea acento bajo el título, como en tu imagen
+              Container(
+                  width: 28,
+                  height: 3,
+                  decoration: BoxDecoration(
+                    color: primary,
+                    borderRadius: BorderRadius.circular(2),
+                  )),
+            ],
+          ),
         ),
       ),
     );
