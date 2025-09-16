@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ihadi_time_tracker/services/auth_service.dart';
 import 'package:ihadi_time_tracker/screens/login_screen.dart';
+import '../l10n/app_localizations.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -27,12 +28,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final confirm = _confirmPasswordController.text;
 
     if (name.isEmpty || email.isEmpty || pass.isEmpty || confirm.isEmpty) {
-      setState(() => _error = 'Todos los campos son obligatorios');
+      setState(() => _error = AppLocalizations.of(context).allFieldsRequired);
       return;
     }
 
     if (pass != confirm) {
-      setState(() => _error = 'Las contraseñas no coinciden');
+      setState(() => _error = AppLocalizations.of(context).passwordMismatch);
       return;
     }
 
@@ -54,14 +55,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (success) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Registro exitoso. Iniciá sesión.')),
+        SnackBar(content: Text(AppLocalizations.of(context).registrationSuccess)),
       );
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const LoginScreen()),
       );
     } else {
-      setState(() => _error = 'Hubo un problema al registrarse');
+      setState(() => _error = AppLocalizations.of(context).registrationError);
     }
 
     setState(() => _isLoading = false);
@@ -70,7 +71,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Crear cuenta')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context).createAccount)),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -80,21 +81,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 12),
                 TextField(
                   controller: _nameController,
-                  decoration: const InputDecoration(labelText: 'Nombre'),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context).nameLabel),
                 ),
                 const SizedBox(height: 12),
                 TextField(
                   controller: _emailController,
-                  decoration: const InputDecoration(labelText: 'Email'),
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context).emailLabel),
                 ),
                 const SizedBox(height: 12),
                 TextFormField(
                   controller: _passwordController,
                   obscureText: _obscurePassword,
                   decoration: InputDecoration(
-                    labelText: 'Contraseña',
+                    labelText: AppLocalizations.of(context).passwordLabel,
                     suffixIcon: IconButton(
-                      tooltip: _obscurePassword ? 'Mostrar' : 'Ocultar',
+                      tooltip: _obscurePassword ? AppLocalizations.of(context).showPasswordTooltip : AppLocalizations.of(context).hidePasswordTooltip,
                       icon: Icon(_obscurePassword
                           ? Icons.visibility
                           : Icons.visibility_off),
@@ -108,9 +109,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   controller: _confirmPasswordController,
                   obscureText: _obscureConfirm,
                   decoration: InputDecoration(
-                    labelText: 'Confirmar contraseña',
+                    labelText: AppLocalizations.of(context).confirmPasswordLabel,
                     suffixIcon: IconButton(
-                      tooltip: _obscureConfirm ? 'Mostrar' : 'Ocultar',
+                      tooltip: _obscureConfirm ? AppLocalizations.of(context).showPasswordTooltip : AppLocalizations.of(context).hidePasswordTooltip,
                       icon: Icon(_obscureConfirm
                           ? Icons.visibility
                           : Icons.visibility_off),
@@ -131,8 +132,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             vertical: 14,
                           ),
                         ),
-                        child: const Text('Registrarme',
-                            style: TextStyle(color: Colors.black)),
+                        child: Text(AppLocalizations.of(context).registerButton,
+                            style: const TextStyle(color: Colors.black)),
                       ),
                 if (_error != null) ...[
                   const SizedBox(height: 16),

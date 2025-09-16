@@ -6,7 +6,7 @@ import 'package:ihadi_time_tracker/screens/register_screen.dart';
 import 'package:provider/provider.dart';
 import '../../models/tracking_data.dart';
 import '../../services/connectivity_service.dart';
-import '../../widgets/offline_status_widget.dart';
+import '../l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -87,9 +87,9 @@ class _LoginScreenState extends State<LoginScreen> {
       if (!mounted) return;
       setState(() {
         if (_isOffline && !_hasOfflineLogin) {
-          _error = 'Sin conexión. Necesitas hacer login online primero para usar la app offline.';
+          _error = AppLocalizations.of(context).offlineFirstLoginMessage;
         } else {
-          _error = 'Credenciales incorrectas';
+          _error = AppLocalizations.of(context).incorrectCredentials;
         }
       });
     }
@@ -133,8 +133,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(width: 8),
                       Text(
                         _hasOfflineLogin 
-                          ? 'Modo offline - Usando credenciales guardadas'
-                          : 'Sin conexión - Se requiere internet para primer login',
+                          ? AppLocalizations.of(context).offlineModeMessage
+                          : AppLocalizations.of(context).internetRequiredMessage,
                         style: TextStyle(
                           color: _hasOfflineLogin ? Colors.orange.shade800 : Colors.red.shade800,
                           fontSize: 12,
@@ -149,21 +149,21 @@ class _LoginScreenState extends State<LoginScreen> {
               
               Image.asset('assets/ihadi.png', height: 120),
               const SizedBox(height: 24),
-              const Text("Iniciar sesión",
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+              Text(AppLocalizations.of(context).loginTitle,
+                  style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
               const SizedBox(height: 30),
               TextField(
                 controller: _usernameController,
-                decoration: const InputDecoration(labelText: "Email"),
+                decoration: InputDecoration(labelText: AppLocalizations.of(context).emailLabel),
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _passwordController,
                 obscureText: _obscurePassword,
                 decoration: InputDecoration(
-                  labelText: 'Contraseña',
+                  labelText: AppLocalizations.of(context).passwordLabel,
                   suffixIcon: IconButton(
-                    tooltip: _obscurePassword ? 'Mostrar' : 'Ocultar',
+                    tooltip: _obscurePassword ? AppLocalizations.of(context).showPasswordTooltip : AppLocalizations.of(context).hidePasswordTooltip,
                     icon: Icon(_obscurePassword
                         ? Icons.visibility
                         : Icons.visibility_off),
@@ -182,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 48, vertical: 14),
                       ),
-                      child: const Text("Entrar", style:TextStyle(color: Colors.black)),
+                      child: Text(AppLocalizations.of(context).loginButton, style: const TextStyle(color: Colors.black)),
                     ),
               if (_error != null) ...[
                 const SizedBox(height: 16),
@@ -196,9 +196,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     MaterialPageRoute(builder: (_) => const RegisterScreen()),
                   );
                 },
-                child: const Text(
-                  '¿No tenés cuenta? Registrate',
-                  style: TextStyle(color: Color(0xFFFC6502)),
+                child: Text(
+                  AppLocalizations.of(context).registerLink,
+                  style: const TextStyle(color: Color(0xFFFC6502)),
                 ),
               ),
             ],

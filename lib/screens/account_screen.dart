@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ihadi_time_tracker/widgets/custom_drawer.dart';
 import '../models/user_profile.dart';
 import '../services/user_service.dart';
+import '../l10n/app_localizations.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -21,6 +22,16 @@ class _AccountScreenState extends State<AccountScreen> {
   bool _saving = false;
 
   late Future<UserMe> _meFuture;
+
+  /// Traduce el nombre del rol del sistema
+  String _translateRole(String role) {
+    return switch (role) {
+      'ADMIN' => AppLocalizations.of(context).roleAdmin,
+      'FIELD_MANAGER' => AppLocalizations.of(context).roleFieldManager,
+      'USER' => AppLocalizations.of(context).roleUser,
+      _ => role,
+    };
+  }
 
   @override
   void initState() {
@@ -61,13 +72,13 @@ class _AccountScreenState extends State<AccountScreen> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Perfil actualizado')),
+          SnackBar(content: Text(AppLocalizations.of(context).profileUpdatedMessage)),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al guardar: $e')),
+          SnackBar(content: Text(AppLocalizations.of(context).saveErrorMessage(e.toString()))),
         );
       }
     } finally {
@@ -99,12 +110,12 @@ class _AccountScreenState extends State<AccountScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(me.name.isEmpty ? 'Usuario' : me.name,
+                  Text(me.name.isEmpty ? AppLocalizations.of(context).defaultUserName : me.name,
                       style: Theme.of(context).textTheme.titleMedium),
                   const SizedBox(height: 4),
                   Text(me.email, style: Theme.of(context).textTheme.bodyMedium),
                   const SizedBox(height: 4),
-                  Text("País: ${me.country}",
+                  Text(AppLocalizations.of(context).userCountryLabel(me.country),
                       style: Theme.of(context).textTheme.bodySmall),
                   const SizedBox(height: 8),
                   Container(
@@ -114,7 +125,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       color: Theme.of(context).colorScheme.primary.withOpacity(0.10),
                     ),
                     child: Text(
-                      'Rol: ${me.role}',
+                      AppLocalizations.of(context).userRoleLabel(_translateRole(me.role)),
                       style: Theme.of(context).textTheme.labelMedium?.copyWith(
                             color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.w600,
@@ -141,28 +152,28 @@ class _AccountScreenState extends State<AccountScreen> {
             children: [
               TextFormField(
                 controller: _nameCtrl,
-                decoration: const InputDecoration(
-                  labelText: 'Nombre',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).nameLabel,
+                  border: const OutlineInputBorder(),
                 ),
                 validator: (v) =>
-                    (v == null || v.trim().isEmpty) ? 'El nombre es requerido' : null,
+                    (v == null || v.trim().isEmpty) ? AppLocalizations.of(context).nameRequiredValidation : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _emailCtrl,
                 readOnly: true,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).emailLabel,
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _countryCtrl,
-                decoration: const InputDecoration(
-                  labelText: 'País',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).countryFieldLabel,
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 16),
@@ -174,7 +185,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       ? const SizedBox(
                           width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
                       : const Icon(Icons.save),
-                  label: const Text('Guardar cambios'),
+                  label: Text(AppLocalizations.of(context).saveChangesButton),
                 ),
               ),
             ],
@@ -188,7 +199,7 @@ class _AccountScreenState extends State<AccountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const CustomDrawer(),
-      appBar: AppBar(title: const Text('Mi cuenta')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context).accountTitle)),
       body: FutureBuilder<UserMe>(
         future: _meFuture,
         builder: (context, snapshot) {
@@ -196,7 +207,7 @@ class _AccountScreenState extends State<AccountScreen> {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(child: Text(AppLocalizations.of(context).genericErrorMessage(snapshot.error.toString())));
           }
           final me = snapshot.data!;
           return ListView(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../l10n/app_localizations.dart';
 import '../services/connectivity_service.dart';
 import '../services/sync_service.dart';
 
@@ -122,7 +123,7 @@ class OfflineStatusWidget extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  isOnline ? 'Conectado (${connectivity.connectionTypeName})' : 'Sin conexión',
+                  isOnline ? AppLocalizations.of(context).connectedStatus(connectivity.connectionTypeName) : AppLocalizations.of(context).disconnectedStatus,
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     color: isOnline ? Colors.green : Colors.grey,
@@ -135,7 +136,7 @@ class OfflineStatusWidget extends StatelessWidget {
           _buildSyncStatus(context, sync),
           if (pendingCount > 0 || failedCount > 0) ...[
             const SizedBox(height: 8),
-            _buildSyncCounts(pendingCount, failedCount),
+            _buildSyncCounts(context, pendingCount, failedCount),
           ],
         ],
       ),
@@ -150,27 +151,27 @@ class OfflineStatusWidget extends StatelessWidget {
 
     switch (sync.status) {
       case SyncStatus.idle:
-        statusText = 'Listo para sincronizar';
+        statusText = AppLocalizations.of(context).readyToSync;
         statusColor = Colors.grey;
         statusIcon = Icons.sync;
         break;
       case SyncStatus.syncing:
-        statusText = 'Sincronizando...';
+        statusText = AppLocalizations.of(context).syncing;
         statusColor = Colors.orange;
         statusIcon = Icons.sync;
         break;
       case SyncStatus.success:
-        statusText = 'Última sincronización exitosa';
+        statusText = AppLocalizations.of(context).lastSyncSuccess;
         statusColor = Colors.green;
         statusIcon = Icons.check_circle;
         break;
       case SyncStatus.failed:
-        statusText = 'Error en sincronización';
+        statusText = AppLocalizations.of(context).syncError;
         statusColor = Colors.red;
         statusIcon = Icons.error;
         break;
       case SyncStatus.paused:
-        statusText = 'Sincronización pausada';
+        statusText = AppLocalizations.of(context).syncPaused;
         statusColor = Colors.orange;
         statusIcon = Icons.pause_circle;
         break;
@@ -204,7 +205,7 @@ class OfflineStatusWidget extends StatelessWidget {
   }
 
   /// Construir contadores de sincronización
-  Widget _buildSyncCounts(int pendingCount, int failedCount) {
+  Widget _buildSyncCounts(BuildContext context, int pendingCount, int failedCount) {
     return Row(
       children: [
         if (pendingCount > 0) ...[
@@ -221,7 +222,7 @@ class OfflineStatusWidget extends StatelessWidget {
                 Icon(Icons.cloud_upload, size: 12, color: Colors.blue),
                 const SizedBox(width: 4),
                 Text(
-                  '$pendingCount pendientes',
+                  AppLocalizations.of(context).pendingCountLabel(pendingCount),
                   style: const TextStyle(fontSize: 10, color: Colors.blue),
                 ),
               ],
@@ -243,7 +244,7 @@ class OfflineStatusWidget extends StatelessWidget {
                 Icon(Icons.error_outline, size: 12, color: Colors.red),
                 const SizedBox(width: 4),
                 Text(
-                  '$failedCount fallidos',
+                  AppLocalizations.of(context).failedCountLabel(failedCount),
                   style: const TextStyle(fontSize: 10, color: Colors.red),
                 ),
               ],
@@ -286,7 +287,7 @@ class _DetailedStatusModal extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Estado de Sincronización',
+            AppLocalizations.of(context).syncStatusTitle,
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           const SizedBox(height: 20),
@@ -294,14 +295,14 @@ class _DetailedStatusModal extends StatelessWidget {
           // Estado de conectividad
           _buildInfoCard(
             context,
-            'Conectividad',
+            AppLocalizations.of(context).connectivityTitle,
             [
-              _InfoRow('Estado', connectivity.isConnected ? 'Conectado' : 'Desconectado'),
-              _InfoRow('Tipo', connectivity.connectionTypeName),
+              _InfoRow(AppLocalizations.of(context).statusLabel, connectivity.isConnected ? AppLocalizations.of(context).connectedLabel : AppLocalizations.of(context).disconnectedLabel),
+              _InfoRow(AppLocalizations.of(context).typeLabel, connectivity.connectionTypeName),
               if (connectivity.lastConnectedTime != null)
-                _InfoRow('Última conexión', _formatDateTime(connectivity.lastConnectedTime!)),
+                _InfoRow('Última conexión', _formatDateTime(context, connectivity.lastConnectedTime!)),
               if (connectivity.lastDisconnectedTime != null)
-                _InfoRow('Última desconexión', _formatDateTime(connectivity.lastDisconnectedTime!)),
+                _InfoRow('Última desconexión', _formatDateTime(context, connectivity.lastDisconnectedTime!)),
             ],
           ),
           
@@ -310,14 +311,14 @@ class _DetailedStatusModal extends StatelessWidget {
           // Estado de sincronización
           _buildInfoCard(
             context,
-            'Sincronización',
+            AppLocalizations.of(context).syncTitle,
             [
               _InfoRow('Estado', sync.status.toString().split('.').last),
               _InfoRow('Último mensaje', sync.lastSyncMessage),
               if (sync.lastSyncTime != null)
-                _InfoRow('Última sincronización', _formatDateTime(sync.lastSyncTime!)),
-              _InfoRow('Entradas pendientes', sync.pendingSyncCount.toString()),
-              _InfoRow('Entradas fallidas', sync.failedSyncCount.toString()),
+                _InfoRow('Última sincronización', _formatDateTime(context, sync.lastSyncTime!)),
+              _InfoRow(AppLocalizations.of(context).pendingEntriesLabel, sync.pendingSyncCount.toString()),
+              _InfoRow(AppLocalizations.of(context).failedEntriesLabel, sync.failedSyncCount.toString()),
             ],
           ),
           
@@ -332,7 +333,7 @@ class _DetailedStatusModal extends StatelessWidget {
                     await sync.forcSync();
                   },
                   icon: const Icon(Icons.sync),
-                  label: const Text('Sincronizar'),
+                  label: Text(AppLocalizations.of(context).syncButton),
                 ),
               ),
               const SizedBox(width: 12),
@@ -343,7 +344,7 @@ class _DetailedStatusModal extends StatelessWidget {
                       await sync.retryFailedEntries();
                     },
                     icon: const Icon(Icons.refresh),
-                    label: const Text('Reintentar'),
+                    label: Text(AppLocalizations.of(context).retryButton),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.orange,
                     ),
@@ -356,7 +357,7 @@ class _DetailedStatusModal extends StatelessWidget {
           
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cerrar'),
+            child: Text(AppLocalizations.of(context).closeButton),
           ),
         ],
       ),
@@ -404,16 +405,16 @@ class _DetailedStatusModal extends StatelessWidget {
     );
   }
 
-  String _formatDateTime(DateTime dateTime) {
+  String _formatDateTime(BuildContext context, DateTime dateTime) {
     final now = DateTime.now();
     final difference = now.difference(dateTime);
 
     if (difference.inMinutes < 1) {
-      return 'Hace unos segundos';
+      return AppLocalizations.of(context).fewSecondsAgo;
     } else if (difference.inMinutes < 60) {
-      return 'Hace ${difference.inMinutes} minutos';
+      return AppLocalizations.of(context).minutesAgo(difference.inMinutes);
     } else if (difference.inHours < 24) {
-      return 'Hace ${difference.inHours} horas';
+      return AppLocalizations.of(context).hoursAgo(difference.inHours);
     } else {
       return '${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}';
     }

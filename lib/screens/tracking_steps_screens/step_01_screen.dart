@@ -4,6 +4,7 @@ import 'step_02_screen.dart';
 import '../../widgets/big_action_button.dart';
 import 'package:provider/provider.dart';
 import '../../models/tracking_data.dart';
+import '../../l10n/app_localizations.dart';
 
 class StepOneScreen extends StatefulWidget {
   const StepOneScreen({super.key});
@@ -43,7 +44,7 @@ class _StepOneScreenState extends State<StepOneScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         foregroundColor: Colors.black,
-        title: const Text('Paso 1 de 7'),
+        title: Text(AppLocalizations.of(context).step1Title),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -52,16 +53,16 @@ class _StepOneScreenState extends State<StepOneScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                '¿Qué hiciste hoy?',
+              Text(
+                AppLocalizations.of(context).step1Question,
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 12),
-              const Text(
-                'Escribí una breve descripción de la actividad que realizaste.',
+              Text(
+                AppLocalizations.of(context).step1Description,
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.black54,
@@ -72,7 +73,7 @@ class _StepOneScreenState extends State<StepOneScreen> {
                 controller: _noteController,
                 maxLines: 6,
                 decoration: InputDecoration(
-                  hintText: 'Ej: Ayudé a un traductor piaroa a...',
+                  hintText: AppLocalizations.of(context).step1Placeholder,
                   filled: true,
                   fillColor: Colors.grey[100],
                   border: OutlineInputBorder(
@@ -83,7 +84,7 @@ class _StepOneScreenState extends State<StepOneScreen> {
               ),
               const Spacer(),
               BigActionButton(
-                text: 'Siguiente',
+                text: AppLocalizations.of(context).nextButton,
                 onPressed: () {
                   if (_noteController.text.isNotEmpty) {
                     Provider.of<TrackingData>(context, listen: false)
@@ -95,8 +96,8 @@ class _StepOneScreenState extends State<StepOneScreen> {
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Por favor completá la nota.')),
+                      SnackBar(
+                          content: Text(AppLocalizations.of(context).step1Validation)),
                     );
                   }
                 },

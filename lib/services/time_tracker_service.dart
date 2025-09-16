@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/tracking_entry.dart';
 import 'local_database.dart';
 import 'connectivity_service.dart';
+import 'sync_service.dart';
 
 class TimeTrackerService {
   static const String baseUrl = 'http://10.0.2.2:8000/api';
@@ -44,6 +45,9 @@ class TimeTrackerService {
       // Guardar localmente primero (siempre)
       final localId = await LocalDatabase.insertTracking(trackingEntry);
       print('✅ Entry guardado localmente con ID: $localId');
+      
+      // Notificar al SyncService que las estadísticas han cambiado
+      SyncService().updateSyncStats();
 
       // Verificar conectividad
       final isConnected = await ConnectivityService.quickConnectivityCheck();

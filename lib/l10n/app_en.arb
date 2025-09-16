@@ -1,21 +1,330 @@
 {
   "@@locale": "en",
+  
+  "appTitle": "TimeTracker",
+  
+  "loginTitle": "Sign In",
+  "emailLabel": "Email",
+  "passwordLabel": "Password",
+  "showPasswordTooltip": "Show",
+  "hidePasswordTooltip": "Hide",
+  "loginButton": "Log In",
+  "registerLink": "Don't have an account? Sign up",
+  "offlineModeMessage": "Offline mode - Using saved credentials",
+  "internetRequiredMessage": "No connection - Internet required for first login",
+  "offlineFirstLoginMessage": "No connection. You need to login online first to use the app offline.",
+  "incorrectCredentials": "Incorrect credentials",
+  
+  "createAccount": "Create Account",
+  "nameLabel": "Name",
+  "confirmPasswordLabel": "Confirm Password",
+  "registerButton": "Sign Up",
+  "registrationSuccess": "Registration successful. Please sign in.",
+  "allFieldsRequired": "All fields are required",
+  "passwordMismatch": "Passwords do not match",
+  "registrationError": "There was a problem registering",
+  
+  "homeGreeting": "Hi, {name}!",
+  "@homeGreeting": {
+    "description": "Personalized greeting on home screen",
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "startTrackingButton": "Start Tracking",
+  "menuTitle": "Menu",
+  "homeMenuItem": "Home",
+  "accountMenuItem": "Account",
+  "reportsMenuItem": "Reports",
+  "logoutMenuItem": "Log Out",
+  
+  "offlineModeTitle": "📱 Offline Mode",
+  "offlineModeDescription": "No internet connection. Records will be saved locally.",
+  "loginRequiredTitle": "🔐 Need to login online",
+  "loginRequiredMessage": "You have {count} pending records. To sync you need to log out and login with internet.",
+  "@loginRequiredMessage": {
+    "description": "Message when login is required for sync",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "logoutAndLoginButton": "Log out and login",
+  "syncErrorTitle": "⚠️ Records with sync error",
+  "pendingSyncTitle": "📤 Pending records to sync",
+  "syncErrorMessage": "You have {failedCount} records with errors and {pendingCount} pending",
+  "@syncErrorMessage": {
+    "description": "Message showing failed and pending sync counts",
+    "placeholders": {
+      "failedCount": {"type": "int"},
+      "pendingCount": {"type": "int"}
+    }
+  },
+  "pendingSyncMessage": "You have {pendingCount} records waiting for synchronization",
+  "@pendingSyncMessage": {
+    "description": "Message showing pending sync count",
+    "placeholders": {
+      "pendingCount": {"type": "int"}
+    }
+  },
+  "synchronizing": "Synchronizing...",
+  "syncNowButton": "Sync Now",
+  "retryButton": "Retry",
+  "logoutDialogTitle": "Log Out",
+  "logoutDialogMessage": "To sync your pending records you need to log out and login again with internet connection.\\n\\nDo you want to log out now?",
+  "cancelButton": "Cancel",
+  "logoutErrorMessage": "Error logging out: {error}",
+  "@logoutErrorMessage": {
+    "description": "Error message when logout fails",
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  
+  "step1Title": "Step 1 of 7",
+  "step1Question": "What did you do today?",
+  "step1Description": "Write a brief description of the activity you performed.",
+  "step1Placeholder": "Ex: I helped a Piaroa translator to...",
+  "nextButton": "Next",
+  "step1Validation": "Please complete the note.",
+  
+  "step2Title": "Step 2 of 7",
+  "step2Question": "Who did you help today?",
+  "recipientLabel": "Recipient",
+  "supportedCountryLabel": "Supported Country",
+  "countryPlaceholder": "Ex: AR, United States, etc.",
+  "workingLanguageLabel": "Working Language",
+  "languagePlaceholder": "Ex: es, en, portuguese...",
+  "recipientValidation": "Complete the recipient.",
+  "countryValidation": "supportedCountry is required",
+  "languageValidation": "workingLanguage is required",
+  "savingButton": "Saving...",
+  "continueButton": "Continue",
+  
+  "step3Title": "Step 3 of 7",
+  "step3Question": "What is your name?",
+  "step3Description": "This name will be used to record your participation.",
+  "step3Placeholder": "Ex: John Smith",
+  "step3Validation": "Complete your name.",
+  
+  "step4Title": "Step 4 of 7",
+  "step4Question": "When did it happen?",
+  "step4Description": "Select the start and end date of the activity.",
+  "startDateLabel": "Start",
+  "endDateLabel": "End",
+  "selectDateButton": "Select",
+  "step4Validation": "Please complete both dates.",
+  
+  "step5Title": "Step 5 of 7",
+  "step5Question": "What time was it?",
+  "step5Description": "Select the start and end time of the activity.",
+  "startTimeLabel": "Start time",
+  "endTimeLabel": "End time",
+  "step5Validation": "Please complete both times.",
+  
+  "step6Title": "Step 6 of 7",
+  "step6Question": "What tasks did you perform?",
+  "step6Description": "Select one or more tasks performed and write details if you want.",
+  "additionalDetailsPlaceholder": "Additional details...",
+  "step6Validation": "Select at least one task.",
+  
+  "step7Title": "Step 7 of 7",
+  "step7Question": "Summary of your activity",
+  "noteLabel": "Note",
+  "dateLabel": "Date",
+  "timeLabel": "Time",
+  "tasksLabel": "Tasks",
+  "descriptionLabel": "Description",
+  "finishButton": "Finish",
+  "successMessage": "Record sent successfully.",
+  "errorMessage": "Error sending the record.",
+  
+  "taskMAST": "MAST",
+  "taskBTTSupport": "BTT Support (Writer, Orature, USFM, Recorder)",
+  "taskTraining": "Training",
+  "taskTechnicalSupport": "Technical Support",
+  "taskVMAST": "V-Mast",
+  "taskTranscribe": "Transcribe",
+  "taskQualityAssurance": "Quality Assurance Processes",
+  "taskIhadiDevelopment": "Ihadi software development",
+  "taskAI": "AI",
+  "taskSpecialAssignment": "Special Assignment",
+  "taskRevision": "Revision",
+  "taskOther": "Other",
+  
+  "reportsTitle": "Reports",
+  "selectRangeTooltip": "Select range",
+  "reloadTooltip": "Reload",
+  "roleLabel": "Role: {role}",
+  "@roleLabel": {
+    "description": "Label showing user role",
+    "placeholders": {
+      "role": {"type": "String"}
+    }
+  },
+  "scopeLabel": "Scope: {scope}",
+  "roleAdmin": "Administrator",
+  "roleFieldManager": "Field Manager",
+  "roleUser": "User",
+  "scopeAll": "All",
+  "scopeMyTeam": "My Team",
+  "scopeMyRecords": "My Records",
+  "@scopeLabel": {
+    "description": "Label showing reports scope",
+    "placeholders": {
+      "scope": {"type": "String"}
+    }
+  },
+  "searchPlaceholder": "Search by name, note, etc.",
+  "noTrackingsMessage": "No trackings to show",
+  "loadReportsError": "Could not load reports: {error}",
+  "@loadReportsError": {
+    "description": "Error message when loading reports fails",
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  
+  "accountTitle": "My Account",
+  "defaultUserName": "User",
+  "guestRole": "Guest",
+  "verifyingAuthStatus": "Verifying authentication status...",
+  "userCountryLabel": "Country: {country}",
+  "@userCountryLabel": {
+    "description": "Label showing user country",
+    "placeholders": {
+      "country": {"type": "String"}
+    }
+  },
+  "userRoleLabel": "Role: {role}",
+  "@userRoleLabel": {
+    "description": "Label showing user role",
+    "placeholders": {
+      "role": {"type": "String"}
+    }
+  },
+  "countryFieldLabel": "Country",
+  "nameRequiredValidation": "Name is required",
+  "saveChangesButton": "Save Changes",
+  "profileUpdatedMessage": "Profile updated",
+  "saveErrorMessage": "Error saving: {error}",
+  "@saveErrorMessage": {
+    "description": "Error message when saving profile fails",
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "genericErrorMessage": "Error: {error}",
+  "@genericErrorMessage": {
+    "description": "Generic error message",
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  
+  "loadingMessage": "Loading...",
+  "noDataMessage": "No data",
+  "closeTooltip": "Close",
+  "reportDetailTitle": "Report Detail",
+  "mainDataSection": "Main Data",
+  "personLabel": "Person",
+  "supportCountryLabel": "Support Country",
+  "workingLanguageModalLabel": "Working Language",
+  "datesAndTimesSection": "Dates and Times",
+  "startLabel": "Start",
+  "endLabel": "End",
+  "startTimeModalLabel": "Start Time",
+  "endTimeModalLabel": "End Time",
+  "tasksSection": "Tasks",
+  "listLabel": "List",
+  "descriptionModalLabel": "Description",
+  "noteSection": "Note",
+  "noteDetailLabel": "Note: {note}",
+  "countryDetailLabel": "Country: {country}",
+  "languageDetailLabel": "Language: {language}",
+  "timeDetailLabel": "Time: {time}",
+  "tasksDetailLabel": "Tasks: {tasks}",
+  
+  "noteDetailPrefix": "Note",
+  "countryDetailPrefix": "Country",
+  "languageDetailPrefix": "Language", 
+  "timeDetailPrefix": "Time",
+  "tasksDetailPrefix": "Tasks",
+  "trackingFallback": "Tracking",
+  
+  "languageSelectionTitle": "Language",
+  "connectedStatus": "Connected ({connectionType})",
+  "@connectedStatus": {
+    "description": "Connection status with type",
+    "placeholders": {
+      "connectionType": {"type": "String"}
+    }
+  },
+  "disconnectedStatus": "No connection",
+  "readyToSync": "Ready to sync",
+  "syncing": "Syncing...",
+  "lastSyncSuccess": "Last sync successful",
+  "syncError": "Sync error",
+  "syncPaused": "Sync paused",
+  "syncStatusTitle": "Sync Status",
+  "connectivityTitle": "Connectivity",
+  "statusLabel": "Status",
+  "connectedLabel": "Connected",
+  "disconnectedLabel": "Disconnected",
+  "typeLabel": "Type",
+  "syncTitle": "Synchronization",
+  "pendingEntriesLabel": "Pending entries",
+  "failedEntriesLabel": "Failed entries",
+  "syncButton": "Sync",
+  "closeButton": "Close",
+  "pendingCountLabel": "{count} pending",
+  "@pendingCountLabel": {
+    "description": "Count of pending items",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "failedCountLabel": "{count} failed",
+  "@failedCountLabel": {
+    "description": "Count of failed items",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "fewSecondsAgo": "A few seconds ago",
+  "minutesAgo": "{minutes} minutes ago",
+  "@minutesAgo": {
+    "description": "Time in minutes ago",
+    "placeholders": {
+      "minutes": {"type": "int"}
+    }
+  },
+  "hoursAgo": "{hours} hours ago",
+  "@hoursAgo": {
+    "description": "Time in hours ago",
+    "placeholders": {
+      "hours": {"type": "int"}
+    }
+  },
+  "noAccessToken": "No access token",
+  "httpError": "Error {statusCode}: {message}",
+  "@httpError": {
+    "description": "HTTP error message",
+    "placeholders": {
+      "statusCode": {"type": "int"},
+      "message": {"type": "String"}
+    }
+  },
+  "emptyFieldValue": "-",
+  
   "app_name": "TimeTracker",
   "login_title": "Sign in",
   "login_button": "Log in",
   "logout_button": "Log out",
-  "home_greeting": "Hi {name}!",
-  "@home_greeting": {
-    "description": "Personalized greeting on home",
-    "placeholders": {
-      "name": { "type": "String" }
-    }
-  },
   "report_items_count": "{count, plural, =0{No entries} one{1 entry} other{{count} entries}}",
   "@report_items_count": {
     "description": "Entries counter in reports",
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {"type": "int"}
     }
   },
   "date_format_hint": "MMM d, y • HH:mm"

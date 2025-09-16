@@ -5,6 +5,7 @@ import 'package:ihadi_time_tracker/screens/splash_screen.dart';
 import 'models/tracking_data.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'l10n/app_localizations.dart';
 import 'localization/language_controller.dart';
 
 // Servicios offline
@@ -89,14 +90,14 @@ class MyApp extends StatelessWidget {
     final lang = context.watch<LanguageController>();
     return MaterialApp(
       locale: lang.locale, // null => sigue idioma del sistema
-      // supportedLocales: AppLocalizations.supportedLocales,
+      supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: const [
-        // AppLocalizations.delegate,
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      // onGenerateTitle: (ctx) => AppLocalizations.of(ctx).app_name,
+      onGenerateTitle: (ctx) => AppLocalizations.of(ctx).appTitle,
       title: 'Tracking App',
       debugShowCheckedModeBanner: false,
       theme: appTheme,

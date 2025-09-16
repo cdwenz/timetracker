@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../models/tracking_data.dart';
 import 'step_05_screen.dart';
 import '../../widgets/big_action_button.dart';
+import '../../l10n/app_localizations.dart';
 
 class StepDateScreen extends StatefulWidget {
   const StepDateScreen({super.key});
@@ -42,28 +43,28 @@ class _StepDateScreenState extends State<StepDateScreen> {
   }
 
   String _formatDate(DateTime? date) {
-    if (date == null) return 'Seleccionar';
+    if (date == null) return AppLocalizations.of(context).selectDateButton;
     return '${date.day}/${date.month}/${date.year}';
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Paso 4 de 7')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context).step4Title)),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                '¿Cuándo ocurrió?',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              Text(
+                AppLocalizations.of(context).step4Question,
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
-              const Text(
-                'Seleccioná la fecha de inicio y de fin de la actividad.',
-                style: TextStyle(fontSize: 16, color: Colors.black54),
+              Text(
+                AppLocalizations.of(context).step4Description,
+                style: const TextStyle(fontSize: 16, color: Colors.black54),
               ),
               const SizedBox(height: 24),
               ElevatedButton(
@@ -76,7 +77,7 @@ class _StepDateScreenState extends State<StepDateScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Inicio'),
+                    Text(AppLocalizations.of(context).startDateLabel),
                     Text(_formatDate(_startDate)),
                   ],
                 ),
@@ -92,14 +93,14 @@ class _StepDateScreenState extends State<StepDateScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Fin'),
+                    Text(AppLocalizations.of(context).endDateLabel),
                     Text(_formatDate(_endDate)),
                   ],
                 ),
               ),
               const Spacer(),
               BigActionButton(
-                text: 'Siguiente',
+                text: AppLocalizations.of(context).nextButton,
                 onPressed: () {
                   if (_startDate != null && _endDate != null) {
                     Provider.of<TrackingData>(context, listen: false)
@@ -110,8 +111,8 @@ class _StepDateScreenState extends State<StepDateScreen> {
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Por favor, completá ambas fechas.')),
+                      SnackBar(
+                          content: Text(AppLocalizations.of(context).step4Validation)),
                     );
                   }
                 },

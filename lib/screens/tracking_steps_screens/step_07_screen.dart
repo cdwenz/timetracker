@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../models/tracking_data.dart';
 import '../../services/time_tracker_service.dart';
 import '../../widgets/big_action_button.dart';
+import '../../l10n/app_localizations.dart';
 
 class StepSummaryScreen extends StatefulWidget {
   const StepSummaryScreen({super.key});
@@ -51,8 +52,8 @@ class _StepSummaryScreenState extends State<StepSummaryScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(success
-            ? 'Registro enviado correctamente.'
-            : 'Error al enviar el registro.'),
+            ? AppLocalizations.of(context).successMessage
+            : AppLocalizations.of(context).errorMessage),
       ),
     );
 
@@ -68,36 +69,36 @@ class _StepSummaryScreenState extends State<StepSummaryScreen> {
     final tracking = Provider.of<TrackingData>(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Paso 7 de 7')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context).step7Title)),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Resumen de tu actividad',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              Text(
+                AppLocalizations.of(context).step7Question,
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
-              _summaryItem('Nota', tracking.note),
-              _summaryItem('Destinatario', tracking.recipient),
-              _summaryItem('Nombre', tracking.personName),
+              _summaryItem(AppLocalizations.of(context).noteLabel, tracking.note),
+              _summaryItem(AppLocalizations.of(context).recipientLabel, tracking.recipient),
+              _summaryItem(AppLocalizations.of(context).nameLabel, tracking.personName),
               _summaryItem(
-                'Fecha',
+                AppLocalizations.of(context).dateLabel,
                 '${formatDate(tracking.startDate)} - ${formatDate(tracking.endDate)}',
               ),
               _summaryItem(
-                'Horario',
+                AppLocalizations.of(context).timeLabel,
                 '${formatTime(tracking.startTimeOfDay)} - ${formatTime(tracking.endTimeOfDay)}',
               ),
-              _summaryItem('Tareas', tracking.tasks.join(', ')),
-              _summaryItem('Descripción', tracking.taskDescription),
+              _summaryItem(AppLocalizations.of(context).tasksLabel, tracking.tasks.join(', ')),
+              _summaryItem(AppLocalizations.of(context).descriptionLabel, tracking.taskDescription),
               const Spacer(),
               _isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : BigActionButton(
-                      text: 'Finalizar',
+                      text: AppLocalizations.of(context).finishButton,
                       onPressed: _submit,
                     ),
             ],

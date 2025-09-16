@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ihadi_time_tracker/widgets/report_detail_modal.dart';
 import 'package:ihadi_time_tracker/models/tracking.dart';
 import 'package:ihadi_time_tracker/services/reports_service.dart';
+import '../l10n/app_localizations.dart';
 
 class ReportsScreen extends StatefulWidget {
   const ReportsScreen({super.key});
@@ -24,6 +25,25 @@ class _ReportsScreenState extends State<ReportsScreen> {
     final m = d.month.toString().padLeft(2, '0');
     final day = d.day.toString().padLeft(2, '0');
     return '$y-$m-$day';
+  }
+
+  /// Traduce el nombre del rol del sistema
+  String _translateRole(String role) {
+    return switch (role) {
+      'ADMIN' => AppLocalizations.of(context).roleAdmin,
+      'FIELD_MANAGER' => AppLocalizations.of(context).roleFieldManager,
+      'USER' => AppLocalizations.of(context).roleUser,
+      _ => role,
+    };
+  }
+
+  /// Traduce el ámbito basado en el rol
+  String _translateScope(String role) {
+    return switch (role) {
+      'ADMIN' => AppLocalizations.of(context).scopeAll,
+      'FIELD_MANAGER' => AppLocalizations.of(context).scopeMyTeam,
+      _ => AppLocalizations.of(context).scopeMyRecords,
+    };
   }
 
   @override
@@ -55,7 +75,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('No se pudieron cargar los reportes: $e')),
+          SnackBar(content: Text(AppLocalizations.of(context).loadReportsError(e.toString()))),
         );
       }
     } finally {
@@ -92,15 +112,15 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Reports'),
+        title: Text(AppLocalizations.of(context).reportsTitle),
         actions: [
           IconButton(
-            tooltip: 'Seleccionar rango',
+            tooltip: AppLocalizations.of(context).selectRangeTooltip,
             onPressed: _pickRange,
             icon: const Icon(Icons.date_range),
           ),
           IconButton(
-            tooltip: 'Recargar',
+            tooltip: AppLocalizations.of(context).reloadTooltip,
             onPressed: _loading ? null : _load,
             icon: const Icon(Icons.refresh),
           ),
@@ -120,15 +140,11 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     runSpacing: 8,
                     children: [
                       Chip(
-                        label: Text('Rol: $_role'),
+                        label: Text(AppLocalizations.of(context).roleLabel(_translateRole(_role))),
                         avatar: const Icon(Icons.security, size: 18),
                       ),
                       Chip(
-                        label: Text('Ámbito: ${switch (_role) {
-                          'ADMIN' => 'Todos',
-                          'FIELD_MANAGER' => 'Mi equipo',
-                          _ => 'Mis registros'
-                        }}'),
+                        label: Text(AppLocalizations.of(context).scopeLabel(_translateScope(_role))),
                         avatar: const Icon(Icons.filter_list, size: 18),
                       ),
                     ],
@@ -163,7 +179,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 controller: _searchCtrl,
                 onSubmitted: (_) => _load(),
                 decoration: InputDecoration(
-                  hintText: 'Buscar por nombre, nota, etc.',
+                  hintText: AppLocalizations.of(context).searchPlaceholder,
                   prefixIcon: const Icon(Icons.search),
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.clear),
@@ -183,11 +199,11 @@ class _ReportsScreenState extends State<ReportsScreen> {
                       onRefresh: _load,
                       child: _items.isEmpty
                           ? ListView(
-                              children: const [
-                                SizedBox(height: 120),
+                              children: [
+                                const SizedBox(height: 120),
                                 Center(
                                     child:
-                                        Text('No hay trackings para mostrar')),
+                                        Text(AppLocalizations.of(context).noTrackingsMessage)),
                               ],
                             )
                           : ListView.separated(
@@ -210,19 +226,19 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                     ? t.personName!
                                     : (t.recipient?.isNotEmpty == true
                                         ? t.recipient!
-                                        : (t.note ?? 'Tracking'));
+                                        : (t.note ?? AppLocalizations.of(context).trackingFallback));
 
                                 final subtitle = [
                                   if (t.note?.isNotEmpty == true)
-                                    'Nota: ${t.note}',
+                                    '${AppLocalizations.of(context).noteDetailPrefix}: ${t.note}',
                                   if (t.supportedCountry?.isNotEmpty == true)
-                                    'País: ${t.supportedCountry}',
+                                    '${AppLocalizations.of(context).countryDetailPrefix}: ${t.supportedCountry}',
                                   if (t.workingLanguage?.isNotEmpty == true)
-                                    'Idioma: ${t.workingLanguage}',
+                                    '${AppLocalizations.of(context).languageDetailPrefix}: ${t.workingLanguage}',
                                   if (timeRange.isNotEmpty)
-                                    'Horario: $timeRange',
+                                    '${AppLocalizations.of(context).timeDetailPrefix}: $timeRange',
                                   if (t.tasks.isNotEmpty)
-                                    'Tareas: ${t.tasks.join(", ")}',
+                                    '${AppLocalizations.of(context).tasksDetailPrefix}: ${t.tasks.join(", ")}',
                                 ].join(' • ');
 
 

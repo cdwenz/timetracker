@@ -24,7 +24,7 @@ class SyncService extends ChangeNotifier {
   SyncService._internal();
 
   static const String baseUrl = 'http://10.0.2.2:8000/api';
-  static const Duration syncInterval = Duration(minutes: 5);
+  static const Duration syncInterval = Duration(minutes: 15);
   static const int maxRetryAttempts = 3;
   
   // Estado del servicio
@@ -35,6 +35,9 @@ class SyncService extends ChangeNotifier {
   bool _isInitialized = false;
   int _pendingSyncCount = 0;
   int _failedSyncCount = 0;
+  bool _hasNotifiedPendingSync = false;
+  bool _allowAutoSync = true;
+  StreamSubscription<bool>? _connectivitySubscription;
 
   // Getters públicos
   SyncStatus get status => _status;
@@ -55,10 +58,13 @@ class SyncService extends ChangeNotifier {
       await LocalDatabase.database;
       
       // Obtener estadísticas iniciales
-      await _updateSyncStats();
+      await updateSyncStats();
 
       // Configurar sincronización periódica
       _startPeriodicSync();
+
+      // Escuchar cambios de conectividad para notificar registros pendientes
+      _setupConnectivityListener();
 
       _isInitialized = true;
       _updateStatus(SyncStatus.idle, 'Servicio de sincronización inicializado');
@@ -74,15 +80,71 @@ class SyncService extends ChangeNotifier {
   void _startPeriodicSync() {
     _periodicSyncTimer?.cancel();
     _periodicSyncTimer = Timer.periodic(syncInterval, (timer) {
-      if (ConnectivityService().isConnected && _status != SyncStatus.syncing) {
+      if (ConnectivityService().isConnected && _status != SyncStatus.syncing && _allowAutoSync) {
+        print('⏰ Sincronización periódica automática...');
         syncPendingEntries();
       }
     });
     print('⏰ Sincronización periódica configurada cada ${syncInterval.inMinutes} minutos');
   }
 
+  /// Configurar listener de conectividad para notificar registros pendientes
+  void _setupConnectivityListener() {
+    final connectivityService = ConnectivityService();
+    
+    // Escuchar cambios de conectividad
+    connectivityService.addListener(() {
+      if (connectivityService.isConnected) {
+        _onConnectivityRestored();
+      } else {
+        _hasNotifiedPendingSync = false; // Reset para próxima conexión
+      }
+    });
+  }
+
+  /// Manejar cuando se restablece la conectividad
+  void _onConnectivityRestored() async {
+    // Solo notificar una vez por sesión de reconexión
+    if (_hasNotifiedPendingSync) return;
+    
+    try {
+      // Forzar actualización de estadísticas
+      await updateSyncStats();
+      
+      print('🔍 Conectividad restablecida - Verificando registros pendientes:');
+      print('   Pendientes: $_pendingSyncCount');
+      print('   Fallidos: $_failedSyncCount');
+      
+      // Si hay registros pendientes o fallidos, mostrar notificación
+      if ((_pendingSyncCount > 0 || _failedSyncCount > 0)) {
+        final totalPending = _pendingSyncCount + _failedSyncCount;
+        _updateStatus(SyncStatus.idle, 
+          '¡Conexión restablecida! Tienes $totalPending registro(s) pendiente(s) de sincronizar');
+        
+        _hasNotifiedPendingSync = true;
+        
+        print('📢 Notificación: $totalPending registros pendientes detectados');
+        
+        // Pausar sincronización automática para dar tiempo al usuario
+        pauseAutoSync(duration: const Duration(seconds: 30));
+        
+        // Programar sincronización después del periodo de pausa
+        Timer(const Duration(seconds: 30), () {
+          if (ConnectivityService().isConnected && _status != SyncStatus.syncing) {
+            print('🔄 Iniciando sincronización automática tras periodo de gracia...');
+            syncPendingEntries();
+          }
+        });
+      } else {
+        print('✅ No hay registros pendientes para sincronizar');
+      }
+    } catch (e) {
+      print('⚠️ Error al verificar registros pendientes: $e');
+    }
+  }
+
   /// Actualizar estadísticas de sincronización
-  Future<void> _updateSyncStats() async {
+  Future<void> updateSyncStats() async {
     try {
       final stats = await LocalDatabase.getSyncStats();
       _pendingSyncCount = stats['pending'] ?? 0;
@@ -140,7 +202,7 @@ class SyncService extends ChangeNotifier {
 
       final token = await _getAuthToken();
       if (token == null) {
-        _updateStatus(SyncStatus.failed, 'Necesitas hacer login online para sincronizar');
+        _updateStatus(SyncStatus.failed, 'Token requerido para sincronización');
         return false;
       }
 
@@ -152,7 +214,7 @@ class SyncService extends ChangeNotifier {
       
       if (allEntries.isEmpty) {
         _updateStatus(SyncStatus.success, 'No hay entradas para sincronizar');
-        await _updateSyncStats();
+        await updateSyncStats();
         return true;
       }
 
@@ -182,7 +244,7 @@ class SyncService extends ChangeNotifier {
       }
 
       // Actualizar estadísticas
-      await _updateSyncStats();
+      await updateSyncStats();
 
       if (failureCount == 0) {
         _updateStatus(SyncStatus.success, 
@@ -277,6 +339,8 @@ class SyncService extends ChangeNotifier {
   /// Forzar sincronización inmediata
   Future<bool> forcSync() async {
     print('🚀 Forzando sincronización inmediata...');
+    // Reanudar sincronización automática cuando usuario sincroniza manualmente
+    resumeAutoSync();
     return await syncPendingEntries();
   }
 
@@ -329,7 +393,7 @@ class SyncService extends ChangeNotifier {
   Future<void> cleanOldEntries({int daysOld = 30}) async {
     try {
       await LocalDatabase.cleanOldSyncedEntries(daysOld: daysOld);
-      await _updateSyncStats();
+      await updateSyncStats();
       print('🧹 Limpieza de entradas antiguas completada');
     } catch (e) {
       print('❌ Error en limpieza: $e');
@@ -355,10 +419,30 @@ class SyncService extends ChangeNotifier {
     return _pendingSyncCount > 10 || _failedSyncCount > 5;
   }
 
+  /// Pausar sincronización automática temporalmente (para que usuario vea notificaciones)
+  void pauseAutoSync({Duration? duration}) {
+    _allowAutoSync = false;
+    print('⏸️ Sincronización automática pausada');
+    
+    if (duration != null) {
+      Timer(duration, () {
+        _allowAutoSync = true;
+        print('▶️ Sincronización automática reanudada');
+      });
+    }
+  }
+
+  /// Reanudar sincronización automática
+  void resumeAutoSync() {
+    _allowAutoSync = true;
+    print('▶️ Sincronización automática reanudada manualmente');
+  }
+
   /// Limpiar recursos
   @override
   void dispose() {
     _periodicSyncTimer?.cancel();
+    _connectivitySubscription?.cancel();
     super.dispose();
   }
 }

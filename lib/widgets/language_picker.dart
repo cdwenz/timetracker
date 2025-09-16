@@ -10,7 +10,7 @@ class LanguagePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     final lang = context.watch<LanguageController>();
     final items = const [
-      Locale('es'), Locale('en'), Locale('pt'), Locale('fr'), Locale('it'),
+      Locale('es'), Locale('en'), Locale('pt'), Locale('fr'), Locale('ru'),
     ];
 
     return DropdownButton<Locale>(
@@ -22,7 +22,7 @@ class LanguagePicker extends StatelessWidget {
           'en' => 'English',
           'pt' => 'Português',
           'fr' => 'Français',
-          'it' => 'Italiano',
+          'ru' => 'Русский',
           _ => l.languageCode,
         };
         return DropdownMenuItem(value: l, child: Text(label));
