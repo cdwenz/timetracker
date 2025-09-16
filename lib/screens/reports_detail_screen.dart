@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../services/api_service.dart';
 import '../services/reports_metrics_service.dart';
+import '../l10n/app_localizations.dart';
 
 /// Args para navegación con rutas nombradas
 class ReportsDetailArgs {
@@ -20,7 +21,7 @@ class ReportsDetailScreen extends StatelessWidget {
     final svc = ReportsMetricsService(ApiService());
     return svc.loadDetailLast30Days(
       filter: args.filter,
-      supportedCountry: 'AR',
+      supportedCountry: null,  // No filtrar por país por defecto
     );
   }
 
@@ -35,11 +36,11 @@ class ReportsDetailScreen extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
           if (snap.hasError) {
-            return Center(child: Text('Error: ${snap.error}'));
+            return Center(child: Text(AppLocalizations.of(context).errorLabel(snap.error.toString())));
           }
           final list = snap.data ?? const [];
           if (list.isEmpty) {
-            return const Center(child: Text('Sin reportes en el período'));
+            return Center(child: Text(AppLocalizations.of(context).noReportsInPeriod));
           }
 
           return ListView.separated(
@@ -48,14 +49,27 @@ class ReportsDetailScreen extends StatelessWidget {
             separatorBuilder: (_, __) => const Divider(height: 1),
             itemBuilder: (ctx, i) {
               final e = list[i];
-              final id = (e['id'] ?? '').toString();
-              final userId = (e['userId'] ?? '').toString();
-              final startedAt = DateTime.tryParse((e['startDate'] ?? e['createdAt'] ?? '').toString());
+              
+              // Obtener información legible para mostrar
+              final personName = (e['personName'] ?? '').toString();
+              final taskDescription = (e['taskDescription'] ?? '').toString();
+              final note = (e['note'] ?? '').toString();
+              final startedAt = DateTime.tryParse((e['startDate'] ?? e['createdAt'] ?? e['updatedAt'] ?? '').toString());
               final startedStr = startedAt != null ? DateFormat('yyyy-MM-dd HH:mm').format(startedAt) : '—';
+              
+              // Título: Mostrar persona o descripción como identificador principal
+              final title = personName.isNotEmpty 
+                  ? personName
+                  : (taskDescription.isNotEmpty 
+                      ? taskDescription 
+                      : (note.isNotEmpty ? note : 'Registro'));
+              
+              // Subtítulo: Mostrar fecha y contexto adicional
+              final subtitle = startedStr != '—' ? 'Fecha: $startedStr' : 'Sin fecha';
 
               return ListTile(
-                title: Text('Reporte ${id.isNotEmpty ? id.substring(0, 6) : '—'}…'),
-                subtitle: Text('Fecha: $startedStr • Usuario: ${userId.isNotEmpty ? userId.substring(0, 6) : '—'}…'),
+                title: Text(title),
+                subtitle: Text(subtitle),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () {
                   showModalBottomSheet(
@@ -82,7 +96,7 @@ class _ReportDetailSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final startedAt = DateTime.tryParse((entry['startDate'] ?? entry['createdAt'] ?? '').toString());
+    final startedAt = DateTime.tryParse((entry['startDate'] ?? entry['createdAt'] ?? entry['updatedAt'] ?? '').toString());
     final startedStr = startedAt != null ? DateFormat('yyyy-MM-dd HH:mm').format(startedAt) : '—';
 
     return DraggableScrollableSheet(
@@ -96,19 +110,104 @@ class _ReportDetailSheet extends StatelessWidget {
           child: ListView(
             controller: controller,
             children: [
-              const Text("Detalle del reporte", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Text(AppLocalizations.of(context).reportDetailTitle, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 12),
-              Text("• ID: ${entry['id'] ?? '—'}"),
-              Text("• Usuario: ${entry['userId'] ?? '—'}"),
-              Text("• Fecha inicio: $startedStr"),
-              if (entry['organizationId'] != null) Text("• Organización: ${entry['organizationId']}"),
-              if (entry['projectId'] != null) Text("• Proyecto: ${entry['projectId']}"),
-              if (entry['notes'] != null) Text("• Notas: ${entry['notes']}"),
-              // Agrega aquí campos reales cuando los tengas en el backend
+              
+              // Información básica
+              if (entry['id'] != null) 
+                _detailRow('ID', entry['id'].toString()),
+              if (entry['userId'] != null) 
+                _detailRow('Usuario', entry['userId'].toString()),
+              if (entry['personName'] != null) 
+                _detailRow('Persona', entry['personName'].toString()),
+              
+              const SizedBox(height: 8),
+              const Divider(),
+              const SizedBox(height: 8),
+              
+              // Fechas y horarios
+              if (startedStr != '—')
+                _detailRow('Fecha inicio', startedStr),
+              if (entry['endDate'] != null) ...[
+                () {
+                  final endDate = DateTime.tryParse(entry['endDate'].toString());
+                  final endStr = endDate != null ? DateFormat('yyyy-MM-dd HH:mm').format(endDate) : '—';
+                  return endStr != '—' ? _detailRow('Fecha fin', endStr) : const SizedBox.shrink();
+                }(),
+              ],
+              if (entry['startTimeOfDay'] != null) 
+                _detailRow('Hora inicio', entry['startTimeOfDay'].toString()),
+              if (entry['endTimeOfDay'] != null) 
+                _detailRow('Hora fin', entry['endTimeOfDay'].toString()),
+              
+              const SizedBox(height: 8),
+              const Divider(),
+              const SizedBox(height: 8),
+              
+              // Detalles del trabajo
+              if (entry['supportedCountry'] != null) 
+                _detailRow('País', entry['supportedCountry'].toString()),
+              if (entry['workingLanguage'] != null) 
+                _detailRow('Idioma', entry['workingLanguage'].toString()),
+              if (entry['recipient'] != null) 
+                _detailRow('Destinatario', entry['recipient'].toString()),
+              
+              const SizedBox(height: 8),
+              const Divider(),
+              const SizedBox(height: 8),
+              
+              // Tareas y descripción
+              if (entry['tasks'] != null && entry['tasks'] is List) 
+                _detailRow('Tareas', (entry['tasks'] as List).join(', ')),
+              if (entry['taskDescription'] != null) 
+                _detailRow('Descripción', entry['taskDescription'].toString()),
+              if (entry['note'] != null) 
+                _detailRow('Nota', entry['note'].toString()),
+              
+              const SizedBox(height: 16),
+              
+              // Debug: mostrar todos los campos disponibles
+              ExpansionTile(
+                title: const Text('Datos técnicos (debug)', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      entry.toString(),
+                      style: const TextStyle(fontSize: 10, fontFamily: 'monospace'),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         );
       },
+    );
+  }
+  
+  Widget _detailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 120,
+            child: Text(
+              '$label:',
+              style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.grey),
+            ),
+          ),
+          Expanded(
+            child: Text(value),
+          ),
+        ],
+      ),
     );
   }
 }

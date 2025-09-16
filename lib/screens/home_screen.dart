@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:ihadi_time_tracker/widgets/custom_drawer.dart';
-import 'package:ihadi_time_tracker/screens/reports_screen.dart';
-import 'package:ihadi_time_tracker/screens/account_screen.dart';
-import 'package:ihadi_time_tracker/screens/tracking_steps_screens/step_01_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+import '../l10n/app_localizations.dart';
+
+import '../widgets/custom_drawer.dart';
+import '../widgets/big_action_button.dart';
+import '../widgets/offline_status_widget.dart';
+import '../services/sync_service.dart';
+import '../services/connectivity_service.dart';
+import 'reports_screen.dart';
+import 'account_screen.dart';
+import 'tracking_steps_screens/step_01_screen.dart';
 
 // helper local, mismo patrón que el Drawer
 void _go(BuildContext context, Widget page, {bool replace = false}) {
@@ -17,8 +25,30 @@ void _go(BuildContext context, Widget page, {bool replace = false}) {
   }
 }
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String _username = '';
+  String _role = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  void _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _username = prefs.getString('name') ?? AppLocalizations.of(context).defaultUserName;
+      _role = prefs.getString('role') ?? AppLocalizations.of(context).guestRole;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,124 +56,62 @@ class HomeScreen extends StatelessWidget {
       drawer: const CustomDrawer(),
       drawerEnableOpenDragGesture: true,
       appBar: AppBar(
-        title: const Text('Panel'),
-        centerTitle: false,
-        leading: Builder(
-          builder: (ctx) => IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () => Scaffold.of(ctx).openDrawer(),
-          ),
-        ),
+        title: Text(AppLocalizations.of(context).dashboardTitle),
+        actions: [
+          const OfflineStatusWidget(compact: true),
+          const SizedBox(width: 16),
+        ],
       ),
       body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            // 2 columnas en móvil, 3 si hay ancho grande
-            final crossAxisCount = constraints.maxWidth >= 900
-                ? 3
-                : constraints.maxWidth >= 600
-                    ? 3
-                    : 2;
+        child: Column(
+          children: [
+            // Widget de notificación de sincronización
+            _buildSyncNotification(),
+            
+            Expanded(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  // 2 columnas en móvil, 3 si hay ancho grande
+                  final crossAxisCount = constraints.maxWidth >= 900
+                      ? 3
+                      : constraints.maxWidth >= 600
+                          ? 3
+                          : 2;
 
-            return GridView.count(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-              crossAxisCount: crossAxisCount,
-              mainAxisSpacing: 16,
-              crossAxisSpacing: 16,
-              childAspectRatio: 1.35, // parecido a tu mock
-              children: [
+                  return GridView.count(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                    crossAxisCount: crossAxisCount,
+                    mainAxisSpacing: 16,
+                    crossAxisSpacing: 16,
+                    childAspectRatio: 1.35,
+                    children: [
                 _DashboardTile(
-                  title: 'Tracking',
-                  subtitle: 'Iniciar y detener',
+                  title: AppLocalizations.of(context).trackingTileTitle,
+                  subtitle: AppLocalizations.of(context).trackingTileSubtitle,
                   icon: Icons.timer_outlined,
                   onTap: () =>
                       _go(context, const StepOneScreen(), replace: true),
                 ),
                 _DashboardTile(
-                  title: 'Reports',
-                  subtitle: 'Tiempos y métricas',
+                  title: AppLocalizations.of(context).reportsTileTitle,
+                  subtitle: AppLocalizations.of(context).reportsTileSubtitle,
                   icon: Icons.bar_chart_rounded,
                   onTap: () =>
                       _go(context, const ReportsScreen(), replace: true),
                 ),
                 _DashboardTile(
-                  title: 'Account',
-                  subtitle: 'Perfil y sesión',
+                  title: AppLocalizations.of(context).accountTileTitle,
+                  subtitle: AppLocalizations.of(context).accountTileSubtitle,
                   icon: Icons.person_rounded,
                   onTap: () =>
                       _go(context, const AccountScreen(), replace: true),
                 ),
               ],
             );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class _DashboardTile extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final IconData icon;
-  final String? routeName; // opcional (fallback)
-  final VoidCallback? onTap; // NUEVO
-
-  const _DashboardTile({
-    required this.title,
-    required this.subtitle,
-    required this.icon,
-    this.routeName,
-    this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final cardColor = theme.colorScheme.surface;
-    final primary = theme.colorScheme.primary;
-    final textTheme = theme.textTheme;
-    final tap = onTap ??
-        (routeName != null
-            ? () => Navigator.of(context).pushReplacementNamed(routeName!)
-            : null);
-
-    return InkWell(
-      onTap: tap,
-      borderRadius: BorderRadius.circular(16),
-      child: Ink(
-        decoration: BoxDecoration(
-          color: cardColor,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: kElevationToShadow[1],
-          border: Border.all(
-            color: theme.colorScheme.outlineVariant.withOpacity(0.35),
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(18),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(icon, size: 32, color: theme.colorScheme.onSurface),
-              const SizedBox(height: 12),
-              Text(
-                title,
-                style: textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+                },
               ),
-              const SizedBox(height: 6),
-              // línea acento bajo el título, como en tu imagen
-              Container(
-                  width: 28,
-                  height: 3,
-                  decoration: BoxDecoration(
-                    color: primary,
-                    borderRadius: BorderRadius.circular(2),
-                  )),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -174,6 +142,22 @@ class _DashboardTile extends StatelessWidget {
     );
   }
 
+  /// Verificar token antes de mostrar notificación de sincronización
+  Widget _buildSyncNotificationWithTokenCheck(SyncService syncService, int pendingCount, int failedCount, int totalPending) {
+    return FutureBuilder<String?>(
+      future: SharedPreferences.getInstance().then((prefs) => prefs.getString('access_token')),
+      builder: (context, snapshot) {
+        final hasToken = snapshot.data?.isNotEmpty ?? false;
+        
+        if (!hasToken) {
+          return _buildLoginRequiredNotification(totalPending);
+        }
+        
+        return _buildPendingSyncNotification(syncService, pendingCount, failedCount);
+      },
+    );
+  }
+
   /// Estado offline
   Widget _buildOfflineStatus(ConnectivityService connectivity) {
     return Container(
@@ -195,7 +179,7 @@ class _DashboardTile extends StatelessWidget {
               children: [
                 Text(
                   AppLocalizations.of(context).offlineModeTitle,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                     color: Colors.grey,
@@ -245,7 +229,7 @@ class _DashboardTile extends StatelessWidget {
                   children: [
                     Text(
                       AppLocalizations.of(context).loginRequiredTitle,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                         color: Colors.orange,
@@ -432,9 +416,8 @@ class _DashboardTile extends StatelessWidget {
       await prefs.clear();
       
       if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const LoginScreen()),
-        );
+        // Navegar a login screen - necesitarás importar la screen de login
+        Navigator.of(context).pushReplacementNamed('/login');
       }
     } catch (e) {
       if (mounted) {
@@ -443,5 +426,73 @@ class _DashboardTile extends StatelessWidget {
         );
       }
     }
+  }
+}
+
+class _DashboardTile extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final String? routeName; // opcional (fallback)
+  final VoidCallback? onTap; // NUEVO
+
+  const _DashboardTile({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    this.routeName,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cardColor = theme.colorScheme.surface;
+    final primary = theme.colorScheme.primary;
+    final textTheme = theme.textTheme;
+    final tap = onTap ??
+        (routeName != null
+            ? () => Navigator.of(context).pushReplacementNamed(routeName!)
+            : null);
+
+    return InkWell(
+      onTap: tap,
+      borderRadius: BorderRadius.circular(16),
+      child: Ink(
+        decoration: BoxDecoration(
+          color: cardColor,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: kElevationToShadow[1],
+          border: Border.all(
+            color: theme.colorScheme.outlineVariant.withOpacity(0.35),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(18),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(icon, size: 32, color: theme.colorScheme.onSurface),
+              const SizedBox(height: 12),
+              Text(
+                title,
+                style: textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 6),
+              // línea acento bajo el título, como en tu imagen
+              Container(
+                  width: 28,
+                  height: 3,
+                  decoration: BoxDecoration(
+                    color: primary,
+                    borderRadius: BorderRadius.circular(2),
+                  )),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -63,6 +63,7 @@ class ReportsMetricsService {
     required DateTime fromDate,
     required DateTime toDate,
     String? supportedCountry,
+    bool? myTeam, // Nuevo parámetro para filtrar por equipo
     int page = 1,
     int pageSize = 100,
   }) async {
@@ -71,23 +72,28 @@ class ReportsMetricsService {
       'toDate': _isoDateOnly(toDate),
       'page': page,
       'pageSize': pageSize,
-      if (userId != null && userId.isNotEmpty) 'userId': userId,
+      'returnMeta': false,  // Devolver array simple sin metadatos
+      if (userId != null && userId.isNotEmpty) 'createdBy': userId,  // Backend usa 'createdBy' no 'userId'
       if (supportedCountry != null && supportedCountry.isNotEmpty)
         'supportedCountry': supportedCountry,
+      if (myTeam == true) 'myTeam': 'true', // Nuevo filtro de equipo
     };
 
-    print("QUERY: $query");
+    print("🔍 FETCHING ENTRIES:");
+    print("   Query: $query");
 
     final json = await ApiService.getRequest('/time-tracker', query: query);
 
-    print("RESPONSE JSON: $json");
+    print("📥 API RESPONSE:");
+    print("   Type: ${json.runtimeType}");
+    print("   Content: $json");
 
-    // Tolerante a { result | results | data | items | entries | timeEntries } o List
+    // Tolerante a { data, result, results, items, entries, timeEntries } o List
     if (json is Map<String, dynamic>) {
       final candidates = [
+        json['data'],        // NestJS usa 'data' por defecto
         json['result'],
         json['results'],
-        json['data'],
         json['items'],
         json['entries'],
         json['timeEntries'],
@@ -95,15 +101,30 @@ class ReportsMetricsService {
       for (final c in candidates) {
         if (c is List) return c.cast<Map<String, dynamic>>();
       }
+      
+      // Si no hay array, podría estar en el root level
+      if (json['meta'] != null && json['data'] is List) {
+        return (json['data'] as List).cast<Map<String, dynamic>>();
+      }
     }
-    if (json is List) return json.cast<Map<String, dynamic>>();
+    if (json is List) {
+      final result = json.cast<Map<String, dynamic>>();
+      print("✅ PARSED AS LIST: ${result.length} items");
+      if (result.isNotEmpty) {
+        print("   First item keys: ${result.first.keys.toList()}");
+      }
+      return result;
+    }
+    
+    print("❌ NO VALID DATA FOUND - returning empty list");
     return <Map<String, dynamic>>[];
   }
 
   Map<String, int> _countByDay(List<Map<String, dynamic>> list) {
     final map = <String, int>{};
     for (final e in list) {
-      final raw = (e['startDate'] ?? e['createdAt'] ?? '').toString();
+      // Campos de fecha del backend NestJS: startDate, createdAt, updatedAt
+      final raw = (e['startDate'] ?? e['createdAt'] ?? e['updatedAt'] ?? e['date'] ?? '').toString();
       if (raw.isEmpty) continue;
       final dt = DateTime.tryParse(raw);
       if (dt == null) continue;
@@ -113,11 +134,65 @@ class ReportsMetricsService {
     return map;
   }
 
+  // ====== Helpers para lógica temporal de filtrado ======
+  
+  /// Filtra registros que pertenecen al usuario actual
+  List<Map<String, dynamic>> _filterMyEntries(
+    List<Map<String, dynamic>> allEntries, 
+    String uid
+  ) {
+    return allEntries.where((entry) {
+      final entryUserId = entry['userId']?.toString() ?? 
+                         entry['createdBy']?.toString() ?? 
+                         entry['user_id']?.toString() ?? '';
+      return entryUserId == uid;
+    }).toList();
+  }
+  
+  /// Filtra registros del "equipo" según el rol del usuario
+  List<Map<String, dynamic>> _filterTeamEntries(
+    List<Map<String, dynamic>> allEntries, 
+    String uid, 
+    String? userRole
+  ) {
+    print("⚠️  BACKEND LIMITATION: Current backend restricts FIELD_MANAGER to own records only");
+    print("⚠️  EXPECTED: FIELD_MANAGER should see team records, but backend needs fix");
+    
+    if (userRole == 'ADMIN') {
+      // ADMIN puede ver todos los registros de la organización
+      print("✅ ADMIN: Showing all organization records");
+      return allEntries;
+    } else if (userRole == 'FIELD_MANAGER') {
+      // 🚨 PROBLEMA: Backend actual limita FIELD_MANAGER a sus propios registros
+      // 📝 TODO: Una vez arreglado el backend, aquí debería mostrar registros del equipo
+      print("🚨 FIELD_MANAGER: Should see team records, but backend limits to own records");
+      print("📝 See TEAM_FILTERING_CHANGES.md for backend fix needed");
+      return _filterMyEntries(allEntries, uid);
+    } else {
+      // USER solo ve sus propios registros (comportamiento correcto)
+      print("✅ USER: Correctly showing only own records");
+      return _filterMyEntries(allEntries, uid);
+    }
+  }
+  
+  /// Descripción de la lógica de filtrado para logs
+  String _getFilteringLogicDescription(String? userRole) {
+    if (userRole == 'ADMIN') {
+      return 'ADMIN - Yo: sólo míos, Equipo: todos (correcto)';
+    } else if (userRole == 'FIELD_MANAGER') {
+      return 'FIELD_MANAGER - Yo y Equipo: sólo míos (🚨 BACKEND BUG)';
+    } else {
+      return '${userRole ?? "USER"} - Yo y Equipo: sólo míos (correcto)';
+    }
+  }
+
   // ====== API pública para el dashboard ======
   Future<ReportsDashboardData> loadDashboardLast30Days({
     String? supportedCountry,
   }) async {
     final uid = await AuthService.currentUserId();
+    final userRole = await AuthService.currentUserRole();
+    
     if (uid == null || uid.isEmpty) {
       throw Exception(
           'No se pudo obtener el userId actual (AuthService.currentUserId).');
@@ -127,17 +202,34 @@ class ReportsMetricsService {
     final from = range.from;
     final to = range.to;
 
+    print("📊 DASHBOARD DATA (REAL BACKEND CALLS):");
+    print("   Current user ID: $uid");
+    print("   Current user role: $userRole");
+
+    // Obtener MIS datos (llamada sin myTeam)
+    final mine = await _fetchEntries(
+      fromDate: from,
+      toDate: to,
+      supportedCountry: supportedCountry,
+      myTeam: false, // Explícitamente NO pedir datos del equipo
+    );
+    
+    // Obtener datos del EQUIPO (llamada con myTeam=true)
     final team = await _fetchEntries(
       fromDate: from,
       toDate: to,
       supportedCountry: supportedCountry,
+      myTeam: true, // Pedir datos del equipo
     );
-    final mine = await _fetchEntries(
-      userId: uid,
-      fromDate: from,
-      toDate: to,
-      supportedCountry: supportedCountry,
-    );
+    
+    print("   My entries: ${mine.length}");
+    print("   Team entries: ${team.length}");
+    
+    if (mine.length == team.length) {
+      print("⚠️  WARNING: Same count - possible backend limitation or no team membership");
+    } else {
+      print("✅ SUCCESS: Different counts - backend working correctly");
+    }
 
     final teamCount = team.length;
     final meCount = mine.length;
@@ -170,31 +262,45 @@ class ReportsMetricsService {
     required ReportsDetailFilter filter,
     String? supportedCountry,
   }) async {
+    final uid = await AuthService.currentUserId();
+    final userRole = await AuthService.currentUserRole();
+    
+    if (uid == null || uid.isEmpty) {
+      throw Exception('No se pudo obtener el userId actual.');
+    }
+    
     final range = last30DaysRange();
     final from = range.from;
     final to = range.to;
 
+    print("🔍 DETAIL DATA (REAL BACKEND CALLS):");
+    print("   Filter: $filter");
+    print("   User ID: $uid, Role: $userRole");
+
     switch (filter) {
       case ReportsDetailFilter.team:
-        return _fetchEntries(
+        // Datos del equipo - llamada con myTeam=true
+        final teamEntries = await _fetchEntries(
           fromDate: from,
           toDate: to,
           supportedCountry: supportedCountry,
+          myTeam: true, // Pedir datos del equipo
         );
+        print("   Returning team entries: ${teamEntries.length}");
+        return teamEntries;
 
       case ReportsDetailFilter.me:
       case ReportsDetailFilter.compare:
       case ReportsDetailFilter.trend:
-        final uid = await AuthService.currentUserId();
-        if (uid == null || uid.isEmpty) {
-          throw Exception('No se pudo obtener el userId actual.');
-        }
-        return _fetchEntries(
-          userId: uid,
+        // Solo mis datos - llamada sin myTeam
+        final myEntries = await _fetchEntries(
           fromDate: from,
           toDate: to,
           supportedCountry: supportedCountry,
+          myTeam: false, // Solo mis datos
         );
+        print("   Returning my entries: ${myEntries.length}");
+        return myEntries;
     }
   }
 }

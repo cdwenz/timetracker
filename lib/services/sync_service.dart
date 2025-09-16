@@ -292,12 +292,12 @@ class SyncService extends ChangeNotifier {
         }),
       ).timeout(const Duration(seconds: 30));
 
-      print('📡 Respuesta del servidor para entry ${entry.id}: ${response.statusCode}');
+      print('📷 Respuesta del servidor para entry ${entry.id}: ${response.statusCode}');
 
       if (response.statusCode == 201) {
-        // Parsear respuesta para obtener ID del servidor
+        // ✅ Éxito: Parsear respuesta para obtener ID del servidor
         final responseData = jsonDecode(response.body);
-        final serverId = responseData['id']?.toString() ?? 
+        final serverId = responseData['id']?.toString() ??
                         responseData['_id']?.toString() ?? 
                         'unknown';
 
@@ -306,11 +306,21 @@ class SyncService extends ChangeNotifier {
         
         print('✅ Entry ${entry.id} sincronizado exitosamente (server ID: $serverId)');
         return true;
-      } else {
+      } else if (response.statusCode >= 400 && response.statusCode < 500) {
+        // ❌ Errores 4xx: Problema del cliente (datos inválidos, falta organización, etc.)
+        // Estos NO deben reintentarse - marcar como fallidos permanentemente
         final errorBody = response.body;
-        print('❌ Error del servidor para entry ${entry.id}:');
+        print('❌ Error del cliente para entry ${entry.id}:');
         print('   Status Code: ${response.statusCode}');
         print('   Response Body: $errorBody');
+        
+        String errorMsg = 'Error del cliente: ${response.statusCode}';
+        try {
+          final errorData = jsonDecode(errorBody);
+          errorMsg = errorData['message'] ?? errorMsg;
+        } catch (e) {
+          // Si no se puede parsear, usar mensaje genérico
+        }
         
         // Log del payload enviado para debugging
         final payload = {
@@ -327,6 +337,20 @@ class SyncService extends ChangeNotifier {
           'taskDescription': entry.description,
         };
         print('   Payload enviado: ${jsonEncode(payload)}');
+        
+        // Marcar como fallido permanentemente (no reintentar)
+        await LocalDatabase.markSyncFailedPermanently(entry.id!, errorMsg);
+        print('   ⚠️ Entry marcado como fallo permanente (no se reintentará)');
+        
+        return false;
+      } else {
+        // ⚠️ Errores 5xx o de conectividad: Estos SÍ pueden reintentarse
+        final errorBody = response.body;
+        print('⚠️ Error del servidor para entry ${entry.id}:');
+        print('   Status Code: ${response.statusCode}');
+        print('   Response Body: $errorBody');
+        print('   Este error puede reintentarse más tarde');
+        
         return false;
       }
 

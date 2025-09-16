@@ -447,7 +447,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get closeTooltip => 'Close';
 
   @override
-  String get reportDetailTitle => 'Report Detail';
+  String get reportDetailTitle => 'Report detail';
 
   @override
   String get mainDataSection => 'Main Data';
@@ -650,4 +650,108 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get date_format_hint => 'MMM d, y • HH:mm';
+
+  @override
+  String get reportsScreenTitle => 'Reports';
+
+  @override
+  String get teamCardTitle => 'Team';
+
+  @override
+  String get meCardTitle => 'Me';
+
+  @override
+  String get teamCardSubtitle => 'Reports last month';
+
+  @override
+  String get meCardSubtitle => 'Reports last month';
+
+  @override
+  String get teamCardSubtitleAdmin => 'Organization reports (ADMIN view)';
+
+  @override
+  String get teamCardSubtitleNonAdmin => 'Same as \'Me\' (limited access)';
+
+  @override
+  String meCardSubtitleRole(Object role) {
+    return 'My reports ($role)';
+  }
+
+  @override
+  String get dailyComparisonTitle => 'Daily comparison';
+
+  @override
+  String get myEvolutionTitle => 'Evolution (Me)';
+
+  @override
+  String errorLabel(String error) {
+    return 'Error: $error';
+  }
+
+  @override
+  String get noReportsInPeriod => 'No reports in the period';
+
+  @override
+  String reportIdLabel(String id) {
+    return 'Report $id…';
+  }
+
+  @override
+  String reportDateUserLabel(String date, String userId) {
+    return 'Date: $date • User: $userId…';
+  }
+
+  @override
+  String reportIdField(String id) {
+    return '• ID: $id';
+  }
+
+  @override
+  String reportUserField(String userId) {
+    return '• User: $userId';
+  }
+
+  @override
+  String reportStartDateField(String startDate) {
+    return '• Start date: $startDate';
+  }
+
+  @override
+  String reportOrganizationField(String organizationId) {
+    return '• Organization: $organizationId';
+  }
+
+  @override
+  String reportProjectField(String projectId) {
+    return '• Project: $projectId';
+  }
+
+  @override
+  String reportNotesField(String notes) {
+    return '• Notes: $notes';
+  }
+
+  @override
+  String get unknownValue => '—';
+
+  @override
+  String get dashboardTitle => 'Dashboard';
+
+  @override
+  String get trackingTileTitle => 'Tracking';
+
+  @override
+  String get trackingTileSubtitle => 'Start and stop';
+
+  @override
+  String get reportsTileTitle => 'Reports';
+
+  @override
+  String get reportsTileSubtitle => 'Times and metrics';
+
+  @override
+  String get accountTileTitle => 'Account';
+
+  @override
+  String get accountTileSubtitle => 'Profile and session';
 }

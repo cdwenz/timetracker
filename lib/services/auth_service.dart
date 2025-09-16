@@ -154,4 +154,14 @@ class AuthService {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('userId');
   }
+
+  static Future<String?> currentUserRole() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('role');
+  }
+
+  static Future<String?> currentUserName() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('name');
+  }
 }

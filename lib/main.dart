@@ -3,6 +3,10 @@ import 'package:ihadi_time_tracker/providers/user_providers.dart';
 import 'package:ihadi_time_tracker/screens/home_screen.dart';
 import 'package:ihadi_time_tracker/screens/reports_detail_screen.dart';
 import 'package:ihadi_time_tracker/screens/reports_screen.dart';
+import 'package:ihadi_time_tracker/screens/account_screen.dart';
+import 'package:ihadi_time_tracker/screens/login_screen.dart';
+import 'package:ihadi_time_tracker/screens/register_screen.dart';
+import 'package:ihadi_time_tracker/screens/tracking_steps_screens/step_01_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:ihadi_time_tracker/screens/splash_screen.dart';
 import 'models/tracking_data.dart';
@@ -104,11 +108,26 @@ class MyApp extends StatelessWidget {
       title: 'Tracking App',
       debugShowCheckedModeBanner: false,
       theme: appTheme,
-      initialRoute: '/home',
+      initialRoute: '/',
       onGenerateRoute: (settings) {
         switch (settings.name) {
+          case '/':
+            return MaterialPageRoute(builder: (_) => const SplashScreen());
+            
+          case '/login':
+            return MaterialPageRoute(builder: (_) => const LoginScreen());
+            
+          case '/register':
+            return MaterialPageRoute(builder: (_) => const RegisterScreen());
+            
           case '/home':
             return MaterialPageRoute(builder: (_) => const HomeScreen());
+            
+          case '/account':
+            return MaterialPageRoute(builder: (_) => const AccountScreen());
+            
+          case '/tracking':
+            return MaterialPageRoute(builder: (_) => const StepOneScreen());
 
           case '/reports':
             return MaterialPageRoute(builder: (_) => const ReportsScreen());

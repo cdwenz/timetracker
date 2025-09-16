@@ -327,5 +327,91 @@
       "count": {"type": "int"}
     }
   },
-  "date_format_hint": "MMM d, y • HH:mm"
+  "date_format_hint": "MMM d, y • HH:mm",
+  
+  "reportsScreenTitle": "Reports",
+  "teamCardTitle": "Team",
+  "meCardTitle": "Me",
+  "teamCardSubtitle": "Reports last month",
+  "meCardSubtitle": "Reports last month",
+  "teamCardSubtitleAdmin": "Organization reports (ADMIN view)",
+  "teamCardSubtitleNonAdmin": "Same as 'Me' (limited access)",
+  "meCardSubtitleRole": "My reports ({role})",
+  "dailyComparisonTitle": "Daily comparison",
+  "myEvolutionTitle": "Evolution (Me)",
+  "errorLabel": "Error: {error}",
+  "@errorLabel": {
+    "description": "Generic error label",
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "noReportsInPeriod": "No reports in the period",
+  "reportIdLabel": "Report {id}…",
+  "@reportIdLabel": {
+    "description": "Report ID label",
+    "placeholders": {
+      "id": {"type": "String"}
+    }
+  },
+  "reportDateUserLabel": "Date: {date} • User: {userId}…",
+  "@reportDateUserLabel": {
+    "description": "Report date and user label",
+    "placeholders": {
+      "date": {"type": "String"},
+      "userId": {"type": "String"}
+    }
+  },
+  "reportDetailTitle": "Report detail",
+  "reportIdField": "• ID: {id}",
+  "@reportIdField": {
+    "description": "Report ID field",
+    "placeholders": {
+      "id": {"type": "String"}
+    }
+  },
+  "reportUserField": "• User: {userId}",
+  "@reportUserField": {
+    "description": "Report user field",
+    "placeholders": {
+      "userId": {"type": "String"}
+    }
+  },
+  "reportStartDateField": "• Start date: {startDate}",
+  "@reportStartDateField": {
+    "description": "Report start date field",
+    "placeholders": {
+      "startDate": {"type": "String"}
+    }
+  },
+  "reportOrganizationField": "• Organization: {organizationId}",
+  "@reportOrganizationField": {
+    "description": "Report organization field",
+    "placeholders": {
+      "organizationId": {"type": "String"}
+    }
+  },
+  "reportProjectField": "• Project: {projectId}",
+  "@reportProjectField": {
+    "description": "Report project field",
+    "placeholders": {
+      "projectId": {"type": "String"}
+    }
+  },
+  "reportNotesField": "• Notes: {notes}",
+  "@reportNotesField": {
+    "description": "Report notes field",
+    "placeholders": {
+      "notes": {"type": "String"}
+    }
+  },
+  "unknownValue": "—",
+  
+  "dashboardTitle": "Dashboard",
+  "trackingTileTitle": "Tracking",
+  "trackingTileSubtitle": "Start and stop",
+  "reportsTileTitle": "Reports",
+  "reportsTileSubtitle": "Times and metrics",
+  "accountTileTitle": "Account",
+  "accountTileSubtitle": "Profile and session"
 }

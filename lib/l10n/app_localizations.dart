@@ -917,7 +917,7 @@ abstract class AppLocalizations {
   /// No description provided for @reportDetailTitle.
   ///
   /// In en, this message translates to:
-  /// **'Report Detail'**
+  /// **'Report detail'**
   String get reportDetailTitle;
 
   /// No description provided for @mainDataSection.
@@ -1261,6 +1261,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'MMM d, y • HH:mm'**
   String get date_format_hint;
+
+  /// No description provided for @reportsScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reports'**
+  String get reportsScreenTitle;
+
+  /// No description provided for @teamCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Team'**
+  String get teamCardTitle;
+
+  /// No description provided for @meCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Me'**
+  String get meCardTitle;
+
+  /// No description provided for @teamCardSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reports last month'**
+  String get teamCardSubtitle;
+
+  /// No description provided for @meCardSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reports last month'**
+  String get meCardSubtitle;
+
+  /// No description provided for @teamCardSubtitleAdmin.
+  ///
+  /// In en, this message translates to:
+  /// **'Organization reports (ADMIN view)'**
+  String get teamCardSubtitleAdmin;
+
+  /// No description provided for @teamCardSubtitleNonAdmin.
+  ///
+  /// In en, this message translates to:
+  /// **'Same as \'Me\' (limited access)'**
+  String get teamCardSubtitleNonAdmin;
+
+  /// No description provided for @meCardSubtitleRole.
+  ///
+  /// In en, this message translates to:
+  /// **'My reports ({role})'**
+  String meCardSubtitleRole(Object role);
+
+  /// No description provided for @dailyComparisonTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily comparison'**
+  String get dailyComparisonTitle;
+
+  /// No description provided for @myEvolutionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolution (Me)'**
+  String get myEvolutionTitle;
+
+  /// Generic error label
+  ///
+  /// In en, this message translates to:
+  /// **'Error: {error}'**
+  String errorLabel(String error);
+
+  /// No description provided for @noReportsInPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'No reports in the period'**
+  String get noReportsInPeriod;
+
+  /// Report ID label
+  ///
+  /// In en, this message translates to:
+  /// **'Report {id}…'**
+  String reportIdLabel(String id);
+
+  /// Report date and user label
+  ///
+  /// In en, this message translates to:
+  /// **'Date: {date} • User: {userId}…'**
+  String reportDateUserLabel(String date, String userId);
+
+  /// Report ID field
+  ///
+  /// In en, this message translates to:
+  /// **'• ID: {id}'**
+  String reportIdField(String id);
+
+  /// Report user field
+  ///
+  /// In en, this message translates to:
+  /// **'• User: {userId}'**
+  String reportUserField(String userId);
+
+  /// Report start date field
+  ///
+  /// In en, this message translates to:
+  /// **'• Start date: {startDate}'**
+  String reportStartDateField(String startDate);
+
+  /// Report organization field
+  ///
+  /// In en, this message translates to:
+  /// **'• Organization: {organizationId}'**
+  String reportOrganizationField(String organizationId);
+
+  /// Report project field
+  ///
+  /// In en, this message translates to:
+  /// **'• Project: {projectId}'**
+  String reportProjectField(String projectId);
+
+  /// Report notes field
+  ///
+  /// In en, this message translates to:
+  /// **'• Notes: {notes}'**
+  String reportNotesField(String notes);
+
+  /// No description provided for @unknownValue.
+  ///
+  /// In en, this message translates to:
+  /// **'—'**
+  String get unknownValue;
+
+  /// No description provided for @dashboardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard'**
+  String get dashboardTitle;
+
+  /// No description provided for @trackingTileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tracking'**
+  String get trackingTileTitle;
+
+  /// No description provided for @trackingTileSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Start and stop'**
+  String get trackingTileSubtitle;
+
+  /// No description provided for @reportsTileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reports'**
+  String get reportsTileTitle;
+
+  /// No description provided for @reportsTileSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Times and metrics'**
+  String get reportsTileSubtitle;
+
+  /// No description provided for @accountTileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get accountTileTitle;
+
+  /// No description provided for @accountTileSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile and session'**
+  String get accountTileSubtitle;
 }
 
 class _AppLocalizationsDelegate

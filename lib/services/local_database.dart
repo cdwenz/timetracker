@@ -154,7 +154,7 @@ class LocalDatabase {
     }
   }
 
-  /// Marcar sincronización como fallida
+  /// Marcar sincronización como fallida (reintentable)
   static Future<void> markSyncFailed(int localId) async {
     final db = await database;
     try {
@@ -170,6 +170,27 @@ class LocalDatabase {
       print('⚠️ Entry marcado como sincronización fallida: $localId');
     } catch (e) {
       print('❌ Error al marcar sync fallido: $e');
+      rethrow;
+    }
+  }
+
+  /// Marcar sincronización como fallida permanentemente (no reintentable)
+  static Future<void> markSyncFailedPermanently(int localId, String errorMsg) async {
+    final db = await database;
+    try {
+      await db.update(
+        _trackingTable,
+        {
+          'syncStatus': 'failed_permanent',
+          'note': '$errorMsg', // Agregar error al note para referencia
+          'lastModified': DateTime.now().toIso8601String(),
+        },
+        where: 'id = ?',
+        whereArgs: [localId],
+      );
+      print('❌ Entry marcado como fallo permanente: $localId ($errorMsg)');
+    } catch (e) {
+      print('❌ Error al marcar fallo permanente: $e');
       rethrow;
     }
   }
@@ -215,16 +236,18 @@ class LocalDatabase {
       final synced = Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM $_trackingTable WHERE synced = 1')) ?? 0;
       final pending = Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM $_trackingTable WHERE syncStatus = "pending"')) ?? 0;
       final failed = Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM $_trackingTable WHERE syncStatus = "failed"')) ?? 0;
+      final failedPermanent = Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM $_trackingTable WHERE syncStatus = "failed_permanent"')) ?? 0;
       
       return {
         'total': total,
         'synced': synced,
         'pending': pending,
         'failed': failed,
+        'failed_permanent': failedPermanent,
       };
     } catch (e) {
       print('❌ Error al obtener estadísticas de sync: $e');
-      return {'total': 0, 'synced': 0, 'pending': 0, 'failed': 0};
+      return {'total': 0, 'synced': 0, 'pending': 0, 'failed': 0, 'failed_permanent': 0};
     }
   }
 

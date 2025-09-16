@@ -7,7 +7,7 @@ class ApiService {
 
   static Future<http.Response> login(String email, String password) {
     return http.post(
-      Uri.parse('$baseUrl/login'),
+      Uri.parse('$baseUrl/auth/login'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({"email": email, "password": password}),
     );

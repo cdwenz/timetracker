@@ -25,7 +25,151 @@ class TimeTrackerService {
     required String taskDescription,
   }) async {
     try {
-      // Crear entry para la base de datos local
+      // Verificar conectividad PRIMERO
+      final isConnected = await ConnectivityService.quickConnectivityCheck();
+      
+      if (isConnected) {
+        // CON INTERNET: Enviar directamente al servidor
+        print('📡 Enviando directamente al servidor (hay conexión)...');
+        
+        final result = await _submitDirectlyWithErrorHandling(
+          supportedPerson: supportedPerson,
+          supportedCountry: supportedCountry,
+          workingLanguage: workingLanguage,
+          startDate: startDate,
+          endDate: endDate,
+          recipient: recipient,
+          note: note,
+          startTimeOfDay: startTimeOfDay,
+          endTimeOfDay: endTimeOfDay,
+          tasks: tasks,
+          taskDescription: taskDescription,
+        );
+        
+        if (result['success'] == true) {
+          print('✅ Entry enviado exitosamente al servidor');
+          return true;
+        } else if (result['shouldSaveLocally'] == true) {
+          print('⚠️ Error de conectividad, guardando localmente...');
+          return await _saveLocallyAsFallback(
+            supportedPerson, supportedCountry, workingLanguage, startDate,
+            endDate, recipient, note, startTimeOfDay, endTimeOfDay, tasks, taskDescription
+          );
+        } else {
+          print('❌ Error del servidor: ${result['error']}');
+          // TODO: Mostrar error al usuario en la UI
+          throw Exception(result['error'] ?? 'Error desconocido del servidor');
+        }
+      } else {
+        // SIN INTERNET: Guardar localmente para sincronizar después
+        print('📵 Sin conexión - Guardando localmente para sincronización posterior');
+        return await _saveLocallyAsFallback(
+          supportedPerson, supportedCountry, workingLanguage, startDate,
+          endDate, recipient, note, startTimeOfDay, endTimeOfDay, tasks, taskDescription
+        );
+      }
+      
+    } catch (e) {
+      print('❌ Error en submitTimeTracker: $e');
+      return false;
+    }
+  }
+
+  /// Enviar directamente al servidor con manejo de errores detallado
+  static Future<Map<String, dynamic>> _submitDirectlyWithErrorHandling({
+    required String supportedPerson,
+    required String supportedCountry,
+    required String workingLanguage,
+    required String startDate,
+    required String endDate,
+    required String recipient,
+    required String note,
+    required String startTimeOfDay,
+    required String endTimeOfDay,
+    required List<String> tasks,
+    required String taskDescription,
+  }) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('access_token');
+
+      if (token == null) {
+        return {
+          'success': false,
+          'shouldSaveLocally': false,
+          'error': 'No hay token de autenticación disponible'
+        };
+      }
+
+      final response = await http.post(
+        Uri.parse('$baseUrl/time-tracker'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'personName': supportedPerson,
+          'supportedCountry': supportedCountry,
+          'workingLanguage': workingLanguage,
+          'startDate': startDate,
+          'endDate': endDate,
+          'recipient': recipient,
+          'note': note,
+          'startTimeOfDay': startTimeOfDay,
+          'endTimeOfDay': endTimeOfDay,
+          'tasks': tasks,
+          'taskDescription': taskDescription,
+        }),
+      ).timeout(const Duration(seconds: 30));
+
+      print('API response: ${response.statusCode} ${response.body}');
+      
+      if (response.statusCode == 201) {
+        return {'success': true};
+      } else if (response.statusCode >= 400 && response.statusCode < 500) {
+        // Errores 4xx: Problema del cliente (datos inválidos, autenticación, etc.)
+        // NO deben guardarse localmente
+        String errorMsg = 'Error del cliente: ${response.statusCode}';
+        try {
+          final errorData = jsonDecode(response.body);
+          errorMsg = errorData['message'] ?? errorMsg;
+        } catch (e) {
+          // Si no se puede parsear, usar mensaje genérico
+        }
+        
+        return {
+          'success': false,
+          'shouldSaveLocally': false,
+          'error': errorMsg
+        };
+      } else {
+        // Errores 5xx o otros: Problema del servidor
+        // Estos SÍ pueden guardarse localmente para reintentar
+        return {
+          'success': false,
+          'shouldSaveLocally': true,
+          'error': 'Error del servidor: ${response.statusCode}'
+        };
+      }
+    } catch (e) {
+      print('❌ Error de conectividad: $e');
+      // Error de conectividad/timeout: guardar localmente
+      return {
+        'success': false,
+        'shouldSaveLocally': true,
+        'error': 'Error de conexión: $e'
+      };
+    }
+  }
+
+
+  /// Guardar localmente como respaldo (solo cuando falla el envío directo o no hay internet)
+  static Future<bool> _saveLocallyAsFallback(
+    String supportedPerson, String supportedCountry, String workingLanguage,
+    String startDate, String endDate, String recipient, String note,
+    String startTimeOfDay, String endTimeOfDay, List<String> tasks, String taskDescription
+  ) async {
+    try {
       final trackingEntry = TrackingEntry(
         person: supportedPerson,
         country: supportedCountry,
@@ -42,102 +186,19 @@ class TimeTrackerService {
         syncStatus: 'pending',
       );
 
-      // Guardar localmente primero (siempre)
       final localId = await LocalDatabase.insertTracking(trackingEntry);
       print('✅ Entry guardado localmente con ID: $localId');
       
-      // Notificar al SyncService que las estadísticas han cambiado
+      // Solo notificar al SyncService cuando guardamos localmente
       SyncService().updateSyncStats();
-
-      // Verificar conectividad
-      final isConnected = await ConnectivityService.quickConnectivityCheck();
       
-      if (isConnected) {
-        // Intentar enviar inmediatamente si hay conexión
-        print('📡 Intentando enviar inmediatamente (hay conexión)...');
-        final success = await _syncSingleEntry(trackingEntry.copyWith(id: localId));
-        
-        if (success) {
-          print('✅ Entry enviado exitosamente al servidor');
-          return true;
-        } else {
-          print('⚠️ Entry guardado localmente, se sincronizará cuando esté disponible');
-          return true; // Devolvemos true porque está guardado localmente
-        }
-      } else {
-        print('📵 Sin conexión - Entry guardado para sincronización posterior');
-        return true; // Devolvemos true porque está guardado localmente
-      }
-      
+      return true;
     } catch (e) {
-      print('❌ Error en submitTimeTracker: $e');
+      print('❌ Error al guardar localmente: $e');
       return false;
     }
   }
 
-  /// Sincronizar una entrada individual con el servidor
-  static Future<bool> _syncSingleEntry(TrackingEntry entry) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('access_token');
-
-      if (token == null) {
-        print('❌ No hay token de autenticación disponible');
-        return false;
-      }
-
-      final response = await http.post(
-        Uri.parse('$baseUrl/time-tracker'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-        body: jsonEncode({
-          'personName': entry.person,
-          'supportedCountry': entry.country,
-          'workingLanguage': entry.workingLanguage,
-          'startDate': entry.startDate,
-          'endDate': entry.endDate,
-          'recipient': entry.recipient,
-          'note': entry.note,
-          'startTimeOfDay': entry.startTime,
-          'endTimeOfDay': entry.endTime,
-          'tasks': entry.tasks,
-          'taskDescription': entry.description,
-        }),
-      ).timeout(const Duration(seconds: 30));
-
-      print('API response: ${response.statusCode} ${response.body}');
-      
-      if (response.statusCode == 201) {
-        // Parsear respuesta para obtener ID del servidor
-        final responseData = jsonDecode(response.body);
-        final serverId = responseData['id']?.toString() ?? 
-                        responseData['_id']?.toString() ?? 
-                        'unknown';
-        
-        // Marcar como sincronizado en la base de datos local
-        if (entry.id != null) {
-          await LocalDatabase.markAsSynced(entry.id!, serverId);
-        }
-        
-        return true;
-      } else {
-        // Marcar como fallido si el entry tiene ID
-        if (entry.id != null) {
-          await LocalDatabase.markSyncFailed(entry.id!);
-        }
-        return false;
-      }
-    } catch (e) {
-      print('❌ Error al sincronizar entry: $e');
-      // Marcar como fallido si el entry tiene ID
-      if (entry.id != null) {
-        await LocalDatabase.markSyncFailed(entry.id!);
-      }
-      return false;
-    }
-  }
 
   /// Obtener todas las entradas locales (sincronizadas y pendientes)
   static Future<List<TrackingEntry>> getAllLocalEntries() async {
