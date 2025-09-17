@@ -2,17 +2,20 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:ihadi_time_tracker/widgets/custom_drawer.dart';
-
-import '../services/api_service.dart';
-import '../services/reports_metrics_service.dart';
-import 'reports_detail_screen.dart'; // para ReportsDetailArgs
+import 'package:ihadi_time_tracker/services/reports_metrics_service.dart';
+import 'package:ihadi_time_tracker/services/api_service.dart';
+import 'package:ihadi_time_tracker/screens/reports_detail_screen.dart';
+import '../l10n/app_localizations.dart';
+import '../services/auth_service.dart';
 
 class ReportsScreen extends StatelessWidget {
   const ReportsScreen({super.key});
 
-  Future<ReportsDashboardData> _load() async {
+  Future<(ReportsDashboardData, String?)> _load() async {
     final svc = ReportsMetricsService(ApiService());
-    return svc.loadDashboardLast30Days();
+    final data = await svc.loadDashboardLast30Days();
+    final userRole = await AuthService.currentUserRole();
+    return (data, userRole);
   }
 
   void _goToDetail(
@@ -27,22 +30,62 @@ class ReportsScreen extends StatelessWidget {
     );
   }
 
+  String _getTeamCardSubtitle(BuildContext context, String? userRole) {
+    if (userRole == 'ADMIN') {
+      try {
+        return AppLocalizations.of(context).teamCardSubtitleAdmin;
+      } catch (e) {
+        return 'Organization reports (ADMIN view)';
+      }
+    } else if (userRole == 'FIELD_MANAGER') {
+      return "Team reports (including yours)";
+    } else {
+      try {
+        return AppLocalizations.of(context).teamCardSubtitleNonAdmin;
+      } catch (e) {
+        return "Same as 'Me' (limited access)";
+      }
+    }
+  }
+
+  String _getMeCardSubtitle(BuildContext context, String? userRole) {
+    final role = userRole ?? 'USER';
+    try {
+      return AppLocalizations.of(context).meCardSubtitleRole(role);
+    } catch (e) {
+      return 'My reports ($role)';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const CustomDrawer(),
       drawerEnableOpenDragGesture: true,
-      appBar: AppBar(title: const Text("Reports")),
-      body: FutureBuilder<ReportsDashboardData>(
+      appBar: AppBar(title: Text(AppLocalizations.of(context).reportsScreenTitle)),
+      body: FutureBuilder<(ReportsDashboardData, String?)>(
         future: _load(),
         builder: (context, snap) {
           if (snap.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
           if (snap.hasError) {
-            return Center(child: Text('Error: ${snap.error}'));
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error_outline, size: 64, color: Colors.red),
+                  const SizedBox(height: 16),
+                  Text(
+                    AppLocalizations.of(context).errorLabel(snap.error.toString()),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ],
+              ),
+            );
           }
-          final data = snap.data!;
+          final (data, userRole) = snap.data!;
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -54,21 +97,21 @@ class ReportsScreen extends StatelessWidget {
                   children: [
                     Expanded(
                       child: _SummaryCard(
-                        title: "Equipo",
+                        title: AppLocalizations.of(context).teamCardTitle,
                         value: "${data.teamCount}",
-                        subtitle: "Reportes último mes",
+                        subtitle: _getTeamCardSubtitle(context, userRole),
                         color: Colors.deepPurple,
-                        onTap: () => _goToDetail(context, title: "Equipo", filter: ReportsDetailFilter.team),
+                        onTap: () => _goToDetail(context, title: AppLocalizations.of(context).teamCardTitle, filter: ReportsDetailFilter.team),
                       ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: _SummaryCard(
-                        title: "Yo",
+                        title: AppLocalizations.of(context).meCardTitle,
                         value: "${data.meCount}",
-                        subtitle: "Reportes último mes",
+                        subtitle: _getMeCardSubtitle(context, userRole),
                         color: Colors.orange,
-                        onTap: () => _goToDetail(context, title: "Yo", filter: ReportsDetailFilter.me),
+                        onTap: () => _goToDetail(context, title: AppLocalizations.of(context).meCardTitle, filter: ReportsDetailFilter.me),
                       ),
                     ),
                   ],
@@ -78,8 +121,8 @@ class ReportsScreen extends StatelessWidget {
 
                 // Gráfico: Comparación diaria (Yo vs Equipo)
                 _TappableCard(
-                  title: "Comparación diaria",
-                  onTap: () => _goToDetail(context, title: "Comparación diaria", filter: ReportsDetailFilter.compare),
+                  title: AppLocalizations.of(context).dailyComparisonTitle,
+                  onTap: () => _goToDetail(context, title: AppLocalizations.of(context).dailyComparisonTitle, filter: ReportsDetailFilter.compare),
                   child: SizedBox(
                     height: 220,
                     child: BarChart(
@@ -125,8 +168,8 @@ class ReportsScreen extends StatelessWidget {
 
                 // Gráfico: Evolución (Yo)
                 _TappableCard(
-                  title: "Evolución (Yo)",
-                  onTap: () => _goToDetail(context, title: "Evolución (Yo)", filter: ReportsDetailFilter.trend),
+                  title: AppLocalizations.of(context).myEvolutionTitle,
+                  onTap: () => _goToDetail(context, title: AppLocalizations.of(context).myEvolutionTitle, filter: ReportsDetailFilter.trend),
                   child: SizedBox(
                     height: 220,
                     child: LineChart(
@@ -140,7 +183,7 @@ class ReportsScreen extends StatelessWidget {
                             isCurved: true,
                             color: Colors.orange,
                             barWidth: 3,
-                            dotData: FlDotData(show: false),
+                            dotData: const FlDotData(show: false),
                           ),
                         ],
                         titlesData: FlTitlesData(
@@ -197,7 +240,7 @@ class _SummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: color.withOpacity(0.1),
+      color: color.withValues(alpha: 0.1),
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),

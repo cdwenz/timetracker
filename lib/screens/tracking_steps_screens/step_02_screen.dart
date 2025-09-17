@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../models/tracking_data.dart';
 import 'step_04_screen.dart' show StepDateScreen; // ajustá el import/alias según tu estructura
 import '../../widgets/big_action_button.dart';
+import '../../l10n/app_localizations.dart';
 
 class StepTwoScreen extends StatefulWidget {
   final String? previousStepNote;
@@ -71,7 +72,7 @@ class _StepTwoScreenState extends State<StepTwoScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         foregroundColor: Colors.black,
-        title: const Text('Paso 2 de 7'),
+        title: Text(AppLocalizations.of(context).step2Title),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -82,7 +83,7 @@ class _StepTwoScreenState extends State<StepTwoScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('¿A quien ayudaste hoy?',
+                Text(AppLocalizations.of(context).step2Question,
                     style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -92,44 +93,44 @@ class _StepTwoScreenState extends State<StepTwoScreen> {
                 TextFormField(
                   controller: _recipientCtrl,
                   textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                    labelText: 'Nombre',
-                    hintText: 'Nombre',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context).recipientLabel,
+                    hintText: AppLocalizations.of(context).recipientLabel,
+                    border: const OutlineInputBorder(),
                   ),
                   validator: (v) =>
-                      (v == null || v.trim().isEmpty) ? 'Completá el destinatario.' : null,
+                      (v == null || v.trim().isEmpty) ? AppLocalizations.of(context).recipientValidation : null,
                 ),
                 const SizedBox(height: 12),
 
                 TextFormField(
                   controller: _countryCtrl,
                   textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                    labelText: 'País soportado',
-                    hintText: 'Ej: AR, United States, etc.',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context).supportedCountryLabel,
+                    hintText: AppLocalizations.of(context).countryPlaceholder,
+                    border: const OutlineInputBorder(),
                   ),
                   validator: (v) =>
-                      (v == null || v.trim().isEmpty) ? 'supportedCountry es requerido' : null,
+                      (v == null || v.trim().isEmpty) ? AppLocalizations.of(context).countryValidation : null,
                 ),
                 const SizedBox(height: 12),
 
                 TextFormField(
                   controller: _languageCtrl,
                   textInputAction: TextInputAction.done,
-                  decoration: const InputDecoration(
-                    labelText: 'Idioma de trabajo',
-                    hintText: 'Ej: es, en, portugués...',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context).workingLanguageLabel,
+                    hintText: AppLocalizations.of(context).languagePlaceholder,
+                    border: const OutlineInputBorder(),
                   ),
                   validator: (v) =>
-                      (v == null || v.trim().isEmpty) ? 'workingLanguage es requerido' : null,
+                      (v == null || v.trim().isEmpty) ? AppLocalizations.of(context).languageValidation : null,
                 ),
 
                 const Spacer(),
                 BigActionButton(
-                  text: _submitting ? 'Guardando...' : 'Continuar',
+                  text: _submitting ? AppLocalizations.of(context).savingButton : AppLocalizations.of(context).continueButton,
                   onPressed: _submitting ? null :  _onSubmit,
                 ),
               ],

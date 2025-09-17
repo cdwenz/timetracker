@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../models/tracking_data.dart';
 import 'step_07_screen.dart';
 import '../../widgets/big_action_button.dart';
+import '../../l10n/app_localizations.dart';
 
 class StepTaskScreen extends StatefulWidget {
   const StepTaskScreen({super.key});
@@ -12,19 +13,19 @@ class StepTaskScreen extends StatefulWidget {
 }
 
 class _StepTaskScreenState extends State<StepTaskScreen> {
-  final List<String> _availableTasks = [
-    'MAST',
-    'BTT Support (Writer, Orature, USFM, Recorder)',
-    'Training',
-    'Technical Support',
-    'V-Mast',
-    'Transcribe',
-    'Quality Assurance Processes',
-    'Ihadi software development',
-    'AI',
-    'Special Assignment.',
-    'Revision',
-    'Other.',
+  List<String> get _availableTasks => [
+    AppLocalizations.of(context).taskMAST,
+    AppLocalizations.of(context).taskBTTSupport,
+    AppLocalizations.of(context).taskTraining,
+    AppLocalizations.of(context).taskTechnicalSupport,
+    AppLocalizations.of(context).taskVMAST,
+    AppLocalizations.of(context).taskTranscribe,
+    AppLocalizations.of(context).taskQualityAssurance,
+    AppLocalizations.of(context).taskIhadiDevelopment,
+    AppLocalizations.of(context).taskAI,
+    AppLocalizations.of(context).taskSpecialAssignment,
+    AppLocalizations.of(context).taskRevision,
+    AppLocalizations.of(context).taskOther,
   ];
 
   final Set<String> _selectedTasks = {};
@@ -49,21 +50,21 @@ class _StepTaskScreenState extends State<StepTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Paso 6 de 7')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context).step6Title)),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                '¿Qué tareas realizaste?',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              Text(
+                AppLocalizations.of(context).step6Question,
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
-              const Text(
-                'Seleccioná una o más tareas realizadas y escribí un detalle si querés.',
-                style: TextStyle(fontSize: 16, color: Colors.black54),
+              Text(
+                AppLocalizations.of(context).step6Description,
+                style: const TextStyle(fontSize: 16, color: Colors.black54),
               ),
               const SizedBox(height: 16),
               Expanded(
@@ -83,14 +84,14 @@ class _StepTaskScreenState extends State<StepTaskScreen> {
               const SizedBox(height: 12),
               TextField(
                 controller: _descriptionController,
-                decoration: const InputDecoration(
-                  hintText: 'Detalles adicionales...',
+                decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context).additionalDetailsPlaceholder,
                 ),
                 maxLines: 3,
               ),
               const SizedBox(height: 20),
               BigActionButton(
-                text: 'Siguiente',
+                text: AppLocalizations.of(context).nextButton,
                 onPressed: () {
                   if (_selectedTasks.isNotEmpty) {
                     Provider.of<TrackingData>(context, listen: false)
@@ -105,8 +106,8 @@ class _StepTaskScreenState extends State<StepTaskScreen> {
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Seleccioná al menos una tarea.')),
+                      SnackBar(
+                          content: Text(AppLocalizations.of(context).step6Validation)),
                     );
                   }
                 },

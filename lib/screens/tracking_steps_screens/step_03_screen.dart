@@ -3,6 +3,7 @@ import 'step_04_screen.dart';
 import '../../widgets/big_action_button.dart';
 import 'package:provider/provider.dart';
 import '../../models/tracking_data.dart';
+import '../../l10n/app_localizations.dart';
 
 class StepThreeScreen extends StatefulWidget {
   final String? previousStepNote;
@@ -25,32 +26,32 @@ class _StepThreeScreenState extends State<StepThreeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Paso 3 de 7')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context).step3Title)),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                '¿Cuál es tu nombre?',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              Text(
+                AppLocalizations.of(context).step3Question,
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
-              const Text(
-                'Este nombre se usará para registrar tu participación.',
-                style: TextStyle(fontSize: 16, color: Colors.black54),
+              Text(
+                AppLocalizations.of(context).step3Description,
+                style: const TextStyle(fontSize: 16, color: Colors.black54),
               ),
               const SizedBox(height: 24),
               TextField(
                 controller: _nameController,
-                decoration: const InputDecoration(
-                  hintText: 'Ej: Juan Pérez',
+                decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context).step3Placeholder,
                 ),
               ),
               const Spacer(),
               BigActionButton(
-                text: 'Siguiente',
+                text: AppLocalizations.of(context).nextButton,
                 onPressed: () {
                   if (_nameController.text.isNotEmpty) {
                     Provider.of<TrackingData>(context, listen: false)
@@ -61,7 +62,7 @@ class _StepThreeScreenState extends State<StepThreeScreen> {
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Completá tu nombre.')),
+                      SnackBar(content: Text(AppLocalizations.of(context).step3Validation)),
                     );
                   }
                 },

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ihadi_time_tracker/localization/language_controller.dart';
 import 'package:ihadi_time_tracker/screens/reports_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../l10n/app_localizations.dart';
+import 'language_picker.dart';
 
 import 'package:ihadi_time_tracker/screens/login_screen.dart';
 import 'package:ihadi_time_tracker/screens/home_screen.dart';
@@ -43,7 +44,7 @@ class CustomDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          const DrawerHeader(
+          DrawerHeader(
             decoration: BoxDecoration(
               color: Color.fromARGB(255, 221, 235, 236),
             ),
@@ -60,8 +61,8 @@ class CustomDrawer extends StatelessWidget {
                 ),
                 SizedBox(height: 12),
                 Text(
-                  'Menú',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+                  AppLocalizations.of(context).menuTitle,
+                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
                 ),
               ],
             ),
@@ -70,30 +71,39 @@ class CustomDrawer extends StatelessWidget {
           // HOME -> screens/home_screen.dart
           ListTile(
             leading: const Icon(Icons.home_outlined),
-            title: const Text('Home'),
+            title: Text(AppLocalizations.of(context).homeMenuItem),
             onTap: () => _go(context, const HomeScreen()),
           ),
 
           // ACCOUNT -> screens/account_screen.dart
           ListTile(
             leading: const Icon(Icons.person_outline),
-            title: const Text('Account'),
+            title: Text(AppLocalizations.of(context).accountMenuItem),
             onTap: () => _go(context, const AccountScreen()),
           ),
 
           // REPORTS -> screens/report_screen.dart
           ListTile(
             leading: const Icon(Icons.person_outline),
-            title: const Text('Reports'),
+            title: Text(AppLocalizations.of(context).reportsMenuItem),
             onTap: () => _go(context, const ReportsScreen()),
           ),
 
+          const Divider(),
+          
+          // LANGUAGE PICKER
+          ListTile(
+            leading: const Icon(Icons.language),
+            title: Text(AppLocalizations.of(context).languageSelectionTitle),
+            trailing: const LanguagePicker(),
+          ),
+          
           const Divider(),
 
           // LOGOUT
           ListTile(
             leading: const Icon(Icons.logout),
-            title: const Text('Cerrar sesión'),
+            title: Text(AppLocalizations.of(context).logoutMenuItem),
             onTap: () => _logout(context),
           ),
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ihadi_time_tracker/models/tracking.dart';
+import '../l10n/app_localizations.dart';
 
 /// Llamalo así desde tu ListTile:
 /// onTap: () => showReportDetailForTracking(context, t)
@@ -71,7 +72,7 @@ class ReportDetailSheetTracking extends StatelessWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      personName != '-' ? personName : 'Detalle del reporte',
+                      personName != '-' ? personName : AppLocalizations.of(context).reportDetailTitle,
                       style: Theme.of(context).textTheme.titleLarge,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -79,7 +80,7 @@ class ReportDetailSheetTracking extends StatelessWidget {
                   IconButton(
                     onPressed: () => Navigator.pop(context),
                     icon: const Icon(Icons.close),
-                    tooltip: 'Cerrar',
+                    tooltip: AppLocalizations.of(context).closeTooltip,
                   ),
                 ],
               ),
@@ -87,36 +88,36 @@ class ReportDetailSheetTracking extends StatelessWidget {
               const Divider(),
 
               _Section(
-                title: 'Datos principales',
+                title: AppLocalizations.of(context).mainDataSection,
                 children: [
-                  _KV('Persona', personName),
-                  _KV('Destinatario', recipient),
-                  _KV('País soporte', supportedCountry),
-                  _KV('Idioma de trabajo', workingLanguage),
+                  _KV(AppLocalizations.of(context).personLabel, personName),
+                  _KV(AppLocalizations.of(context).recipientLabel, recipient),
+                  _KV(AppLocalizations.of(context).supportCountryLabel, supportedCountry),
+                  _KV(AppLocalizations.of(context).workingLanguageModalLabel, workingLanguage),
                 ],
               ),
 
               _Section(
-                title: 'Fechas y horarios',
+                title: AppLocalizations.of(context).datesAndTimesSection,
                 children: [
-                  _KV('Inicio', startDate),
-                  _KV('Fin', endDate),
-                  _KV('Hora inicio', startTime),
-                  _KV('Hora fin', endTime),
+                  _KV(AppLocalizations.of(context).startLabel, startDate),
+                  _KV(AppLocalizations.of(context).endLabel, endDate),
+                  _KV(AppLocalizations.of(context).startTimeModalLabel, startTime),
+                  _KV(AppLocalizations.of(context).endTimeModalLabel, endTime),
                 ],
               ),
 
               _Section(
-                title: 'Tareas',
+                title: AppLocalizations.of(context).tasksSection,
                 children: [
-                  _KV('Lista', tasksStr),
-                  _KV('Descripción', taskDescription),
+                  _KV(AppLocalizations.of(context).listLabel, tasksStr),
+                  _KV(AppLocalizations.of(context).descriptionModalLabel, taskDescription),
                 ],
               ),
 
               if (note != '-')
                 _Section(
-                  title: 'Nota',
+                  title: AppLocalizations.of(context).noteSection,
                   children: [
                     Container(
                       width: double.infinity,
