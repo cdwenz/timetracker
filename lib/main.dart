@@ -71,8 +71,6 @@ void main() async {
   // Verificar base de datos
   await LocalDatabase.database;
   
-  print('🚀 Servicios offline inicializados correctamente');
-  
   runApp(
     MultiProvider(
       providers: [

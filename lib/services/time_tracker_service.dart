@@ -9,7 +9,7 @@ import 'connectivity_service.dart';
 import 'sync_service.dart';
 
 class TimeTrackerService {
-  static const String baseUrl = 'http://10.0.2.2:8000/api';
+  static const String baseUrl = 'http://localhost:8000/api';
 
   static Future<bool> submitTimeTracker({
     required String supportedPerson,

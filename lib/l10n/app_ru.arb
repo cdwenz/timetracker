@@ -147,6 +147,25 @@
   "profileUpdatedMessage": "Профиль обновлён",
   "saveErrorMessage": "Ошибка при сохранении: {error}",
   "genericErrorMessage": "Ошибка: {error}",
+  "security": "Безопасность",
+  "changePassword": "Сменить пароль",
+  "changePasswordSubtitle": "Обновите свой пароль",
+
+  "changePasswordTitle": "Сменить пароль",
+  "currentPasswordLabel": "Текущий пароль",
+  "newPasswordLabel": "Новый пароль",
+  "repeatNewPasswordLabel": "Повторите новый пароль",
+  "changePasswordSubmit": "Обновить",
+  "changePasswordSuccess": "Пароль обновлён ✅",
+  "changePasswordErrorGeneric": "Не удалось обновить пароль",
+  "changePasswordValidationCurrentRequired": "Введите текущий пароль",
+  "changePasswordValidationMinLength": "Минимум {min} символов",
+  "@changePasswordValidationMinLength": {
+    "placeholders": {
+      "min": {}
+    }
+  },
+  "changePasswordValidationRepeatMismatch": "Не совпадает",
   
   "loadingMessage": "Загрузка...",
   "noDataMessage": "Нет данных",

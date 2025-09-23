@@ -440,6 +440,48 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get security => 'Безопасность';
+
+  @override
+  String get changePassword => 'Сменить пароль';
+
+  @override
+  String get changePasswordSubtitle => 'Обновите свой пароль';
+
+  @override
+  String get changePasswordTitle => 'Сменить пароль';
+
+  @override
+  String get currentPasswordLabel => 'Текущий пароль';
+
+  @override
+  String get newPasswordLabel => 'Новый пароль';
+
+  @override
+  String get repeatNewPasswordLabel => 'Повторите новый пароль';
+
+  @override
+  String get changePasswordSubmit => 'Обновить';
+
+  @override
+  String get changePasswordSuccess => 'Пароль обновлён ✅';
+
+  @override
+  String get changePasswordErrorGeneric => 'Не удалось обновить пароль';
+
+  @override
+  String get changePasswordValidationCurrentRequired =>
+      'Введите текущий пароль';
+
+  @override
+  String changePasswordValidationMinLength(Object min) {
+    return 'Минимум $min символов';
+  }
+
+  @override
+  String get changePasswordValidationRepeatMismatch => 'Не совпадает';
+
+  @override
   String get loadingMessage => 'Загрузка...';
 
   @override

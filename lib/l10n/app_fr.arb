@@ -147,6 +147,25 @@
   "profileUpdatedMessage": "Profil mis à jour",
   "saveErrorMessage": "Erreur lors de la sauvegarde : {error}",
   "genericErrorMessage": "Erreur : {error}",
+  "security": "Sécurité",
+  "changePassword": "Changer le mot de passe",
+  "changePasswordSubtitle": "Mettez à jour votre mot de passe",
+
+  "changePasswordTitle": "Changer le mot de passe",
+  "currentPasswordLabel": "Mot de passe actuel",
+  "newPasswordLabel": "Nouveau mot de passe",
+  "repeatNewPasswordLabel": "Répéter le nouveau mot de passe",
+  "changePasswordSubmit": "Mettre à jour",
+  "changePasswordSuccess": "Mot de passe mis à jour ✅",
+  "changePasswordErrorGeneric": "Impossible de mettre à jour le mot de passe",
+  "changePasswordValidationCurrentRequired": "Saisissez votre mot de passe actuel",
+  "changePasswordValidationMinLength": "Au moins {min} caractères",
+  "@changePasswordValidationMinLength": {
+    "placeholders": {
+      "min": {}
+    }
+  },
+  "changePasswordValidationRepeatMismatch": "Ne correspond pas",
   
   "loadingMessage": "Chargement...",
   "noDataMessage": "Aucune donnée",
