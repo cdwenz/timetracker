@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  static const String baseUrl = "http://10.0.2.2:8000/api";
+  static const String baseUrl = "http://localhost:8000/api";
 
   static Future<http.Response> login(String email, String password) {
     return http.post(
@@ -24,6 +24,8 @@ class ApiService {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('access_token');
 
+    print("uri: $uri"); // Para depuración
+
     final response = await http.get(
       uri,
       headers: {
@@ -32,6 +34,8 @@ class ApiService {
         'Authorization': 'Bearer $token',
       },
     );
+
+    print("Response body: ${response.body}"); // Para depuración
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       if (response.body.isEmpty) return null;
@@ -42,5 +46,45 @@ class ApiService {
     }
   }
 
+  static Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('access_token'); // tu clave actual
+
+    if (token == null || token.isEmpty) {
+      throw Exception('Sesión no válida. Iniciá sesión nuevamente.');
+    }
+
+    final uri = Uri.parse('$baseUrl/auth/change-password');
+    final res = await http.post(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode({
+        'currentPassword': currentPassword,
+        'newPassword': newPassword,
+      }),
+    );
+
+    if (res.statusCode >= 200 && res.statusCode < 300) {
+      // ok
+      return;
+    }
+
+    // parsea el error del backend (Nest suele enviar { message })
+    try {
+      final data = jsonDecode(res.body);
+      final msg = (data is Map && data['message'] != null)
+          ? data['message'].toString()
+          : 'No se pudo actualizar la contraseña';
+      throw Exception(msg);
+    } catch (_) {
+      throw Exception('No se pudo actualizar la contraseña');
+    }
+  }
   // Otros métodos: register, fetchLogs, createLog, etc.
 }

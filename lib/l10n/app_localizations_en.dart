@@ -438,6 +438,48 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get security => 'Security';
+
+  @override
+  String get changePassword => 'Change password';
+
+  @override
+  String get changePasswordSubtitle => 'Update your account password';
+
+  @override
+  String get changePasswordTitle => 'Change password';
+
+  @override
+  String get currentPasswordLabel => 'Current password';
+
+  @override
+  String get newPasswordLabel => 'New password';
+
+  @override
+  String get repeatNewPasswordLabel => 'Repeat new password';
+
+  @override
+  String get changePasswordSubmit => 'Update';
+
+  @override
+  String get changePasswordSuccess => 'Password updated ✅';
+
+  @override
+  String get changePasswordErrorGeneric => 'Couldn\'t update the password';
+
+  @override
+  String get changePasswordValidationCurrentRequired =>
+      'Enter your current password';
+
+  @override
+  String changePasswordValidationMinLength(Object min) {
+    return 'At least $min characters';
+  }
+
+  @override
+  String get changePasswordValidationRepeatMismatch => 'Does not match';
+
+  @override
   String get loadingMessage => 'Loading...';
 
   @override

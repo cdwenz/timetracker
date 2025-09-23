@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'connectivity_service.dart';
 
 class AuthService {
-  static const String baseUrl = 'http://10.0.2.2:8000/api';
+  static const String baseUrl = 'http://localhost:8000/api';
 
   static Future<bool> login(String email, String password) async {
     try {
@@ -141,7 +141,7 @@ class AuthService {
         }),
       );
 
-      print(response.body); // Para depuración
+      print("registe" + response.body); // Para depuración
 
       return response.statusCode == 200 || response.statusCode == 201;
     } catch (e) {

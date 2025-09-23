@@ -440,6 +440,49 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get security => 'Seguridad';
+
+  @override
+  String get changePassword => 'Cambiar contraseña';
+
+  @override
+  String get changePasswordSubtitle => 'Actualizá tu contraseña';
+
+  @override
+  String get changePasswordTitle => 'Cambiar contraseña';
+
+  @override
+  String get currentPasswordLabel => 'Contraseña actual';
+
+  @override
+  String get newPasswordLabel => 'Nueva contraseña';
+
+  @override
+  String get repeatNewPasswordLabel => 'Repetir nueva contraseña';
+
+  @override
+  String get changePasswordSubmit => 'Actualizar';
+
+  @override
+  String get changePasswordSuccess => 'Contraseña actualizada ✅';
+
+  @override
+  String get changePasswordErrorGeneric =>
+      'No se pudo actualizar la contraseña';
+
+  @override
+  String get changePasswordValidationCurrentRequired =>
+      'Ingresá tu contraseña actual';
+
+  @override
+  String changePasswordValidationMinLength(Object min) {
+    return 'Mínimo $min caracteres';
+  }
+
+  @override
+  String get changePasswordValidationRepeatMismatch => 'No coincide';
+
+  @override
   String get loadingMessage => 'Cargando...';
 
   @override
