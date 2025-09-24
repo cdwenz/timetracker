@@ -23,7 +23,7 @@ class SyncService extends ChangeNotifier {
   factory SyncService() => _instance;
   SyncService._internal();
 
-  static const String baseUrl = 'http://10.0.2.2:8000/api';
+  static const String baseUrl = 'http://localhost:8000/api';
   static const Duration syncInterval = Duration(minutes: 15);
   static const int maxRetryAttempts = 3;
   

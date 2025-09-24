@@ -447,6 +447,49 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get security => 'Sécurité';
+
+  @override
+  String get changePassword => 'Changer le mot de passe';
+
+  @override
+  String get changePasswordSubtitle => 'Mettez à jour votre mot de passe';
+
+  @override
+  String get changePasswordTitle => 'Changer le mot de passe';
+
+  @override
+  String get currentPasswordLabel => 'Mot de passe actuel';
+
+  @override
+  String get newPasswordLabel => 'Nouveau mot de passe';
+
+  @override
+  String get repeatNewPasswordLabel => 'Répéter le nouveau mot de passe';
+
+  @override
+  String get changePasswordSubmit => 'Mettre à jour';
+
+  @override
+  String get changePasswordSuccess => 'Mot de passe mis à jour ✅';
+
+  @override
+  String get changePasswordErrorGeneric =>
+      'Impossible de mettre à jour le mot de passe';
+
+  @override
+  String get changePasswordValidationCurrentRequired =>
+      'Saisissez votre mot de passe actuel';
+
+  @override
+  String changePasswordValidationMinLength(Object min) {
+    return 'Au moins $min caractères';
+  }
+
+  @override
+  String get changePasswordValidationRepeatMismatch => 'Ne correspond pas';
+
+  @override
   String get loadingMessage => 'Chargement...';
 
   @override

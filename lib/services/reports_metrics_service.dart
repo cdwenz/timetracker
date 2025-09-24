@@ -79,14 +79,14 @@ class ReportsMetricsService {
       if (myTeam == true) 'myTeam': 'true', // Nuevo filtro de equipo
     };
 
-    print("🔍 FETCHING ENTRIES:");
-    print("   Query: $query");
+    // print("🔍 FETCHING ENTRIES:");
+    // print("   Query: $query");
 
     final json = await ApiService.getRequest('/time-tracker', query: query);
 
-    print("📥 API RESPONSE:");
-    print("   Type: ${json.runtimeType}");
-    print("   Content: $json");
+    // print("📥 API RESPONSE:");
+    // print("   Type: ${json.runtimeType}");
+    // print("   Content: $json");
 
     // Tolerante a { data, result, results, items, entries, timeEntries } o List
     if (json is Map<String, dynamic>) {
@@ -109,7 +109,7 @@ class ReportsMetricsService {
     }
     if (json is List) {
       final result = json.cast<Map<String, dynamic>>();
-      print("✅ PARSED AS LIST: ${result.length} items");
+      // print("✅ PARSED AS LIST: ${result.length} items");
       if (result.isNotEmpty) {
         print("   First item keys: ${result.first.keys.toList()}");
       }
@@ -205,9 +205,9 @@ class ReportsMetricsService {
     final from = range.from;
     final to = range.to;
 
-    print("📊 DASHBOARD DATA (REAL BACKEND CALLS):");
-    print("   Current user ID: $uid");
-    print("   Current user role: $userRole");
+    // print("📊 DASHBOARD DATA (REAL BACKEND CALLS):");
+    // print("   Current user ID: $uid");
+    // print("   Current user role: $userRole");
 
     // Obtener MIS datos (llamada sin myTeam)
     final mine = await _fetchEntries(

@@ -147,6 +147,25 @@
   "profileUpdatedMessage": "Perfil actualizado",
   "saveErrorMessage": "Error al guardar: {error}",
   "genericErrorMessage": "Error: {error}",
+  "security": "Seguridad",
+  "changePassword": "Cambiar contraseña",
+  "changePasswordSubtitle": "Actualizá tu contraseña",
+
+   "changePasswordTitle": "Cambiar contraseña",
+  "currentPasswordLabel": "Contraseña actual",
+  "newPasswordLabel": "Nueva contraseña",
+  "repeatNewPasswordLabel": "Repetir nueva contraseña",
+  "changePasswordSubmit": "Actualizar",
+  "changePasswordSuccess": "Contraseña actualizada ✅",
+  "changePasswordErrorGeneric": "No se pudo actualizar la contraseña",
+  "changePasswordValidationCurrentRequired": "Ingresá tu contraseña actual",
+  "changePasswordValidationMinLength": "Mínimo {min} caracteres",
+  "@changePasswordValidationMinLength": {
+    "placeholders": {
+      "min": {}
+    }
+  },
+  "changePasswordValidationRepeatMismatch": "No coincide",
   
   "loadingMessage": "Cargando...",
   "noDataMessage": "Sin datos",

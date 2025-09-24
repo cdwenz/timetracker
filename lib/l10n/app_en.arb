@@ -221,6 +221,25 @@
       "error": {"type": "String"}
     }
   },
+  "security": "Security",
+  "changePassword": "Change password",
+  "changePasswordSubtitle": "Update your account password",
+
+  "changePasswordTitle": "Change password",
+  "currentPasswordLabel": "Current password",
+  "newPasswordLabel": "New password",
+  "repeatNewPasswordLabel": "Repeat new password",
+  "changePasswordSubmit": "Update",
+  "changePasswordSuccess": "Password updated ✅",
+  "changePasswordErrorGeneric": "Couldn't update the password",
+  "changePasswordValidationCurrentRequired": "Enter your current password",
+  "changePasswordValidationMinLength": "At least {min} characters",
+  "@changePasswordValidationMinLength": {
+    "placeholders": {
+      "min": {}
+    }
+  },
+  "changePasswordValidationRepeatMismatch": "Does not match",
   
   "loadingMessage": "Loading...",
   "noDataMessage": "No data",

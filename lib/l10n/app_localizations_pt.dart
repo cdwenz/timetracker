@@ -442,6 +442,48 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get security => 'Segurança';
+
+  @override
+  String get changePassword => 'Alterar senha';
+
+  @override
+  String get changePasswordSubtitle => 'Atualize sua senha';
+
+  @override
+  String get changePasswordTitle => 'Alterar senha';
+
+  @override
+  String get currentPasswordLabel => 'Senha atual';
+
+  @override
+  String get newPasswordLabel => 'Nova senha';
+
+  @override
+  String get repeatNewPasswordLabel => 'Repetir nova senha';
+
+  @override
+  String get changePasswordSubmit => 'Atualizar';
+
+  @override
+  String get changePasswordSuccess => 'Senha atualizada ✅';
+
+  @override
+  String get changePasswordErrorGeneric => 'Não foi possível atualizar a senha';
+
+  @override
+  String get changePasswordValidationCurrentRequired =>
+      'Informe sua senha atual';
+
+  @override
+  String changePasswordValidationMinLength(Object min) {
+    return 'No mínimo $min caracteres';
+  }
+
+  @override
+  String get changePasswordValidationRepeatMismatch => 'Não coincide';
+
+  @override
   String get loadingMessage => 'Carregando...';
 
   @override

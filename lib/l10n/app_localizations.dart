@@ -902,6 +902,84 @@ abstract class AppLocalizations {
   /// **'Error: {error}'**
   String genericErrorMessage(String error);
 
+  /// No description provided for @security.
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get security;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change password'**
+  String get changePassword;
+
+  /// No description provided for @changePasswordSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Update your account password'**
+  String get changePasswordSubtitle;
+
+  /// No description provided for @changePasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Change password'**
+  String get changePasswordTitle;
+
+  /// No description provided for @currentPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Current password'**
+  String get currentPasswordLabel;
+
+  /// No description provided for @newPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'New password'**
+  String get newPasswordLabel;
+
+  /// No description provided for @repeatNewPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat new password'**
+  String get repeatNewPasswordLabel;
+
+  /// No description provided for @changePasswordSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get changePasswordSubmit;
+
+  /// No description provided for @changePasswordSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Password updated ✅'**
+  String get changePasswordSuccess;
+
+  /// No description provided for @changePasswordErrorGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t update the password'**
+  String get changePasswordErrorGeneric;
+
+  /// No description provided for @changePasswordValidationCurrentRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your current password'**
+  String get changePasswordValidationCurrentRequired;
+
+  /// No description provided for @changePasswordValidationMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'At least {min} characters'**
+  String changePasswordValidationMinLength(Object min);
+
+  /// No description provided for @changePasswordValidationRepeatMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Does not match'**
+  String get changePasswordValidationRepeatMismatch;
+
   /// No description provided for @loadingMessage.
   ///
   /// In en, this message translates to:

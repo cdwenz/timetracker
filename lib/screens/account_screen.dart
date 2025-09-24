@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ihadi_time_tracker/widgets/change_password_sheet.dart';
 import 'package:ihadi_time_tracker/widgets/custom_drawer.dart';
 import '../models/user_profile.dart';
 import '../services/user_service.dart';
@@ -31,6 +32,19 @@ class _AccountScreenState extends State<AccountScreen> {
       'USER' => AppLocalizations.of(context).roleUser,
       _ => role,
     };
+  }
+
+  Future<void> _openChangePassword() async {
+    final changed = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => const ChangePasswordSheet(),
+    );
+    if (changed == true && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Contraseña actualizada ✅')),
+      );
+    }
   }
 
   @override
@@ -72,13 +86,17 @@ class _AccountScreenState extends State<AccountScreen> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context).profileUpdatedMessage)),
+          SnackBar(
+              content:
+                  Text(AppLocalizations.of(context).profileUpdatedMessage)),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context).saveErrorMessage(e.toString()))),
+          SnackBar(
+              content: Text(
+                  AppLocalizations.of(context).saveErrorMessage(e.toString()))),
         );
       }
     } finally {
@@ -88,7 +106,12 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Widget _header(UserMe me) {
     final initials = (me.name.isNotEmpty
-            ? me.name.trim().split(RegExp(r'\s+')).map((p) => p[0]).take(2).join()
+            ? me.name
+                .trim()
+                .split(RegExp(r'\s+'))
+                .map((p) => p[0])
+                .take(2)
+                .join()
             : '?')
         .toUpperCase();
 
@@ -102,7 +125,8 @@ class _AccountScreenState extends State<AccountScreen> {
               radius: 28,
               child: Text(
                 initials,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
             ),
             const SizedBox(width: 16),
@@ -110,22 +134,31 @@ class _AccountScreenState extends State<AccountScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(me.name.isEmpty ? AppLocalizations.of(context).defaultUserName : me.name,
+                  Text(
+                      me.name.isEmpty
+                          ? AppLocalizations.of(context).defaultUserName
+                          : me.name,
                       style: Theme.of(context).textTheme.titleMedium),
                   const SizedBox(height: 4),
                   Text(me.email, style: Theme.of(context).textTheme.bodyMedium),
                   const SizedBox(height: 4),
-                  Text(AppLocalizations.of(context).userCountryLabel(me.country),
+                  Text(
+                      AppLocalizations.of(context).userCountryLabel(me.country),
                       style: Theme.of(context).textTheme.bodySmall),
                   const SizedBox(height: 8),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(6),
-                      color: Theme.of(context).colorScheme.primary.withOpacity(0.10),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withOpacity(0.10),
                     ),
                     child: Text(
-                      AppLocalizations.of(context).userRoleLabel(_translateRole(me.role)),
+                      AppLocalizations.of(context)
+                          .userRoleLabel(_translateRole(me.role)),
                       style: Theme.of(context).textTheme.labelMedium?.copyWith(
                             color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.w600,
@@ -156,8 +189,9 @@ class _AccountScreenState extends State<AccountScreen> {
                   labelText: AppLocalizations.of(context).nameLabel,
                   border: const OutlineInputBorder(),
                 ),
-                validator: (v) =>
-                    (v == null || v.trim().isEmpty) ? AppLocalizations.of(context).nameRequiredValidation : null,
+                validator: (v) => (v == null || v.trim().isEmpty)
+                    ? AppLocalizations.of(context).nameRequiredValidation
+                    : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -183,7 +217,9 @@ class _AccountScreenState extends State<AccountScreen> {
                   onPressed: _saving ? null : _save,
                   icon: _saving
                       ? const SizedBox(
-                          width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2))
                       : const Icon(Icons.save),
                   label: Text(AppLocalizations.of(context).saveChangesButton),
                 ),
@@ -207,17 +243,48 @@ class _AccountScreenState extends State<AccountScreen> {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
-            return Center(child: Text(AppLocalizations.of(context).genericErrorMessage(snapshot.error.toString())));
+            return Center(
+                child: Text(AppLocalizations.of(context)
+                    .genericErrorMessage(snapshot.error.toString())));
           }
           final me = snapshot.data!;
           return ListView(
             children: [
               _header(me),
               _formSection(),
+              const SizedBox(height: 16),
+              _securitySection(),
             ],
           );
         },
       ),
     );
   }
+
+  Widget _securitySection() {
+  final t = AppLocalizations.of(context);
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 16),
+    child: Card(
+      child: Column(
+        children: [
+          ListTile(
+            leading: const Icon(Icons.security),
+            title: Text(t.security), // o 'Seguridad'
+            dense: true,
+          ),
+          const Divider(height: 1),
+          ListTile(
+            leading: const Icon(Icons.lock_reset),
+            title: Text(t.changePassword), // o 'Cambiar contraseña'
+            subtitle: Text(t.changePasswordSubtitle),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: _openChangePassword,
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 }
