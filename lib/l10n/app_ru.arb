@@ -141,6 +141,7 @@
   "verifyingAuthStatus": "Проверка статуса аутентификации...",
   "userCountryLabel": "Страна: {country}",
   "userRoleLabel": "Роль: {role}",
+  "myTrackingsOnly": "Только мои трекинги",
   "countryFieldLabel": "Страна",
   "nameRequiredValidation": "Имя обязательно",
   "saveChangesButton": "Сохранить Изменения",

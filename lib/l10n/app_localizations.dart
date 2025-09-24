@@ -806,6 +806,12 @@ abstract class AppLocalizations {
   /// **'My Records'**
   String get scopeMyRecords;
 
+  /// No description provided for @myTrackingsOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'My trackings only'**
+  String get myTrackingsOnly;
+
   /// No description provided for @searchPlaceholder.
   ///
   /// In en, this message translates to:

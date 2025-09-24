@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:ihadi_time_tracker/widgets/custom_drawer.dart';
 import 'package:ihadi_time_tracker/widgets/report_detail_modal.dart';
@@ -371,8 +372,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                 name: _myUserName ?? 'Yo',
                                 isMe: true),
                           ),
-                          child: const Text(
-                              'Solo mis trackings '), //(${_myUserName ?? "Yo"})
+                          child: Text(
+                              AppLocalizations.of(context).myTrackingsOnly), //(${_myUserName ?? "Yo"})
                         ),
                       ..._users.where((u) => !u.isMe).map(
                             (u) => DropdownMenuItem<_UserOption>(

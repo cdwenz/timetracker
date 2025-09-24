@@ -1,8 +1,8 @@
 // lib/models/tracking.dart
 class Tracking {
   final String id;
-  final String? userId;
-  final String? userName;
+  final int? userId;  // ID numérico del usuario
+  final String? userName;  // Nombre del usuario
   final String? note;
   final String? recipient;
   final String? personName;
@@ -46,7 +46,7 @@ class Tracking {
 
     return Tracking(
       id: (json['id'] ?? '').toString(),
-      userId: json['userId']?.toString(),
+      userId: json['userId'] is int ? json['userId'] : int.tryParse(json['userId']?.toString() ?? ''),
       userName: json['userName']?.toString(),
       note: json['note']?.toString(),
       recipient: json['recipient']?.toString(),

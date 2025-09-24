@@ -141,11 +141,14 @@ class ReportsMetricsService {
     List<Map<String, dynamic>> allEntries, 
     String uid
   ) {
+    final userIdInt = int.tryParse(uid);
     return allEntries.where((entry) {
-      final entryUserId = entry['userId']?.toString() ?? 
-                         entry['createdBy']?.toString() ?? 
-                         entry['user_id']?.toString() ?? '';
-      return entryUserId == uid;
+      final entryUserId = entry['userId'] is int 
+          ? entry['userId'] 
+          : int.tryParse(entry['userId']?.toString() ?? '') ??
+            int.tryParse(entry['createdBy']?.toString() ?? '') ??
+            int.tryParse(entry['user_id']?.toString() ?? '');
+      return entryUserId == userIdInt;
     }).toList();
   }
   

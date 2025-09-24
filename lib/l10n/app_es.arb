@@ -221,6 +221,7 @@
   "teamCardSubtitleAdmin": "Reportes organización (vista ADMIN)",
   "teamCardSubtitleNonAdmin": "Igual que 'Yo' (acceso limitado)",
   "meCardSubtitleRole": "Mis reportes ({role})",
+  "myTrackingsOnly": "Solo mis trackings",
   "dailyComparisonTitle": "Comparación diaria",
   "myEvolutionTitle": "Evolución (Yo)",
   "errorLabel": "Error: {error}",

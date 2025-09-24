@@ -168,6 +168,7 @@
   "scopeAll": "All",
   "scopeMyTeam": "My Team",
   "scopeMyRecords": "My Records",
+  "myTrackingsOnly": "My trackings only",
   "@scopeLabel": {
     "description": "Label showing reports scope",
     "placeholders": {

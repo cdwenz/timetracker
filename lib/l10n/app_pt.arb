@@ -141,6 +141,7 @@
   "verifyingAuthStatus": "Verificando status de autenticação...",
   "userCountryLabel": "País: {country}",
   "userRoleLabel": "Função: {role}",
+  "myTrackingsOnly": "Apenas meus trackings",
   "countryFieldLabel": "País",
   "nameRequiredValidation": "O nome é obrigatório",
   "saveChangesButton": "Salvar Alterações",

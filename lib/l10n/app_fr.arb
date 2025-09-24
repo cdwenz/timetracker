@@ -141,6 +141,7 @@
   "verifyingAuthStatus": "Vérification du statut d'authentification...",
   "userCountryLabel": "Pays : {country}",
   "userRoleLabel": "Rôle : {role}",
+  "myTrackingsOnly": "Mes trackings seulement",
   "countryFieldLabel": "Pays",
   "nameRequiredValidation": "Le nom est requis",
   "saveChangesButton": "Sauvegarder les Modifications",

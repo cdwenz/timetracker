@@ -114,12 +114,10 @@ class _ReportDetailSheet extends StatelessWidget {
               const SizedBox(height: 12),
               
               // Información básica
-              if (entry['id'] != null) 
-                _detailRow('ID', entry['id'].toString()),
-              if (entry['userId'] != null) 
-                _detailRow('Usuario', entry['userId'].toString()),
+              if (entry['userName'] != null) 
+                _detailRow(AppLocalizations.of(context).defaultUserName, entry['userName'].toString()),
               if (entry['personName'] != null) 
-                _detailRow('Persona', entry['personName'].toString()),
+                _detailRow(AppLocalizations.of(context).personLabel, entry['personName'].toString()),
               
               const SizedBox(height: 8),
               const Divider(),
@@ -127,18 +125,18 @@ class _ReportDetailSheet extends StatelessWidget {
               
               // Fechas y horarios
               if (startedStr != '—')
-                _detailRow('Fecha inicio', startedStr),
+                _detailRow(AppLocalizations.of(context).startDateLabel, startedStr),
               if (entry['endDate'] != null) ...[
                 () {
                   final endDate = DateTime.tryParse(entry['endDate'].toString());
                   final endStr = endDate != null ? DateFormat('yyyy-MM-dd HH:mm').format(endDate) : '—';
-                  return endStr != '—' ? _detailRow('Fecha fin', endStr) : const SizedBox.shrink();
+                  return endStr != '—' ? _detailRow(AppLocalizations.of(context).endDateLabel, endStr) : const SizedBox.shrink();
                 }(),
               ],
               if (entry['startTimeOfDay'] != null) 
-                _detailRow('Hora inicio', entry['startTimeOfDay'].toString()),
+                _detailRow(AppLocalizations.of(context).startTimeLabel, entry['startTimeOfDay'].toString()),
               if (entry['endTimeOfDay'] != null) 
-                _detailRow('Hora fin', entry['endTimeOfDay'].toString()),
+                _detailRow(AppLocalizations.of(context).endTimeLabel, entry['endTimeOfDay'].toString()),
               
               const SizedBox(height: 8),
               const Divider(),
@@ -146,11 +144,11 @@ class _ReportDetailSheet extends StatelessWidget {
               
               // Detalles del trabajo
               if (entry['supportedCountry'] != null) 
-                _detailRow('País', entry['supportedCountry'].toString()),
+                _detailRow(AppLocalizations.of(context).countryFieldLabel, entry['supportedCountry'].toString()),
               if (entry['workingLanguage'] != null) 
-                _detailRow('Idioma', entry['workingLanguage'].toString()),
+                _detailRow(AppLocalizations.of(context).languageSelectionTitle, entry['workingLanguage'].toString()),
               if (entry['recipient'] != null) 
-                _detailRow('Destinatario', entry['recipient'].toString()),
+                _detailRow(AppLocalizations.of(context).recipientLabel, entry['recipient'].toString()),
               
               const SizedBox(height: 8),
               const Divider(),
@@ -158,31 +156,12 @@ class _ReportDetailSheet extends StatelessWidget {
               
               // Tareas y descripción
               if (entry['tasks'] != null && entry['tasks'] is List) 
-                _detailRow('Tareas', (entry['tasks'] as List).join(', ')),
+                _detailRow(AppLocalizations.of(context).tasksLabel, (entry['tasks'] as List).join(', ')),
               if (entry['taskDescription'] != null) 
-                _detailRow('Descripción', entry['taskDescription'].toString()),
+                _detailRow(AppLocalizations.of(context).descriptionLabel, entry['taskDescription'].toString()),
               if (entry['note'] != null) 
-                _detailRow('Nota', entry['note'].toString()),
+                _detailRow(AppLocalizations.of(context).noteLabel, entry['note'].toString()),
               
-              const SizedBox(height: 16),
-              
-              // Debug: mostrar todos los campos disponibles
-              ExpansionTile(
-                title: const Text('Datos técnicos (debug)', style: TextStyle(fontSize: 12, color: Colors.grey)),
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      entry.toString(),
-                      style: const TextStyle(fontSize: 10, fontFamily: 'monospace'),
-                    ),
-                  ),
-                ],
-              ),
             ],
           ),
         );

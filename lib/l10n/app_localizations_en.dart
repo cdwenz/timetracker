@@ -383,6 +383,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scopeMyRecords => 'My Records';
 
   @override
+  String get myTrackingsOnly => 'My trackings only';
+
+  @override
   String get searchPlaceholder => 'Search by name, note, etc.';
 
   @override

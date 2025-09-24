@@ -1,6 +1,6 @@
 // lib/models/user_profile.dart
 class UserProfile {
-  final String id;
+  final int id;  // ID numérico del usuario
   String name;
   final String email; // normalmente no editable
   String? workingLanguage;   // ej: "es", "en"
@@ -15,7 +15,7 @@ class UserProfile {
   });
 
   factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
-        id: json['id'].toString(),
+        id: json['id'] is int ? json['id'] : int.tryParse(json['id'].toString()) ?? 0,
         name: json['name'] ?? '',
         email: json['email'] ?? '',
         workingLanguage: json['workingLanguage'],

@@ -385,6 +385,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get scopeMyRecords => 'Мои Записи';
 
   @override
+  String get myTrackingsOnly => 'Только мои трекинги';
+
+  @override
   String get searchPlaceholder => 'Поиск по имени, заметке и т.д.';
 
   @override

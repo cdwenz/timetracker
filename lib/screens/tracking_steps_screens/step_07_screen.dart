@@ -4,6 +4,7 @@ import '../../models/tracking_data.dart';
 import '../../services/time_tracker_service.dart';
 import '../../widgets/big_action_button.dart';
 import '../../l10n/app_localizations.dart';
+import '../home_screen.dart';
 
 class StepSummaryScreen extends StatefulWidget {
   const StepSummaryScreen({super.key});
@@ -58,9 +59,12 @@ class _StepSummaryScreenState extends State<StepSummaryScreen> {
     );
 
     if (success) {
-      // TODO: limpiar datos si querés o redirigir
-      Navigator.of(context).popUntil((route) => route.isFirst);
+      // Limpiar datos y redirigir al panel principal
       tracking.clear();
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+        (route) => false,
+      );
     }
   }
 
