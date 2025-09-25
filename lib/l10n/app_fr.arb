@@ -14,6 +14,14 @@
   "internetRequiredMessage": "Pas de connexion - Internet requis pour la première connexion",
   "offlineFirstLoginMessage": "Pas de connexion. Vous devez vous connecter en ligne d'abord pour utiliser l'app hors ligne.",
   "incorrectCredentials": "Identifiants incorrects",
+  "forgotPassword": "Mot de passe oublié",
+  "forgotPasswordTitle": "Récupérer le mot de passe",
+  "forgotPasswordInstruction": "Entrez votre e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+  "emailRequired": "Saisissez votre e-mail",
+  "invalidEmail": "E-mail invalide",
+  "sendButton": "Envoyer",
+  "forgotPasswordSent": "Vérifiez votre e-mail",
+  "forgotPasswordErrorGeneric": "Impossible d’envoyer l’e-mail de récupération",
   
   "createAccount": "Créer un Compte",
   "nameLabel": "Nom",
@@ -118,6 +126,7 @@
   "taskAI": "IA",
   "taskSpecialAssignment": "Mission Spéciale",
   "taskRevision": "Révision",
+  "taskRefinement": "Raffinement",
   "taskOther": "Autre",
   
   "reportsTitle": "Rapports",
@@ -272,7 +281,8 @@
   "regionalComparisonTitle": "Comparaison Régionale",
   "countryBreakdownTitle": "Répartition par Pays",
   "languageDistributionTitle": "Distribution des Langues",
-  
+  "regionalDashboard": "Panel régional",
+
   "roleBasedAccess": "Accès basé sur le rôle",
   "accessLevel": "Niveau d'Accès",
   "availableReports": "Rapports Disponibles",
