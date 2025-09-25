@@ -1060,4 +1060,84 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get reset => 'Сбросить';
+
+  @override
+  String get advancedReportsScreenTitle => 'Расширенные Отчёты';
+
+  @override
+  String get userAccessLevelTitle => 'Ваш уровень доступа';
+
+  @override
+  String get personalDashboardTitle => 'Личная Панель (последние 30 дней)';
+
+  @override
+  String get myEntriesTitle => 'Мои Записи';
+
+  @override
+  String get teamTitle => 'Команда';
+
+  @override
+  String get totalHoursTitle => 'Всего Часов';
+
+  @override
+  String get activeUsersTitle => 'Активные Пользователи';
+
+  @override
+  String get activeRegionsTitle => 'Активные Регионы';
+
+  @override
+  String get mostActiveRegionsTitle => 'Наиболее Активные Регионы';
+
+  @override
+  String get advancedReportsTitle => 'Расширенные Отчёты';
+
+  @override
+  String get compareRegionsTitle => 'Сравнить Регионы';
+
+  @override
+  String get byCountriesTitle => 'По Странам';
+
+  @override
+  String get byLanguagesTitle => 'По Языкам';
+
+  @override
+  String get compareRegionsSubtitle => 'Анализировать несколько регионов';
+
+  @override
+  String get byCountriesSubtitle => 'Разбивка по странам';
+
+  @override
+  String get byLanguagesSubtitle => 'Распределение языков';
+
+  @override
+  String get dailyComparisonSubtitle => 'Я vs Команда';
+
+  @override
+  String availableRegionsTitle(Object count) {
+    return 'Доступные Регионы ($count)';
+  }
+
+  @override
+  String get regionalAccessEnabled => 'Доступ к региональным отчётам включён';
+
+  @override
+  String get teamReportsIncludingYours => 'Отчёты команды (включая ваши)';
+
+  @override
+  String get noBasicDashboardData => 'Нет данных базовой панели';
+
+  @override
+  String get noRegionalData => 'Нет региональных данных';
+
+  @override
+  String get analysisMultipleRegions => 'Анализ нескольких регионов';
+
+  @override
+  String get at2RegionsRequired => 'Необходимо минимум 2 региона для сравнения';
+
+  @override
+  String get updateData => 'Обновить данные';
+
+  @override
+  String get hours => 'часов';
 }

@@ -1064,4 +1064,88 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get reset => 'Réinitialiser';
+
+  @override
+  String get advancedReportsScreenTitle => 'Rapports Avancés';
+
+  @override
+  String get userAccessLevelTitle => 'Votre niveau d\'accès';
+
+  @override
+  String get personalDashboardTitle =>
+      'Tableau de Bord Personnel (30 derniers jours)';
+
+  @override
+  String get myEntriesTitle => 'Mes Entrées';
+
+  @override
+  String get teamTitle => 'Équipe';
+
+  @override
+  String get totalHoursTitle => 'Total Heures';
+
+  @override
+  String get activeUsersTitle => 'Utilisateurs Actifs';
+
+  @override
+  String get activeRegionsTitle => 'Régions Actives';
+
+  @override
+  String get mostActiveRegionsTitle => 'Régions les Plus Actives';
+
+  @override
+  String get advancedReportsTitle => 'Rapports Avancés';
+
+  @override
+  String get compareRegionsTitle => 'Comparer les Régions';
+
+  @override
+  String get byCountriesTitle => 'Par Pays';
+
+  @override
+  String get byLanguagesTitle => 'Par Langues';
+
+  @override
+  String get compareRegionsSubtitle => 'Analyser plusieurs régions';
+
+  @override
+  String get byCountriesSubtitle => 'Répartition par pays';
+
+  @override
+  String get byLanguagesSubtitle => 'Distribution des langues';
+
+  @override
+  String get dailyComparisonSubtitle => 'Moi vs Équipe';
+
+  @override
+  String availableRegionsTitle(Object count) {
+    return 'Régions Disponibles ($count)';
+  }
+
+  @override
+  String get regionalAccessEnabled => 'Accès aux rapports régionaux activé';
+
+  @override
+  String get teamReportsIncludingYours =>
+      'Rapports d\'équipe (y compris les vôtres)';
+
+  @override
+  String get noBasicDashboardData =>
+      'Aucune donnée de tableau de bord de base disponible';
+
+  @override
+  String get noRegionalData => 'Aucune donnée régionale disponible';
+
+  @override
+  String get analysisMultipleRegions => 'Analyse de plusieurs régions';
+
+  @override
+  String get at2RegionsRequired =>
+      'Au moins 2 régions nécessaires pour comparer';
+
+  @override
+  String get updateData => 'Mettre à jour les données';
+
+  @override
+  String get hours => 'heures';
 }

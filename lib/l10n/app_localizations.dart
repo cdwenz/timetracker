@@ -1999,6 +1999,162 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reset'**
   String get reset;
+
+  /// No description provided for @advancedReportsScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced Reports'**
+  String get advancedReportsScreenTitle;
+
+  /// No description provided for @userAccessLevelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your access level'**
+  String get userAccessLevelTitle;
+
+  /// No description provided for @personalDashboardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Dashboard (last 30 days)'**
+  String get personalDashboardTitle;
+
+  /// No description provided for @myEntriesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My Entries'**
+  String get myEntriesTitle;
+
+  /// No description provided for @teamTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Team'**
+  String get teamTitle;
+
+  /// No description provided for @totalHoursTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Hours'**
+  String get totalHoursTitle;
+
+  /// No description provided for @activeUsersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Users'**
+  String get activeUsersTitle;
+
+  /// No description provided for @activeRegionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Regions'**
+  String get activeRegionsTitle;
+
+  /// No description provided for @mostActiveRegionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Most Active Regions'**
+  String get mostActiveRegionsTitle;
+
+  /// No description provided for @advancedReportsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced Reports'**
+  String get advancedReportsTitle;
+
+  /// No description provided for @compareRegionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Compare Regions'**
+  String get compareRegionsTitle;
+
+  /// No description provided for @byCountriesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'By Countries'**
+  String get byCountriesTitle;
+
+  /// No description provided for @byLanguagesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'By Languages'**
+  String get byLanguagesTitle;
+
+  /// No description provided for @compareRegionsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyze multiple regions'**
+  String get compareRegionsSubtitle;
+
+  /// No description provided for @byCountriesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Country breakdown'**
+  String get byCountriesSubtitle;
+
+  /// No description provided for @byLanguagesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Language distribution'**
+  String get byLanguagesSubtitle;
+
+  /// No description provided for @dailyComparisonSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Me vs Team'**
+  String get dailyComparisonSubtitle;
+
+  /// No description provided for @availableRegionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Available Regions ({count})'**
+  String availableRegionsTitle(Object count);
+
+  /// No description provided for @regionalAccessEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Regional reports access enabled'**
+  String get regionalAccessEnabled;
+
+  /// No description provided for @teamReportsIncludingYours.
+  ///
+  /// In en, this message translates to:
+  /// **'Team reports (including yours)'**
+  String get teamReportsIncludingYours;
+
+  /// No description provided for @noBasicDashboardData.
+  ///
+  /// In en, this message translates to:
+  /// **'No basic dashboard data available'**
+  String get noBasicDashboardData;
+
+  /// No description provided for @noRegionalData.
+  ///
+  /// In en, this message translates to:
+  /// **'No regional data available'**
+  String get noRegionalData;
+
+  /// No description provided for @analysisMultipleRegions.
+  ///
+  /// In en, this message translates to:
+  /// **'Analysis of multiple regions'**
+  String get analysisMultipleRegions;
+
+  /// No description provided for @at2RegionsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'At least 2 regions needed to compare'**
+  String get at2RegionsRequired;
+
+  /// No description provided for @updateData.
+  ///
+  /// In en, this message translates to:
+  /// **'Update data'**
+  String get updateData;
+
+  /// No description provided for @hours.
+  ///
+  /// In en, this message translates to:
+  /// **'hours'**
+  String get hours;
 }
 
 class _AppLocalizationsDelegate

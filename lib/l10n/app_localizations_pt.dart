@@ -1056,4 +1056,87 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get reset => 'Redefinir';
+
+  @override
+  String get advancedReportsScreenTitle => 'Relatórios Avançados';
+
+  @override
+  String get userAccessLevelTitle => 'Seu nível de acesso';
+
+  @override
+  String get personalDashboardTitle => 'Painel Pessoal (últimos 30 dias)';
+
+  @override
+  String get myEntriesTitle => 'Minhas Entradas';
+
+  @override
+  String get teamTitle => 'Equipa';
+
+  @override
+  String get totalHoursTitle => 'Total de Horas';
+
+  @override
+  String get activeUsersTitle => 'Usuários Ativos';
+
+  @override
+  String get activeRegionsTitle => 'Regiões Ativas';
+
+  @override
+  String get mostActiveRegionsTitle => 'Regiões Mais Ativas';
+
+  @override
+  String get advancedReportsTitle => 'Relatórios Avançados';
+
+  @override
+  String get compareRegionsTitle => 'Comparar Regiões';
+
+  @override
+  String get byCountriesTitle => 'Por Países';
+
+  @override
+  String get byLanguagesTitle => 'Por Idiomas';
+
+  @override
+  String get compareRegionsSubtitle => 'Analisar múltiplas regiões';
+
+  @override
+  String get byCountriesSubtitle => 'Detalhamento por países';
+
+  @override
+  String get byLanguagesSubtitle => 'Distribuição de idiomas';
+
+  @override
+  String get dailyComparisonSubtitle => 'Eu vs Equipa';
+
+  @override
+  String availableRegionsTitle(Object count) {
+    return 'Regiões Disponíveis ($count)';
+  }
+
+  @override
+  String get regionalAccessEnabled =>
+      'Acesso a relatórios regionais habilitado';
+
+  @override
+  String get teamReportsIncludingYours =>
+      'Relatórios da equipa (incluindo os seus)';
+
+  @override
+  String get noBasicDashboardData => 'Nenhum dado de painel básico disponível';
+
+  @override
+  String get noRegionalData => 'Nenhum dado regional disponível';
+
+  @override
+  String get analysisMultipleRegions => 'Análise de múltiplas regiões';
+
+  @override
+  String get at2RegionsRequired =>
+      'Pelo menos 2 regiões necessárias para comparar';
+
+  @override
+  String get updateData => 'Atualizar dados';
+
+  @override
+  String get hours => 'horas';
 }

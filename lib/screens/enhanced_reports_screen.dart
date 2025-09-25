@@ -89,6 +89,11 @@ class _EnhancedReportsScreenState extends State<EnhancedReportsScreen> {
     }
   }
 
+  // Helper para formatear porcentajes sin decimales
+  String _formatPercentage(double percentage) {
+    return '${percentage.round()}%';
+  }
+
   void _showExportOptions() async {
     final String? exportType = await showDialog<String>(
       context: context,
@@ -215,71 +220,191 @@ class _EnhancedReportsScreenState extends State<EnhancedReportsScreen> {
   }
 
   Future<String> _exportBasicDashboard(ExportFormat format) async {
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final userName = await AuthService.currentUserName() ?? 'Unknown';
+    
+    if (_basicDashboard == null) {
+      throw Exception('No basic dashboard data available');
+    }
+    
+    switch (format) {
+      case ExportFormat.csv:
+        return _exportBasicDashboardCSV(timestamp, userName);
+      case ExportFormat.excel:
+        return _exportBasicDashboardExcel(timestamp, userName);
+      case ExportFormat.pdf:
+        return _exportBasicDashboardPDF(timestamp, userName);
+    }
+  }
+
+  Future<String> _exportBasicDashboardCSV(int timestamp, String userName) async {
     final buffer = StringBuffer();
     
     buffer.writeln('Basic Dashboard Report');
     buffer.writeln('Generated: ${DateTime.now()}');
-    buffer.writeln('User: ${await AuthService.currentUserName() ?? 'Unknown'}');
+    buffer.writeln('User: $userName');
     buffer.writeln('Role: ${_userRole ?? 'Unknown'}');
     buffer.writeln('');
     
-    if (_basicDashboard != null) {
-      buffer.writeln('Dashboard Metrics');
-      buffer.writeln('Team Count,${_basicDashboard!.teamCount}');
-      buffer.writeln('Me Count,${_basicDashboard!.meCount}');
-      buffer.writeln('');
-      
-      buffer.writeln('Daily Comparison');
-      buffer.writeln('Day,Team Count,My Count');
-      for (final daily in _basicDashboard!.dailyCompare) {
-        buffer.writeln('${daily.day.day}/${daily.day.month},${daily.teamCount},${daily.myCount}');
-      }
-      buffer.writeln('');
-      
-      buffer.writeln('My Trend');
-      buffer.writeln('Day,Count');
-      for (final trend in _basicDashboard!.myTrend) {
-        buffer.writeln('${trend.day.day}/${trend.day.month},${trend.count}');
-      }
+    buffer.writeln('Dashboard Metrics');
+    buffer.writeln('Team Count,${_basicDashboard!.teamCount}');
+    buffer.writeln('Me Count,${_basicDashboard!.meCount}');
+    buffer.writeln('');
+    
+    buffer.writeln('Daily Comparison');
+    buffer.writeln('Day,Team Count,My Count');
+    for (final daily in _basicDashboard!.dailyCompare) {
+      buffer.writeln('${daily.day.day}/${daily.day.month},${daily.teamCount},${daily.myCount}');
+    }
+    buffer.writeln('');
+    
+    buffer.writeln('My Trend');
+    buffer.writeln('Day,Count');
+    for (final trend in _basicDashboard!.myTrend) {
+      buffer.writeln('${trend.day.day}/${trend.day.month},${trend.count}');
     }
     
-    final directory = await ExportService.saveToFile(buffer.toString(), 'basic_dashboard_${DateTime.now().millisecondsSinceEpoch}.csv');
-    return directory.path;
+    final file = await ExportService.saveToFile(buffer.toString(), 'basic_dashboard_$timestamp.csv');
+    return file.path;
+  }
+
+  Future<String> _exportBasicDashboardExcel(int timestamp, String userName) async {
+    return ExportService.generateRealExcel('Basic Dashboard', [
+      ['Basic Dashboard Report'],
+      ['Generated', DateTime.now().toString()],
+      ['User', userName],
+      ['Role', _userRole ?? 'Unknown'],
+      [],
+      ['Dashboard Metrics'],
+      ['Team Count', _basicDashboard!.teamCount],
+      ['Me Count', _basicDashboard!.meCount],
+      [],
+      ['Daily Comparison', '', ''],
+      ['Day', 'Team Count', 'My Count'],
+      ..._basicDashboard!.dailyCompare.map((daily) => ['${daily.day.day}/${daily.day.month}', daily.teamCount, daily.myCount]),
+      [],
+      ['My Trend', ''],
+      ['Day', 'Count'],
+      ..._basicDashboard!.myTrend.map((trend) => ['${trend.day.day}/${trend.day.month}', trend.count]),
+    ]);
+  }
+
+  Future<String> _exportBasicDashboardPDF(int timestamp, String userName) async {
+    final content = [
+      'Basic Dashboard Report',
+      'Generated: ${DateTime.now()}',
+      'User: $userName',
+      'Role: ${_userRole ?? 'Unknown'}',
+      '',
+      'DASHBOARD METRICS:',
+      '• Team Count: ${_basicDashboard!.teamCount}',
+      '• Me Count: ${_basicDashboard!.meCount}',
+      '',
+      'DAILY COMPARISON:',
+      ..._basicDashboard!.dailyCompare.map((daily) => '• ${daily.day.day}/${daily.day.month}: Team ${daily.teamCount}, Me ${daily.myCount}'),
+      '',
+      'MY TREND:',
+      ..._basicDashboard!.myTrend.map((trend) => '• ${trend.day.day}/${trend.day.month}: ${trend.count}'),
+    ];
+    
+    return await ExportService.generateRealPDF('Basic Dashboard Report', content);
   }
 
   Future<String> _exportRegionalDashboard(ExportFormat format) async {
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final userName = await AuthService.currentUserName() ?? 'Unknown';
+    
+    if (_regionalDashboard == null) {
+      throw Exception('No regional dashboard data available');
+    }
+    
+    switch (format) {
+      case ExportFormat.csv:
+        return _exportRegionalDashboardCSV(timestamp, userName);
+      case ExportFormat.excel:
+        return _exportRegionalDashboardExcel(timestamp, userName);
+      case ExportFormat.pdf:
+        return _exportRegionalDashboardPDF(timestamp, userName);
+    }
+  }
+
+  Future<String> _exportRegionalDashboardCSV(int timestamp, String userName) async {
     final buffer = StringBuffer();
     
     buffer.writeln('Regional Dashboard Report');
     buffer.writeln('Generated: ${DateTime.now()}');
-    buffer.writeln('User: ${await AuthService.currentUserName() ?? 'Unknown'}');
+    buffer.writeln('User: $userName');
     buffer.writeln('Role: ${_userRole ?? 'Unknown'}');
     buffer.writeln('');
     
-    if (_regionalDashboard != null) {
-      buffer.writeln('Regional Summary');
-      buffer.writeln('Active Regions,${_regionalDashboard!.activeRegions}');
-      buffer.writeln('Total Hours,${_regionalDashboard!.totalHours}');
-      buffer.writeln('Total Entries,${_regionalDashboard!.totalEntries}');
-      buffer.writeln('Active Users,${_regionalDashboard!.activeUsers}');
-      buffer.writeln('');
-      
-      buffer.writeln('Top Countries');
-      buffer.writeln('Country,Hours,Percentage');
-      for (final country in _regionalDashboard!.topCountries) {
-        buffer.writeln('${country.country},${country.totalHours},${country.percentage}%');
-      }
-      buffer.writeln('');
-      
-      buffer.writeln('Top Languages');
-      buffer.writeln('Language,Hours,Percentage');
-      for (final lang in _regionalDashboard!.topLanguages) {
-        buffer.writeln('${lang.language},${lang.totalHours},${lang.percentage}%');
-      }
+    buffer.writeln('Regional Summary');
+    buffer.writeln('Active Regions,${_regionalDashboard!.activeRegions}');
+    buffer.writeln('Total Hours,${_regionalDashboard!.totalHours}');
+    buffer.writeln('Total Entries,${_regionalDashboard!.totalEntries}');
+    buffer.writeln('Active Users,${_regionalDashboard!.activeUsers}');
+    buffer.writeln('');
+    
+    buffer.writeln('Top Countries');
+    buffer.writeln('Country,Hours,Percentage');
+    for (final country in _regionalDashboard!.topCountries) {
+      buffer.writeln('${country.country},${country.totalHours},${_formatPercentage(country.percentage)}');
+    }
+    buffer.writeln('');
+    
+    buffer.writeln('Top Languages');
+    buffer.writeln('Language,Hours,Percentage');
+    for (final lang in _regionalDashboard!.topLanguages) {
+      buffer.writeln('${lang.language},${lang.totalHours},${_formatPercentage(lang.percentage)}');
     }
     
-    final directory = await ExportService.saveToFile(buffer.toString(), 'regional_dashboard_${DateTime.now().millisecondsSinceEpoch}.csv');
-    return directory.path;
+    final file = await ExportService.saveToFile(buffer.toString(), 'regional_dashboard_$timestamp.csv');
+    return file.path;
+  }
+
+  Future<String> _exportRegionalDashboardExcel(int timestamp, String userName) async {
+    return ExportService.generateRealExcel('Regional Dashboard', [
+      ['Regional Dashboard Report'],
+      ['Generated', DateTime.now().toString()],
+      ['User', userName],
+      ['Role', _userRole ?? 'Unknown'],
+      [],
+      ['Regional Summary'],
+      ['Active Regions', _regionalDashboard!.activeRegions],
+      ['Total Hours', _regionalDashboard!.totalHours],
+      ['Total Entries', _regionalDashboard!.totalEntries],
+      ['Active Users', _regionalDashboard!.activeUsers],
+      [],
+      ['Top Countries', '', ''],
+      ['Country', 'Hours', 'Percentage'],
+      ..._regionalDashboard!.topCountries.map((c) => [c.country, c.totalHours, _formatPercentage(c.percentage)]),
+      [],
+      ['Top Languages', '', ''],
+      ['Language', 'Hours', 'Percentage'],
+      ..._regionalDashboard!.topLanguages.map((l) => [l.language, l.totalHours, _formatPercentage(l.percentage)]),
+    ]);
+  }
+
+  Future<String> _exportRegionalDashboardPDF(int timestamp, String userName) async {
+    final content = [
+      'Regional Dashboard Report',
+      'Generated: ${DateTime.now()}',
+      'User: $userName',
+      'Role: ${_userRole ?? 'Unknown'}',
+      '',
+      'REGIONAL SUMMARY:',
+      '• Active Regions: ${_regionalDashboard!.activeRegions}',
+      '• Total Hours: ${_regionalDashboard!.totalHours}',
+      '• Total Entries: ${_regionalDashboard!.totalEntries}',
+      '• Active Users: ${_regionalDashboard!.activeUsers}',
+      '',
+      'TOP COUNTRIES:',
+      ..._regionalDashboard!.topCountries.map((c) => '• ${c.country}: ${c.totalHours} hours (${_formatPercentage(c.percentage)})'),
+      '',
+      'TOP LANGUAGES:',
+      ..._regionalDashboard!.topLanguages.map((l) => '• ${l.language}: ${l.totalHours} hours (${_formatPercentage(l.percentage)})'),
+    ];
+    
+    return await ExportService.generateRealPDF('Regional Dashboard Report', content);
   }
 
   void _navigateToRegionalSummary(String regionId, String regionName) {
@@ -805,7 +930,7 @@ class _EnhancedReportsScreenState extends State<EnhancedReportsScreen> {
         title: Text(region.regionName),
         subtitle: Text('${region.totalHours.toStringAsFixed(1)} horas'),
         trailing: Text(
-          '${region.percentage.toStringAsFixed(1)}%',
+          _formatPercentage(region.percentage),
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         onTap: () => _navigateToRegionalSummary(region.regionId, region.regionName),

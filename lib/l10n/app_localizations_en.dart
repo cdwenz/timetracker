@@ -1054,4 +1054,84 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reset => 'Reset';
+
+  @override
+  String get advancedReportsScreenTitle => 'Advanced Reports';
+
+  @override
+  String get userAccessLevelTitle => 'Your access level';
+
+  @override
+  String get personalDashboardTitle => 'Personal Dashboard (last 30 days)';
+
+  @override
+  String get myEntriesTitle => 'My Entries';
+
+  @override
+  String get teamTitle => 'Team';
+
+  @override
+  String get totalHoursTitle => 'Total Hours';
+
+  @override
+  String get activeUsersTitle => 'Active Users';
+
+  @override
+  String get activeRegionsTitle => 'Active Regions';
+
+  @override
+  String get mostActiveRegionsTitle => 'Most Active Regions';
+
+  @override
+  String get advancedReportsTitle => 'Advanced Reports';
+
+  @override
+  String get compareRegionsTitle => 'Compare Regions';
+
+  @override
+  String get byCountriesTitle => 'By Countries';
+
+  @override
+  String get byLanguagesTitle => 'By Languages';
+
+  @override
+  String get compareRegionsSubtitle => 'Analyze multiple regions';
+
+  @override
+  String get byCountriesSubtitle => 'Country breakdown';
+
+  @override
+  String get byLanguagesSubtitle => 'Language distribution';
+
+  @override
+  String get dailyComparisonSubtitle => 'Me vs Team';
+
+  @override
+  String availableRegionsTitle(Object count) {
+    return 'Available Regions ($count)';
+  }
+
+  @override
+  String get regionalAccessEnabled => 'Regional reports access enabled';
+
+  @override
+  String get teamReportsIncludingYours => 'Team reports (including yours)';
+
+  @override
+  String get noBasicDashboardData => 'No basic dashboard data available';
+
+  @override
+  String get noRegionalData => 'No regional data available';
+
+  @override
+  String get analysisMultipleRegions => 'Analysis of multiple regions';
+
+  @override
+  String get at2RegionsRequired => 'At least 2 regions needed to compare';
+
+  @override
+  String get updateData => 'Update data';
+
+  @override
+  String get hours => 'hours';
 }
