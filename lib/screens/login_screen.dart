@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ihadi_time_tracker/widgets/forgot_password_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ihadi_time_tracker/screens/home_screen.dart';
 import 'package:ihadi_time_tracker/services/auth_service.dart';
@@ -24,6 +25,14 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _hasOfflineLogin = false;
 
   String? _error;
+
+  Future<void> _openForgotPassword() async {
+    await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => const ForgotPasswordSheet(),
+    );
+  }
 
   @override
   void initState() {
@@ -113,9 +122,12 @@ class _LoginScreenState extends State<LoginScreen> {
               // Indicador de estado offline/online
               if (_isOffline) ...[
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
-                    color: _hasOfflineLogin ? Colors.orange.shade100 : Colors.red.shade100,
+                    color: _hasOfflineLogin
+                        ? Colors.orange.shade100
+                        : Colors.red.shade100,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
                       color: _hasOfflineLogin ? Colors.orange : Colors.red,
@@ -126,17 +138,22 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(
-                        _hasOfflineLogin ? Icons.wifi_off : Icons.signal_wifi_off,
+                        _hasOfflineLogin
+                            ? Icons.wifi_off
+                            : Icons.signal_wifi_off,
                         color: _hasOfflineLogin ? Colors.orange : Colors.red,
                         size: 16,
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        _hasOfflineLogin 
-                          ? AppLocalizations.of(context).offlineModeMessage
-                          : AppLocalizations.of(context).internetRequiredMessage,
+                        _hasOfflineLogin
+                            ? AppLocalizations.of(context).offlineModeMessage
+                            : AppLocalizations.of(context)
+                                .internetRequiredMessage,
                         style: TextStyle(
-                          color: _hasOfflineLogin ? Colors.orange.shade800 : Colors.red.shade800,
+                          color: _hasOfflineLogin
+                              ? Colors.orange.shade800
+                              : Colors.red.shade800,
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                         ),
@@ -146,15 +163,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 20),
               ],
-              
+
               Image.asset('assets/ihadi.png', height: 120),
               const SizedBox(height: 24),
               Text(AppLocalizations.of(context).loginTitle,
-                  style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+                  style: const TextStyle(
+                      fontSize: 28, fontWeight: FontWeight.bold)),
               const SizedBox(height: 30),
               TextField(
                 controller: _usernameController,
-                decoration: InputDecoration(labelText: AppLocalizations.of(context).emailLabel),
+                decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context).emailLabel),
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -163,7 +182,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context).passwordLabel,
                   suffixIcon: IconButton(
-                    tooltip: _obscurePassword ? AppLocalizations.of(context).showPasswordTooltip : AppLocalizations.of(context).hidePasswordTooltip,
+                    tooltip: _obscurePassword
+                        ? AppLocalizations.of(context).showPasswordTooltip
+                        : AppLocalizations.of(context).hidePasswordTooltip,
                     icon: Icon(_obscurePassword
                         ? Icons.visibility
                         : Icons.visibility_off),
@@ -182,12 +203,21 @@ class _LoginScreenState extends State<LoginScreen> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 48, vertical: 14),
                       ),
-                      child: Text(AppLocalizations.of(context).loginButton, style: const TextStyle(color: Colors.black)),
+                      child: Text(AppLocalizations.of(context).loginButton,
+                          style: const TextStyle(color: Colors.black)),
                     ),
               if (_error != null) ...[
                 const SizedBox(height: 16),
                 Text(_error!, style: const TextStyle(color: Colors.red)),
               ],
+              const SizedBox(height: 16),
+              Align(
+                alignment: Alignment.center,
+                child: TextButton(
+                  onPressed: _openForgotPassword,
+                  child: Text(AppLocalizations.of(context).forgotPassword), // "Olvidé mi contraseña"
+                ),
+              ),
               const SizedBox(height: 16),
               TextButton(
                 onPressed: () {

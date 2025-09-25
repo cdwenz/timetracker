@@ -48,6 +48,32 @@ class AppLocalizationsRu extends AppLocalizations {
   String get incorrectCredentials => 'Неверные учётные данные';
 
   @override
+  String get forgotPassword => 'Забыли пароль';
+
+  @override
+  String get forgotPasswordTitle => 'Восстановление пароля';
+
+  @override
+  String get forgotPasswordInstruction =>
+      'Введите ваш e-mail, и мы отправим ссылку для сброса пароля.';
+
+  @override
+  String get emailRequired => 'Введите ваш e-mail';
+
+  @override
+  String get invalidEmail => 'Неверный e-mail';
+
+  @override
+  String get sendButton => 'Отправить';
+
+  @override
+  String get forgotPasswordSent => 'Проверьте вашу почту';
+
+  @override
+  String get forgotPasswordErrorGeneric =>
+      'Не удалось отправить письмо для восстановления';
+
+  @override
   String get createAccount => 'Создать Аккаунт';
 
   @override
@@ -343,6 +369,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get taskRevision => 'Ревизия';
+
+  @override
+  String get taskRefinement => 'Усовершенствование';
 
   @override
   String get taskOther => 'Другое';
@@ -827,6 +856,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get languageDistributionTitle => 'Распределение языков';
+
+  @override
+  String get regionalDashboard => 'Региональная панель';
 
   @override
   String get roleBasedAccess => 'Доступ на основе ролей';

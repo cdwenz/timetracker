@@ -14,6 +14,14 @@
   "internetRequiredMessage": "Нет соединения - Интернет необходим для первого входа",
   "offlineFirstLoginMessage": "Нет соединения. Вам нужно войти онлайн сначала, чтобы использовать приложение оффлайн.",
   "incorrectCredentials": "Неверные учётные данные",
+  "forgotPassword": "Забыли пароль",
+  "forgotPasswordTitle": "Восстановление пароля",
+  "forgotPasswordInstruction": "Введите ваш e-mail, и мы отправим ссылку для сброса пароля.",
+  "emailRequired": "Введите ваш e-mail",
+  "invalidEmail": "Неверный e-mail",
+  "sendButton": "Отправить",
+  "forgotPasswordSent": "Проверьте вашу почту",
+  "forgotPasswordErrorGeneric": "Не удалось отправить письмо для восстановления",
   
   "createAccount": "Создать Аккаунт",
   "nameLabel": "Имя",
@@ -118,6 +126,7 @@
   "taskAI": "ИИ",
   "taskSpecialAssignment": "Специальное Задание",
   "taskRevision": "Ревизия",
+  "taskRefinement": "Усовершенствование",
   "taskOther": "Другое",
   
   "reportsTitle": "Отчёты",
@@ -272,6 +281,7 @@
   "regionalComparisonTitle": "Сравнение регионов",
   "countryBreakdownTitle": "Разбивка по странам",
   "languageDistributionTitle": "Распределение языков",
+  "regionalDashboard": "Региональная панель",
   
   "roleBasedAccess": "Доступ на основе ролей",
   "accessLevel": "Уровень доступа",

@@ -25,6 +25,7 @@ class _StepTaskScreenState extends State<StepTaskScreen> {
     AppLocalizations.of(context).taskAI,
     AppLocalizations.of(context).taskSpecialAssignment,
     AppLocalizations.of(context).taskRevision,
+    AppLocalizations.of(context).taskRefinement,
     AppLocalizations.of(context).taskOther,
   ];
 

@@ -48,6 +48,32 @@ class AppLocalizationsFr extends AppLocalizations {
   String get incorrectCredentials => 'Identifiants incorrects';
 
   @override
+  String get forgotPassword => 'Mot de passe oublié';
+
+  @override
+  String get forgotPasswordTitle => 'Récupérer le mot de passe';
+
+  @override
+  String get forgotPasswordInstruction =>
+      'Entrez votre e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.';
+
+  @override
+  String get emailRequired => 'Saisissez votre e-mail';
+
+  @override
+  String get invalidEmail => 'E-mail invalide';
+
+  @override
+  String get sendButton => 'Envoyer';
+
+  @override
+  String get forgotPasswordSent => 'Vérifiez votre e-mail';
+
+  @override
+  String get forgotPasswordErrorGeneric =>
+      'Impossible d’envoyer l’e-mail de récupération';
+
+  @override
   String get createAccount => 'Créer un Compte';
 
   @override
@@ -346,6 +372,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get taskRevision => 'Révision';
+
+  @override
+  String get taskRefinement => 'Raffinement';
 
   @override
   String get taskOther => 'Autre';
@@ -830,6 +859,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get languageDistributionTitle => 'Distribution des Langues';
+
+  @override
+  String get regionalDashboard => 'Panel régional';
 
   @override
   String get roleBasedAccess => 'Accès basé sur le rôle';

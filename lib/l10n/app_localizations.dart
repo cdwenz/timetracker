@@ -176,6 +176,54 @@ abstract class AppLocalizations {
   /// **'Incorrect credentials'**
   String get incorrectCredentials;
 
+  /// No description provided for @forgotPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password'**
+  String get forgotPassword;
+
+  /// No description provided for @forgotPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recover password'**
+  String get forgotPasswordTitle;
+
+  /// No description provided for @forgotPasswordInstruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email and we’ll send you a link to reset your password.'**
+  String get forgotPasswordInstruction;
+
+  /// No description provided for @emailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email'**
+  String get emailRequired;
+
+  /// No description provided for @invalidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email'**
+  String get invalidEmail;
+
+  /// No description provided for @sendButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get sendButton;
+
+  /// No description provided for @forgotPasswordSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your email'**
+  String get forgotPasswordSent;
+
+  /// No description provided for @forgotPasswordErrorGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t send the recovery email'**
+  String get forgotPasswordErrorGeneric;
+
   /// No description provided for @createAccount.
   ///
   /// In en, this message translates to:
@@ -733,6 +781,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Revision'**
   String get taskRevision;
+
+  /// No description provided for @taskRefinement.
+  ///
+  /// In en, this message translates to:
+  /// **'Refinement'**
+  String get taskRefinement;
 
   /// No description provided for @taskOther.
   ///
@@ -1561,6 +1615,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Language Distribution'**
   String get languageDistributionTitle;
+
+  /// No description provided for @regionalDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard Regional'**
+  String get regionalDashboard;
 
   /// No description provided for @roleBasedAccess.
   ///
