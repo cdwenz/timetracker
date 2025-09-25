@@ -2,6 +2,8 @@
 import 'package:intl/intl.dart';
 import 'api_service.dart';
 import 'auth_service.dart';
+import 'reports_service.dart';
+import '../models/regional_reports_models.dart';
 
 /// Filtros para la pantalla de detalle
 enum ReportsDetailFilter { team, me, compare, trend }
@@ -304,6 +306,192 @@ class ReportsMetricsService {
         );
         print("   Returning my entries: ${myEntries.length}");
         return myEntries;
+    }
+  }
+
+  // ====== API para reportes regionales ======
+
+  /// Obtiene el dashboard completo con datos regionales según el rol del usuario
+  Future<DashboardSummary?> loadEnhancedDashboard({
+    DateTime? startDate,
+    DateTime? endDate,
+    List<String>? countries,
+    List<String>? languages,
+  }) async {
+    final userRole = await AuthService.currentUserRole();
+    
+    // Solo roles con acceso a reportes regionales
+    if (!['SUPER', 'ADMIN', 'REGIONAL_MANAGER', 'FIELD_MANAGER'].contains(userRole)) {
+      return null;
+    }
+
+    try {
+      final dashboard = await ReportsService.getDashboardSummary(
+        startDate: startDate,
+        endDate: endDate,
+        countries: countries,
+        languages: languages,
+      );
+      return dashboard;
+    } catch (e) {
+      print('Error loading enhanced dashboard: $e');
+      return null;
+    }
+  }
+
+  /// Obtiene las regiones disponibles según el rol del usuario
+  Future<List<RegionInfo>> getAccessibleRegions() async {
+    final userRole = await AuthService.currentUserRole();
+    
+    if (!['SUPER', 'ADMIN', 'REGIONAL_MANAGER', 'FIELD_MANAGER'].contains(userRole)) {
+      return [];
+    }
+
+    try {
+      return await ReportsService.getAvailableRegions();
+    } catch (e) {
+      print('Error loading accessible regions: $e');
+      return [];
+    }
+  }
+
+  /// Obtiene el resumen de una región específica (con validación de acceso)
+  Future<RegionalSummary?> getRegionalSummary(
+    String regionId, {
+    DateTime? startDate,
+    DateTime? endDate,
+    List<String>? countries,
+    List<String>? languages,
+  }) async {
+    final userRole = await AuthService.currentUserRole();
+    
+    if (!['SUPER', 'ADMIN', 'REGIONAL_MANAGER', 'FIELD_MANAGER'].contains(userRole)) {
+      throw Exception('Sin permisos para acceder a reportes regionales');
+    }
+
+    try {
+      return await ReportsService.getRegionalSummary(
+        regionId,
+        startDate: startDate,
+        endDate: endDate,
+        countries: countries,
+        languages: languages,
+      );
+    } catch (e) {
+      print('Error loading regional summary: $e');
+      return null;
+    }
+  }
+
+  /// Compara múltiples regiones (con validación de acceso)
+  Future<RegionalComparison?> compareRegions(
+    List<String> regionIds, {
+    DateTime? startDate,
+    DateTime? endDate,
+    List<String>? countries,
+    List<String>? languages,
+  }) async {
+    final userRole = await AuthService.currentUserRole();
+    
+    if (!['SUPER', 'ADMIN', 'REGIONAL_MANAGER', 'FIELD_MANAGER'].contains(userRole)) {
+      throw Exception('Sin permisos para comparar regiones');
+    }
+
+    if (regionIds.length < 2 || regionIds.length > 10) {
+      throw Exception('Se requieren entre 2 y 10 regiones para comparar');
+    }
+
+    try {
+      return await ReportsService.getRegionalComparison(
+        regionIds,
+        startDate: startDate,
+        endDate: endDate,
+        countries: countries,
+        languages: languages,
+      );
+    } catch (e) {
+      print('Error comparing regions: $e');
+      return null;
+    }
+  }
+
+  /// Obtiene el desglose por países
+  Future<CountryBreakdown?> getCountryBreakdown({
+    String? regionId,
+    DateTime? startDate,
+    DateTime? endDate,
+    List<String>? countries,
+  }) async {
+    final userRole = await AuthService.currentUserRole();
+    
+    if (!['SUPER', 'ADMIN', 'REGIONAL_MANAGER', 'FIELD_MANAGER'].contains(userRole)) {
+      return null;
+    }
+
+    try {
+      return await ReportsService.getCountryBreakdown(
+        regionId: regionId,
+        startDate: startDate,
+        endDate: endDate,
+        countries: countries,
+        take: 50, // Más datos para análisis
+      );
+    } catch (e) {
+      print('Error loading country breakdown: $e');
+      return null;
+    }
+  }
+
+  /// Obtiene la distribución de idiomas
+  Future<LanguageDistribution?> getLanguageDistribution({
+    String? regionId,
+    DateTime? startDate,
+    DateTime? endDate,
+    List<String>? countries,
+    List<String>? languages,
+  }) async {
+    final userRole = await AuthService.currentUserRole();
+    
+    if (!['SUPER', 'ADMIN', 'REGIONAL_MANAGER', 'FIELD_MANAGER'].contains(userRole)) {
+      return null;
+    }
+
+    try {
+      return await ReportsService.getLanguageDistribution(
+        regionId: regionId,
+        startDate: startDate,
+        endDate: endDate,
+        countries: countries,
+        languages: languages,
+        take: 50, // Más datos para análisis
+      );
+    } catch (e) {
+      print('Error loading language distribution: $e');
+      return null;
+    }
+  }
+
+  /// Verifica si el usuario actual puede acceder a reportes regionales
+  Future<bool> canAccessRegionalReports() async {
+    final userRole = await AuthService.currentUserRole();
+    return ['SUPER', 'ADMIN', 'REGIONAL_MANAGER', 'FIELD_MANAGER'].contains(userRole);
+  }
+
+  /// Obtiene una descripción del tipo de acceso del usuario actual
+  Future<String> getUserAccessDescription() async {
+    final userRole = await AuthService.currentUserRole();
+    
+    switch (userRole) {
+      case 'SUPER':
+        return 'Acceso completo a todas las organizaciones y regiones';
+      case 'ADMIN':
+        return 'Acceso completo a toda la organización';
+      case 'REGIONAL_MANAGER':
+        return 'Acceso a las regiones que maneja';
+      case 'FIELD_MANAGER':
+        return 'Acceso a las regiones de sus equipos';
+      default:
+        return 'Acceso solo a datos personales';
     }
   }
 }

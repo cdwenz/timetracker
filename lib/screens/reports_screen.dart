@@ -5,6 +5,7 @@ import 'package:ihadi_time_tracker/widgets/custom_drawer.dart';
 import 'package:ihadi_time_tracker/services/reports_metrics_service.dart';
 import 'package:ihadi_time_tracker/services/api_service.dart';
 import 'package:ihadi_time_tracker/screens/reports_detail_screen.dart';
+import 'package:ihadi_time_tracker/screens/enhanced_reports_screen.dart';
 import '../l10n/app_localizations.dart';
 import '../services/auth_service.dart';
 
@@ -62,7 +63,36 @@ class ReportsScreen extends StatelessWidget {
     return Scaffold(
       drawer: const CustomDrawer(),
       drawerEnableOpenDragGesture: true,
-      appBar: AppBar(title: Text(AppLocalizations.of(context).reportsScreenTitle)),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context).reportsScreenTitle),
+        actions: [
+          // Solo mostrar reportes avanzados para ADMIN, SUPER y REGIONAL_MANAGER
+          FutureBuilder<String?>(
+            future: AuthService.currentUserRole(),
+            builder: (context, roleSnapshot) {
+              final userRole = roleSnapshot.data;
+              final hasAdvancedAccess = userRole == 'ADMIN' || 
+                                      userRole == 'SUPER' || 
+                                      userRole == 'REGIONAL_MANAGER';
+              
+              if (!hasAdvancedAccess) {
+                return const SizedBox.shrink();
+              }
+              
+              return IconButton(
+                icon: const Icon(Icons.dashboard),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EnhancedReportsScreen(),
+                  ),
+                ),
+                tooltip: AppLocalizations.of(context).advancedReportsTooltip,
+              );
+            },
+          ),
+        ],
+      ),
       body: FutureBuilder<(ReportsDashboardData, String?)>(
         future: _load(),
         builder: (context, snap) {

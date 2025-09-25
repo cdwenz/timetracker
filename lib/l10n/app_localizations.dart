@@ -1513,6 +1513,492 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Profile and session'**
   String get accountTileSubtitle;
+
+  /// No description provided for @enhancedReportsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enhanced Reports'**
+  String get enhancedReportsTitle;
+
+  /// No description provided for @advancedReportsTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced Reports'**
+  String get advancedReportsTooltip;
+
+  /// No description provided for @basicReportsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Basic Reports'**
+  String get basicReportsTitle;
+
+  /// No description provided for @regionalReportsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Regional Reports'**
+  String get regionalReportsTitle;
+
+  /// No description provided for @regionalSummaryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Regional Summary'**
+  String get regionalSummaryTitle;
+
+  /// No description provided for @regionalComparisonTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Regional Comparison'**
+  String get regionalComparisonTitle;
+
+  /// No description provided for @countryBreakdownTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Country Breakdown'**
+  String get countryBreakdownTitle;
+
+  /// No description provided for @languageDistributionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Language Distribution'**
+  String get languageDistributionTitle;
+
+  /// No description provided for @roleBasedAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Role-based access'**
+  String get roleBasedAccess;
+
+  /// No description provided for @accessLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Access Level'**
+  String get accessLevel;
+
+  /// No description provided for @availableReports.
+  ///
+  /// In en, this message translates to:
+  /// **'Available Reports'**
+  String get availableReports;
+
+  /// No description provided for @selectRegionForDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a region to view details'**
+  String get selectRegionForDetails;
+
+  /// No description provided for @compareRegions.
+  ///
+  /// In en, this message translates to:
+  /// **'Compare Regions'**
+  String get compareRegions;
+
+  /// No description provided for @viewCountryBreakdown.
+  ///
+  /// In en, this message translates to:
+  /// **'View Country Breakdown'**
+  String get viewCountryBreakdown;
+
+  /// No description provided for @analyzeLanguageDistribution.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyze Language Distribution'**
+  String get analyzeLanguageDistribution;
+
+  /// No description provided for @activeFiltersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Filters'**
+  String get activeFiltersTitle;
+
+  /// No description provided for @clearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Filters'**
+  String get clearFilters;
+
+  /// No description provided for @filterByRegion.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter by region'**
+  String get filterByRegion;
+
+  /// No description provided for @filterByDates.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter by dates'**
+  String get filterByDates;
+
+  /// No description provided for @allRegions.
+  ///
+  /// In en, this message translates to:
+  /// **'All regions'**
+  String get allRegions;
+
+  /// No description provided for @selectRegions.
+  ///
+  /// In en, this message translates to:
+  /// **'Select regions'**
+  String get selectRegions;
+
+  /// No description provided for @selectAtLeast2Regions.
+  ///
+  /// In en, this message translates to:
+  /// **'Select at least 2 regions to compare'**
+  String get selectAtLeast2Regions;
+
+  /// Count of selected regions
+  ///
+  /// In en, this message translates to:
+  /// **'Selected Regions ({count}/10)'**
+  String selectedRegionsCount(int count);
+
+  /// No description provided for @totalHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Hours'**
+  String get totalHours;
+
+  /// No description provided for @totalEntries.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Entries'**
+  String get totalEntries;
+
+  /// No description provided for @activeUsers.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Users'**
+  String get activeUsers;
+
+  /// No description provided for @totalLanguages.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Languages'**
+  String get totalLanguages;
+
+  /// No description provided for @totalCountries.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Countries'**
+  String get totalCountries;
+
+  /// No description provided for @totalRegions.
+  ///
+  /// In en, this message translates to:
+  /// **'Regions'**
+  String get totalRegions;
+
+  /// No description provided for @averagePerRegion.
+  ///
+  /// In en, this message translates to:
+  /// **'Average/Region'**
+  String get averagePerRegion;
+
+  /// No description provided for @averagePerCountry.
+  ///
+  /// In en, this message translates to:
+  /// **'Average/Country'**
+  String get averagePerCountry;
+
+  /// No description provided for @averagePerLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Average/Language'**
+  String get averagePerLanguage;
+
+  /// No description provided for @topCountries.
+  ///
+  /// In en, this message translates to:
+  /// **'Top Countries'**
+  String get topCountries;
+
+  /// No description provided for @languageBreakdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Language Breakdown'**
+  String get languageBreakdown;
+
+  /// No description provided for @performanceMetrics.
+  ///
+  /// In en, this message translates to:
+  /// **'Performance Metrics'**
+  String get performanceMetrics;
+
+  /// No description provided for @comparisonSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Comparison Summary'**
+  String get comparisonSummary;
+
+  /// No description provided for @detailedMetrics.
+  ///
+  /// In en, this message translates to:
+  /// **'Detailed Metrics'**
+  String get detailedMetrics;
+
+  /// No description provided for @performanceHighlights.
+  ///
+  /// In en, this message translates to:
+  /// **'Performance Highlights'**
+  String get performanceHighlights;
+
+  /// No description provided for @mostUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Most Used'**
+  String get mostUsed;
+
+  /// No description provided for @leastUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Least Used'**
+  String get leastUsed;
+
+  /// No description provided for @mostActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Most Active'**
+  String get mostActive;
+
+  /// No description provided for @leastActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Least Active'**
+  String get leastActive;
+
+  /// No description provided for @bestPerformance.
+  ///
+  /// In en, this message translates to:
+  /// **'Best Performance'**
+  String get bestPerformance;
+
+  /// No description provided for @worstPerformance.
+  ///
+  /// In en, this message translates to:
+  /// **'Worst Performance'**
+  String get worstPerformance;
+
+  /// No description provided for @hoursPerUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours/User'**
+  String get hoursPerUser;
+
+  /// No description provided for @entriesPerUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Entries/User'**
+  String get entriesPerUser;
+
+  /// No description provided for @languagesUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Languages Used'**
+  String get languagesUsed;
+
+  /// No description provided for @countriesWithActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Countries with Activity'**
+  String get countriesWithActivity;
+
+  /// No description provided for @languagesWithActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Languages with Activity'**
+  String get languagesWithActivity;
+
+  /// No description provided for @periodInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Period Information'**
+  String get periodInformation;
+
+  /// From date
+  ///
+  /// In en, this message translates to:
+  /// **'From: {date}'**
+  String fromDate(String date);
+
+  /// To date
+  ///
+  /// In en, this message translates to:
+  /// **'To: {date}'**
+  String toDate(String date);
+
+  /// Region scope
+  ///
+  /// In en, this message translates to:
+  /// **'Region: {region}'**
+  String regionScope(String region);
+
+  /// No description provided for @allRegionsScope.
+  ///
+  /// In en, this message translates to:
+  /// **'Scope: All regions'**
+  String get allRegionsScope;
+
+  /// Filtered country
+  ///
+  /// In en, this message translates to:
+  /// **'Filtered country: {country}'**
+  String filteredCountry(String country);
+
+  /// No description provided for @noDataAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No data available'**
+  String get noDataAvailable;
+
+  /// No description provided for @noDataForRegion.
+  ///
+  /// In en, this message translates to:
+  /// **'No data available for this region'**
+  String get noDataForRegion;
+
+  /// No description provided for @loadingData.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading data...'**
+  String get loadingData;
+
+  /// No description provided for @refreshData.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get refreshData;
+
+  /// No description provided for @exportReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Report'**
+  String get exportReport;
+
+  /// No description provided for @generateReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate Report'**
+  String get generateReport;
+
+  /// No description provided for @exportToPDF.
+  ///
+  /// In en, this message translates to:
+  /// **'Export to PDF'**
+  String get exportToPDF;
+
+  /// No description provided for @exportToExcel.
+  ///
+  /// In en, this message translates to:
+  /// **'Export to Excel'**
+  String get exportToExcel;
+
+  /// No description provided for @exportToCSV.
+  ///
+  /// In en, this message translates to:
+  /// **'Export to CSV'**
+  String get exportToCSV;
+
+  /// No description provided for @shareReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Share Report'**
+  String get shareReport;
+
+  /// No description provided for @distributionChart.
+  ///
+  /// In en, this message translates to:
+  /// **'Distribution Chart'**
+  String get distributionChart;
+
+  /// No description provided for @comparisonChart.
+  ///
+  /// In en, this message translates to:
+  /// **'Comparison Chart'**
+  String get comparisonChart;
+
+  /// No description provided for @detailsTable.
+  ///
+  /// In en, this message translates to:
+  /// **'Details Table'**
+  String get detailsTable;
+
+  /// No description provided for @statisticsInsights.
+  ///
+  /// In en, this message translates to:
+  /// **'Statistics & Insights'**
+  String get statisticsInsights;
+
+  /// No description provided for @regionalDistribution.
+  ///
+  /// In en, this message translates to:
+  /// **'Regional Distribution'**
+  String get regionalDistribution;
+
+  /// No description provided for @selectItemsToExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Select items to export'**
+  String get selectItemsToExport;
+
+  /// No description provided for @exportOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Options'**
+  String get exportOptions;
+
+  /// No description provided for @includeCharts.
+  ///
+  /// In en, this message translates to:
+  /// **'Include charts'**
+  String get includeCharts;
+
+  /// No description provided for @includeRawData.
+  ///
+  /// In en, this message translates to:
+  /// **'Include raw data'**
+  String get includeRawData;
+
+  /// No description provided for @includeSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Include summary'**
+  String get includeSummary;
+
+  /// No description provided for @exportSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Report exported successfully'**
+  String get exportSuccess;
+
+  /// Export error message
+  ///
+  /// In en, this message translates to:
+  /// **'Error exporting report: {error}'**
+  String exportError(String error);
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @compare.
+  ///
+  /// In en, this message translates to:
+  /// **'Compare'**
+  String get compare;
+
+  /// No description provided for @apply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get apply;
+
+  /// No description provided for @reset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get reset;
 }
 
 class _AppLocalizationsDelegate

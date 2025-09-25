@@ -799,4 +799,259 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get accountTileSubtitle => 'Profile and session';
+
+  @override
+  String get enhancedReportsTitle => 'Enhanced Reports';
+
+  @override
+  String get advancedReportsTooltip => 'Advanced Reports';
+
+  @override
+  String get basicReportsTitle => 'Basic Reports';
+
+  @override
+  String get regionalReportsTitle => 'Regional Reports';
+
+  @override
+  String get regionalSummaryTitle => 'Regional Summary';
+
+  @override
+  String get regionalComparisonTitle => 'Regional Comparison';
+
+  @override
+  String get countryBreakdownTitle => 'Country Breakdown';
+
+  @override
+  String get languageDistributionTitle => 'Language Distribution';
+
+  @override
+  String get roleBasedAccess => 'Role-based access';
+
+  @override
+  String get accessLevel => 'Access Level';
+
+  @override
+  String get availableReports => 'Available Reports';
+
+  @override
+  String get selectRegionForDetails => 'Select a region to view details';
+
+  @override
+  String get compareRegions => 'Compare Regions';
+
+  @override
+  String get viewCountryBreakdown => 'View Country Breakdown';
+
+  @override
+  String get analyzeLanguageDistribution => 'Analyze Language Distribution';
+
+  @override
+  String get activeFiltersTitle => 'Active Filters';
+
+  @override
+  String get clearFilters => 'Clear Filters';
+
+  @override
+  String get filterByRegion => 'Filter by region';
+
+  @override
+  String get filterByDates => 'Filter by dates';
+
+  @override
+  String get allRegions => 'All regions';
+
+  @override
+  String get selectRegions => 'Select regions';
+
+  @override
+  String get selectAtLeast2Regions => 'Select at least 2 regions to compare';
+
+  @override
+  String selectedRegionsCount(int count) {
+    return 'Selected Regions ($count/10)';
+  }
+
+  @override
+  String get totalHours => 'Total Hours';
+
+  @override
+  String get totalEntries => 'Total Entries';
+
+  @override
+  String get activeUsers => 'Active Users';
+
+  @override
+  String get totalLanguages => 'Total Languages';
+
+  @override
+  String get totalCountries => 'Total Countries';
+
+  @override
+  String get totalRegions => 'Regions';
+
+  @override
+  String get averagePerRegion => 'Average/Region';
+
+  @override
+  String get averagePerCountry => 'Average/Country';
+
+  @override
+  String get averagePerLanguage => 'Average/Language';
+
+  @override
+  String get topCountries => 'Top Countries';
+
+  @override
+  String get languageBreakdown => 'Language Breakdown';
+
+  @override
+  String get performanceMetrics => 'Performance Metrics';
+
+  @override
+  String get comparisonSummary => 'Comparison Summary';
+
+  @override
+  String get detailedMetrics => 'Detailed Metrics';
+
+  @override
+  String get performanceHighlights => 'Performance Highlights';
+
+  @override
+  String get mostUsed => 'Most Used';
+
+  @override
+  String get leastUsed => 'Least Used';
+
+  @override
+  String get mostActive => 'Most Active';
+
+  @override
+  String get leastActive => 'Least Active';
+
+  @override
+  String get bestPerformance => 'Best Performance';
+
+  @override
+  String get worstPerformance => 'Worst Performance';
+
+  @override
+  String get hoursPerUser => 'Hours/User';
+
+  @override
+  String get entriesPerUser => 'Entries/User';
+
+  @override
+  String get languagesUsed => 'Languages Used';
+
+  @override
+  String get countriesWithActivity => 'Countries with Activity';
+
+  @override
+  String get languagesWithActivity => 'Languages with Activity';
+
+  @override
+  String get periodInformation => 'Period Information';
+
+  @override
+  String fromDate(String date) {
+    return 'From: $date';
+  }
+
+  @override
+  String toDate(String date) {
+    return 'To: $date';
+  }
+
+  @override
+  String regionScope(String region) {
+    return 'Region: $region';
+  }
+
+  @override
+  String get allRegionsScope => 'Scope: All regions';
+
+  @override
+  String filteredCountry(String country) {
+    return 'Filtered country: $country';
+  }
+
+  @override
+  String get noDataAvailable => 'No data available';
+
+  @override
+  String get noDataForRegion => 'No data available for this region';
+
+  @override
+  String get loadingData => 'Loading data...';
+
+  @override
+  String get refreshData => 'Refresh';
+
+  @override
+  String get exportReport => 'Export Report';
+
+  @override
+  String get generateReport => 'Generate Report';
+
+  @override
+  String get exportToPDF => 'Export to PDF';
+
+  @override
+  String get exportToExcel => 'Export to Excel';
+
+  @override
+  String get exportToCSV => 'Export to CSV';
+
+  @override
+  String get shareReport => 'Share Report';
+
+  @override
+  String get distributionChart => 'Distribution Chart';
+
+  @override
+  String get comparisonChart => 'Comparison Chart';
+
+  @override
+  String get detailsTable => 'Details Table';
+
+  @override
+  String get statisticsInsights => 'Statistics & Insights';
+
+  @override
+  String get regionalDistribution => 'Regional Distribution';
+
+  @override
+  String get selectItemsToExport => 'Select items to export';
+
+  @override
+  String get exportOptions => 'Export Options';
+
+  @override
+  String get includeCharts => 'Include charts';
+
+  @override
+  String get includeRawData => 'Include raw data';
+
+  @override
+  String get includeSummary => 'Include summary';
+
+  @override
+  String get exportSuccess => 'Report exported successfully';
+
+  @override
+  String exportError(String error) {
+    return 'Error exporting report: $error';
+  }
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get compare => 'Compare';
+
+  @override
+  String get apply => 'Apply';
+
+  @override
+  String get reset => 'Reset';
 }

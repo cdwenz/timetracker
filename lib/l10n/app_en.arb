@@ -433,5 +433,134 @@
   "reportsTileTitle": "Reports",
   "reportsTileSubtitle": "Times and metrics",
   "accountTileTitle": "Account",
-  "accountTileSubtitle": "Profile and session"
+  "accountTileSubtitle": "Profile and session",
+
+  "enhancedReportsTitle": "Enhanced Reports",
+  "advancedReportsTooltip": "Advanced Reports",
+  "basicReportsTitle": "Basic Reports",
+  "regionalReportsTitle": "Regional Reports",
+  "regionalSummaryTitle": "Regional Summary",
+  "regionalComparisonTitle": "Regional Comparison",
+  "countryBreakdownTitle": "Country Breakdown",
+  "languageDistributionTitle": "Language Distribution",
+  
+  "roleBasedAccess": "Role-based access",
+  "accessLevel": "Access Level",
+  "availableReports": "Available Reports",
+  "selectRegionForDetails": "Select a region to view details",
+  "compareRegions": "Compare Regions",
+  "viewCountryBreakdown": "View Country Breakdown",
+  "analyzeLanguageDistribution": "Analyze Language Distribution",
+  
+  "activeFiltersTitle": "Active Filters",
+  "clearFilters": "Clear Filters",
+  "filterByRegion": "Filter by region",
+  "filterByDates": "Filter by dates",
+  "allRegions": "All regions",
+  "selectRegions": "Select regions",
+  "selectAtLeast2Regions": "Select at least 2 regions to compare",
+  "selectedRegionsCount": "Selected Regions ({count}/10)",
+  "@selectedRegionsCount": {
+    "description": "Count of selected regions",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  
+  "totalHours": "Total Hours",
+  "totalEntries": "Total Entries",
+  "activeUsers": "Active Users",
+  "totalLanguages": "Total Languages",
+  "totalCountries": "Total Countries",
+  "totalRegions": "Regions",
+  "averagePerRegion": "Average/Region",
+  "averagePerCountry": "Average/Country",
+  "averagePerLanguage": "Average/Language",
+  
+  "topCountries": "Top Countries",
+  "languageBreakdown": "Language Breakdown",
+  "performanceMetrics": "Performance Metrics",
+  "comparisonSummary": "Comparison Summary",
+  "detailedMetrics": "Detailed Metrics",
+  "performanceHighlights": "Performance Highlights",
+  
+  "mostUsed": "Most Used",
+  "leastUsed": "Least Used",
+  "mostActive": "Most Active",
+  "leastActive": "Least Active",
+  "bestPerformance": "Best Performance",
+  "worstPerformance": "Worst Performance",
+  
+  "hoursPerUser": "Hours/User",
+  "entriesPerUser": "Entries/User",
+  "languagesUsed": "Languages Used",
+  "countriesWithActivity": "Countries with Activity",
+  "languagesWithActivity": "Languages with Activity",
+  
+  "periodInformation": "Period Information",
+  "fromDate": "From: {date}",
+  "@fromDate": {
+    "description": "From date",
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "toDate": "To: {date}",
+  "@toDate": {
+    "description": "To date",
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "regionScope": "Region: {region}",
+  "@regionScope": {
+    "description": "Region scope",
+    "placeholders": {
+      "region": {"type": "String"}
+    }
+  },
+  "allRegionsScope": "Scope: All regions",
+  "filteredCountry": "Filtered country: {country}",
+  "@filteredCountry": {
+    "description": "Filtered country",
+    "placeholders": {
+      "country": {"type": "String"}
+    }
+  },
+  
+  "noDataAvailable": "No data available",
+  "noDataForRegion": "No data available for this region",
+  "loadingData": "Loading data...",
+  "refreshData": "Refresh",
+  "exportReport": "Export Report",
+  "generateReport": "Generate Report",
+  "exportToPDF": "Export to PDF",
+  "exportToExcel": "Export to Excel",
+  "exportToCSV": "Export to CSV",
+  "shareReport": "Share Report",
+  
+  "distributionChart": "Distribution Chart",
+  "comparisonChart": "Comparison Chart",
+  "detailsTable": "Details Table",
+  "statisticsInsights": "Statistics & Insights",
+  "regionalDistribution": "Regional Distribution",
+  
+  "selectItemsToExport": "Select items to export",
+  "exportOptions": "Export Options",
+  "includeCharts": "Include charts",
+  "includeRawData": "Include raw data",
+  "includeSummary": "Include summary",
+  "exportSuccess": "Report exported successfully",
+  "exportError": "Error exporting report: {error}",
+  "@exportError": {
+    "description": "Export error message",
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  
+  "cancel": "Cancel",
+  "compare": "Compare",
+  "apply": "Apply",
+  "reset": "Reset"
 }

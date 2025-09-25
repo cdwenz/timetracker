@@ -4,7 +4,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'connectivity_service.dart';
 
 class AuthService {
-  static const String baseUrl = 'http://localhost:8000/api';
+  // Configuración para diferentes plataformas
+  static String get baseUrl {
+    // Usando la IP local real para que funcione en emuladores y dispositivos físicos
+    return 'http://192.168.1.6:8000/api';
+    
+    // Alternativas comentadas:
+    // Para emulador Android (no funciona si backend está en localhost):
+    // return 'http://10.0.2.2:8000/api';
+    
+    // Para desarrollo web:
+    // return 'http://localhost:8000/api';
+  }
 
   static Future<bool> login(String email, String password) async {
     try {
@@ -128,6 +139,9 @@ class AuthService {
     try {
       final url = Uri.parse('$baseUrl/auth/register');
 
+      print('📝 Enviando registro para: $email');
+      print('🔗 URL: $url');
+
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
@@ -141,11 +155,18 @@ class AuthService {
         }),
       );
 
-      print("registe" + response.body); // Para depuración
+      print('📋 Status Code: ${response.statusCode}');
+      print('📄 Response Body: ${response.body}');
 
-      return response.statusCode == 200 || response.statusCode == 201;
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print('✅ Registro exitoso');
+        return true;
+      } else {
+        print('❌ Error en registro - Status: ${response.statusCode}');
+        return false;
+      }
     } catch (e) {
-      print('Excepción en register: $e');
+      print('💥 Excepción en register: $e');
       return false;
     }
   }

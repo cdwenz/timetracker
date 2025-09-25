@@ -3,9 +3,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ihadi_time_tracker/models/tracking.dart';
+import '../models/regional_reports_models.dart';
 
 class ReportsService {
-  static const String baseUrl = 'http://localhost:8000/api';
+  static const String baseUrl = 'http://192.168.1.6:8000/api';
 
   // ==== Helpers de sesión ====
   static Future<String?> _getToken() async {
@@ -26,6 +27,9 @@ class ReportsService {
       if (v is DateTime) {
         // El backend espera YYYY-MM-DD (ajusta si necesita ISO)
         qp[k] = v.toIso8601String().split('T').first;
+      } else if (v is List) {
+        // Para listas, unir con comas (formato esperado por el backend)
+        qp[k] = v.join(',');
       } else {
         qp[k] = v.toString();
       }
@@ -128,6 +132,227 @@ class ReportsService {
     }
 
     throw Exception('Error ${res.statusCode}: ${res.body}');
+  }
+
+  // ==== Nuevos métodos para reportes regionales ====
+
+  /// Helper para parsear respuestas de reportes
+  static T _parseReportResponse<T>(http.Response response, T Function(Map<String, dynamic>) parser) {
+    if (response.statusCode == 200) {
+      final decoded = jsonDecode(response.body);
+      if (decoded is Map && decoded.containsKey('data')) {
+        return parser(decoded['data'] as Map<String, dynamic>);
+      }
+      return parser(decoded as Map<String, dynamic>);
+    }
+
+    if (response.statusCode == 401) {
+      throw Exception('No autorizado (401). Verificá el token.');
+    }
+
+    if (response.statusCode == 403) {
+      throw Exception('Sin permisos para acceder a este recurso.');
+    }
+
+    throw Exception('Error ${response.statusCode}: ${response.body}');
+  }
+
+  /// Obtiene el resumen de una región específica
+  static Future<RegionalSummary> getRegionalSummary(
+    String regionId, {
+    DateTime? startDate,
+    DateTime? endDate,
+    List<String>? countries,
+    List<String>? languages,
+    List<String>? userIds,
+  }) async {
+    final token = await _getToken();
+    if (token == null) {
+      throw Exception('No hay token de sesión');
+    }
+
+    final uri = _buildUri('/reports/regional-summary/$regionId', {
+      'startDate': startDate,
+      'endDate': endDate,
+      'countries': countries,
+      'languages': languages,
+      'userIds': userIds,
+    });
+
+    final response = await http.get(uri, headers: _authHeaders(token));
+    
+    return _parseReportResponse(response, (data) => RegionalSummary.fromJson(data));
+  }
+
+  /// Compara múltiples regiones
+  static Future<RegionalComparison> getRegionalComparison(
+    List<String> regionIds, {
+    DateTime? startDate,
+    DateTime? endDate,
+    List<String>? countries,
+    List<String>? languages,
+  }) async {
+    if (regionIds.isEmpty || regionIds.length > 10) {
+      throw Exception('Se requieren entre 1 y 10 regiones para la comparación');
+    }
+
+    final token = await _getToken();
+    if (token == null) {
+      throw Exception('No hay token de sesión');
+    }
+
+    final uri = _buildUri('/reports/regional-comparison', {
+      'regionIds': regionIds,
+      'startDate': startDate,
+      'endDate': endDate,
+      'countries': countries,
+      'languages': languages,
+    });
+
+    final response = await http.get(uri, headers: _authHeaders(token));
+    
+    return _parseReportResponse(response, (data) => RegionalComparison.fromJson(data));
+  }
+
+  /// Obtiene el desglose por países
+  static Future<CountryBreakdown> getCountryBreakdown({
+    String? regionId,
+    DateTime? startDate,
+    DateTime? endDate,
+    List<String>? countries,
+    int skip = 0,
+    int take = 20,
+  }) async {
+    final token = await _getToken();
+    if (token == null) {
+      throw Exception('No hay token de sesión');
+    }
+
+    final path = regionId != null 
+        ? '/reports/country-breakdown/$regionId' 
+        : '/reports/country-breakdown';
+    
+    final uri = _buildUri(path, {
+      'startDate': startDate,
+      'endDate': endDate,
+      'countries': countries,
+      'skip': skip,
+      'take': take,
+    });
+
+    final response = await http.get(uri, headers: _authHeaders(token));
+    
+    return _parseReportResponse(response, (data) => CountryBreakdown.fromJson(data));
+  }
+
+  /// Obtiene la distribución de idiomas
+  static Future<LanguageDistribution> getLanguageDistribution({
+    String? regionId,
+    DateTime? startDate,
+    DateTime? endDate,
+    List<String>? countries,
+    List<String>? languages,
+    int skip = 0,
+    int take = 20,
+  }) async {
+    final token = await _getToken();
+    if (token == null) {
+      throw Exception('No hay token de sesión');
+    }
+
+    final path = regionId != null 
+        ? '/reports/language-distribution/$regionId' 
+        : '/reports/language-distribution';
+    
+    final uri = _buildUri(path, {
+      'startDate': startDate,
+      'endDate': endDate,
+      'countries': countries,
+      'languages': languages,
+      'skip': skip,
+      'take': take,
+    });
+
+    final response = await http.get(uri, headers: _authHeaders(token));
+    
+    return _parseReportResponse(response, (data) => LanguageDistribution.fromJson(data));
+  }
+
+  /// Obtiene el resumen del dashboard
+  static Future<DashboardSummary> getDashboardSummary({
+    DateTime? startDate,
+    DateTime? endDate,
+    List<String>? regionIds,
+    List<String>? countries,
+    List<String>? languages,
+  }) async {
+    final token = await _getToken();
+    if (token == null) {
+      throw Exception('No hay token de sesión');
+    }
+
+    final uri = _buildUri('/reports/dashboard-summary', {
+      'startDate': startDate,
+      'endDate': endDate,
+      'regionIds': regionIds,
+      'countries': countries,
+      'languages': languages,
+    });
+
+    final response = await http.get(uri, headers: _authHeaders(token));
+    
+    return _parseReportResponse(response, (data) => DashboardSummary.fromJson(data));
+  }
+
+  /// Obtiene las regiones disponibles para el usuario actual
+  static Future<List<RegionInfo>> getAvailableRegions() async {
+    final token = await _getToken();
+    if (token == null) {
+      throw Exception('No hay token de sesión');
+    }
+
+    final uri = _buildUri('/regions', {'mine': 'true'});
+    final response = await http.get(uri, headers: _authHeaders(token));
+
+    if (response.statusCode == 200) {
+      final decoded = jsonDecode(response.body);
+      final items = decoded is Map && decoded.containsKey('items') 
+          ? decoded['items'] as List
+          : decoded as List;
+      
+      return items
+          .cast<Map<String, dynamic>>()
+          .map((json) => RegionInfo.fromJson(json))
+          .toList();
+    }
+
+    throw Exception('Error al obtener regiones: ${response.statusCode}');
+  }
+
+  /// Obtiene los países únicos de los datos
+  static Future<List<String>> getAvailableCountries({String? regionId}) async {
+    try {
+      final breakdown = await getCountryBreakdown(
+        regionId: regionId,
+        take: 100, // Obtener muchos para tener lista completa
+      );
+      return breakdown.countries.map((c) => c.country).toList();
+    } catch (e) {
+      return [];
+    }
+  }
+
+  /// Obtiene los idiomas únicos de los datos
+  static Future<List<String>> getAvailableLanguages({String? regionId}) async {
+    try {
+      final distribution = await getLanguageDistribution(
+        regionId: regionId,
+        take: 100, // Obtener muchos para tener lista completa
+      );
+      return distribution.languages.map((l) => l.language).toList();
+    } catch (e) {
+      return [];
+    }
   }
 }
 
