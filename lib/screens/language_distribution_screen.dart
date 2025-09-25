@@ -53,7 +53,7 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error cargando datos: $e'),
+            content: Text(AppLocalizations.of(context).errorLoadingLanguageData(e)),
             backgroundColor: Colors.red,
           ),
         );
@@ -163,6 +163,7 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
       final filePath = await ExportService.exportLanguageDistribution(
         _distribution!,
         format,
+        AppLocalizations.of(context),
         includeCharts: true,
         includeRawData: true,
         includeSummary: true,
@@ -178,7 +179,7 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
               label: AppLocalizations.of(context).shareReport,
               onPressed: () => ExportService.shareReport(
                 filePath,
-                subject: 'Language Distribution Report',
+                subject: AppLocalizations.of(context).languageDistributionReportSubject,
               ),
             ),
           ),
@@ -201,7 +202,7 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Distribución de Idiomas'),
+        title: Text(AppLocalizations.of(context).languageDistribution),
         backgroundColor: Colors.orange.shade700,
         foregroundColor: Colors.white,
         actions: [
@@ -238,10 +239,10 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _distribution == null
-              ? const Center(
+              ? Center(
                   child: Text(
-                    'No hay datos disponibles',
-                    style: TextStyle(fontSize: 16),
+                    AppLocalizations.of(context).noDataAvailable,
+                    style: const TextStyle(fontSize: 16),
                   ),
                 )
               : SingleChildScrollView(
@@ -301,9 +302,9 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Filtros Activos',
-              style: TextStyle(fontWeight: FontWeight.bold),
+            Text(
+              AppLocalizations.of(context).activeFilters,
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             
@@ -312,15 +313,15 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
                 children: [
                   const Icon(Icons.location_on, size: 16),
                   const SizedBox(width: 4),
-                  Text(_distribution!.regionName ?? 'Región seleccionada'),
+                  Text(_distribution!.regionName ?? AppLocalizations.of(context).selectedRegion),
                 ],
               ),
             ] else ...[
-              const Row(
+              Row(
                 children: [
-                  Icon(Icons.public, size: 16),
-                  SizedBox(width: 4),
-                  Text('Todas las regiones'),
+                  const Icon(Icons.public, size: 16),
+                  const SizedBox(width: 4),
+                  Text(AppLocalizations.of(context).allRegions),
                 ],
               ),
             ],
@@ -342,7 +343,7 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
                 children: [
                   const Icon(Icons.flag, size: 16),
                   const SizedBox(width: 4),
-                  Text('Países: ${_selectedCountries.join(", ")}'),
+                  Text(AppLocalizations.of(context).countries(_selectedCountries.join(", "))),
                 ],
               ),
             ],
@@ -353,7 +354,7 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
                 children: [
                   const Icon(Icons.language, size: 16),
                   const SizedBox(width: 4),
-                  Text('Idiomas: ${_selectedLanguages.join(", ")}'),
+                  Text(AppLocalizations.of(context).languages(_selectedLanguages.join(", "))),
                 ],
               ),
             ],
@@ -371,7 +372,7 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Resumen General',
+              AppLocalizations.of(context).generalSummary,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -382,7 +383,7 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
               children: [
                 Expanded(
                   child: _buildMetricCard(
-                    'Total Idiomas',
+                    AppLocalizations.of(context).totalLanguages,
                     _distribution!.totalLanguages.toString(),
                     Icons.language,
                     Colors.blue,
@@ -391,7 +392,7 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
                 const SizedBox(width: 12),
                 Expanded(
                   child: _buildMetricCard(
-                    'Total Horas',
+                    AppLocalizations.of(context).totalHours,
                     _distribution!.totalHours.toStringAsFixed(1),
                     Icons.access_time,
                     Colors.green,
@@ -400,7 +401,7 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
                 const SizedBox(width: 12),
                 Expanded(
                   child: _buildMetricCard(
-                    'Total Entradas',
+                    AppLocalizations.of(context).totalEntries,
                     _distribution!.totalEntries.toString(),
                     Icons.list_alt,
                     Colors.orange,
@@ -416,7 +417,7 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
               children: [
                 Expanded(
                   child: _buildInsightCard(
-                    'Más Usado',
+                    AppLocalizations.of(context).mostUsed,
                     _distribution!.summary.mostUsedLanguage,
                     Icons.trending_up,
                     Colors.green,
@@ -425,7 +426,7 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
                 const SizedBox(width: 12),
                 Expanded(
                   child: _buildInsightCard(
-                    'Menos Usado',
+                    AppLocalizations.of(context).leastUsed,
                     _distribution!.summary.leastUsedLanguage,
                     Icons.trending_down,
                     Colors.orange,
@@ -451,9 +452,9 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Distribución de Idiomas',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context).languageDistribution,
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -539,9 +540,9 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Horas por Idioma',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context).hoursPerLanguage,
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -609,7 +610,7 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Detalle por Idiomas (${_distribution!.languages.length})',
+              AppLocalizations.of(context).languageDetails(_distribution!.languages.length),
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -650,7 +651,7 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
         style: const TextStyle(fontWeight: FontWeight.bold),
       ),
       subtitle: Text(
-        '${language.totalHours.toStringAsFixed(1)} horas • ${language.totalEntries} entradas • ${language.activeUsers} usuarios',
+        '${language.totalHours.toStringAsFixed(1)} ${AppLocalizations.of(context).hours} • ${language.totalEntries} ${AppLocalizations.of(context).entries} • ${language.activeUsers} ${AppLocalizations.of(context).users}',
       ),
       trailing: Text(
         '${language.percentage.toStringAsFixed(1)}%',
@@ -670,14 +671,14 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
                 children: [
                   Expanded(
                     child: _buildDetailMetric(
-                      'Promedio hrs/usuario',
+                      AppLocalizations.of(context).averageHrsPerUser,
                       language.averageHoursPerUser.toStringAsFixed(1),
                       Icons.person,
                     ),
                   ),
                   Expanded(
                     child: _buildDetailMetric(
-                      'Promedio entradas/usuario',
+                      AppLocalizations.of(context).averageEntriesPerUser,
                       language.averageEntriesPerUser.toStringAsFixed(1),
                       Icons.list,
                     ),
@@ -689,16 +690,16 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
               
               if (language.countries.isNotEmpty) ...[
                 Text(
-                  'Países donde se usa: ${language.countries.join(", ")}',
+                  AppLocalizations.of(context).countriesWhereUsed(language.countries.join(", ")),
                   style: const TextStyle(fontSize: 14),
                 ),
                 const SizedBox(height: 8),
               ],
               
               if (language.regionalDistribution.isNotEmpty) ...[
-                const Text(
-                  'Distribución por regiones:',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                Text(
+                  AppLocalizations.of(context).regionalDistribution,
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                 ),
                 const SizedBox(height: 8),
                 ...language.regionalDistribution.map((regional) =>
@@ -709,7 +710,7 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
                       children: [
                         Text(regional.regionName, style: const TextStyle(fontSize: 13)),
                         Text(
-                          '${regional.hours.toStringAsFixed(1)}h (${regional.entries} entradas)',
+                          '${regional.hours.toStringAsFixed(1)}h (${regional.entries} ${AppLocalizations.of(context).entries})',
                           style: const TextStyle(fontSize: 13),
                         ),
                       ],
@@ -743,9 +744,9 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Distribución Regional por Idiomas (Top 5)',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context).regionalLanguageDistribution,
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -773,7 +774,7 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(langEntry.key),
-                            Text('${langEntry.value.toStringAsFixed(1)} horas'),
+                            Text('${langEntry.value.toStringAsFixed(1)} ${AppLocalizations.of(context).hours}'),
                           ],
                         ),
                       ),
@@ -795,9 +796,9 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Estadísticas e Insights',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context).statisticsInsights,
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -808,7 +809,7 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
               children: [
                 Expanded(
                   child: _buildStatCard(
-                    'Promedio Horas/Idioma',
+                    AppLocalizations.of(context).averageHoursPerLanguage,
                     _distribution!.summary.avgHoursPerLanguage.toStringAsFixed(1),
                     Icons.bar_chart,
                     Colors.blue,
@@ -817,7 +818,7 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
                 const SizedBox(width: 12),
                 Expanded(
                   child: _buildStatCard(
-                    'Idiomas Activos',
+                    AppLocalizations.of(context).activeLanguages,
                     _distribution!.summary.languagesWithActivity.toString(),
                     Icons.language,
                     Colors.green,
@@ -838,19 +839,19 @@ class _LanguageDistributionScreenState extends State<LanguageDistributionScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Información del Período',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  Text(
+                    AppLocalizations.of(context).periodInformation,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
-                  Text('Desde: ${_formatDate(_distribution!.dateRange.startDate)}'),
-                  Text('Hasta: ${_formatDate(_distribution!.dateRange.endDate)}'),
+                  Text(AppLocalizations.of(context).from(_formatDate(_distribution!.dateRange.startDate))),
+                  Text(AppLocalizations.of(context).to(_formatDate(_distribution!.dateRange.endDate))),
                   if (_distribution!.regionName != null)
-                    Text('Región: ${_distribution!.regionName}')
+                    Text(AppLocalizations.of(context).regionScope(_distribution!.regionName!))
                   else
-                    const Text('Alcance: Todas las regiones'),
+                    Text(AppLocalizations.of(context).allRegionsScope),
                   if (_distribution!.countryFilter != null)
-                    Text('País filtrado: ${_distribution!.countryFilter}'),
+                    Text(AppLocalizations.of(context).countryFiltered(_distribution!.countryFilter!)),
                 ],
               ),
             ),
@@ -1008,14 +1009,14 @@ class _RegionSelectorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Filtrar por Región'),
+      title: Text(AppLocalizations.of(context).filterByRegion),
       content: SizedBox(
         width: double.maxFinite,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              title: const Text('Todas las regiones'),
+              title: Text(AppLocalizations.of(context).allRegions),
               leading: Radio<String?>(
                 value: null,
                 groupValue: selectedRegionId,
@@ -1049,7 +1050,7 @@ class _RegionSelectorDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancelar'),
+          child: Text(AppLocalizations.of(context).cancel),
         ),
       ],
     );

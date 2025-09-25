@@ -148,6 +148,7 @@ class _RegionalSummaryScreenState extends State<RegionalSummaryScreen> {
       final filePath = await ExportService.exportRegionalSummary(
         _summary!,
         format,
+        AppLocalizations.of(context),
         includeCharts: true,
         includeRawData: true,
         includeSummary: true,

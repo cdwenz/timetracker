@@ -67,7 +67,7 @@ class _RegionalComparisonScreenState extends State<RegionalComparisonScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error comparando regiones: $e'),
+            content: Text(AppLocalizations.of(context).errorComparingRegions(e)),
             backgroundColor: Colors.red,
           ),
         );
@@ -166,6 +166,7 @@ class _RegionalComparisonScreenState extends State<RegionalComparisonScreen> {
       final filePath = await ExportService.exportRegionalComparison(
         _comparison!,
         format,
+        AppLocalizations.of(context),
         includeCharts: true,
         includeRawData: true,
         includeSummary: true,
@@ -181,7 +182,7 @@ class _RegionalComparisonScreenState extends State<RegionalComparisonScreen> {
               label: AppLocalizations.of(context).shareReport,
               onPressed: () => ExportService.shareReport(
                 filePath,
-                subject: 'Regional Comparison Report',
+                subject: AppLocalizations.of(context).regionalComparisonReportSubject,
               ),
             ),
           ),
@@ -204,7 +205,7 @@ class _RegionalComparisonScreenState extends State<RegionalComparisonScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Comparación de Regiones'),
+        title: Text(AppLocalizations.of(context).regionalComparison),
         backgroundColor: Colors.blue.shade700,
         foregroundColor: Colors.white,
         actions: [
@@ -286,7 +287,7 @@ class _RegionalComparisonScreenState extends State<RegionalComparisonScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Regiones Seleccionadas (${_selectedRegionIds.length}/10)',
+            AppLocalizations.of(context).selectedRegions(_selectedRegionIds.length),
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
@@ -295,7 +296,7 @@ class _RegionalComparisonScreenState extends State<RegionalComparisonScreen> {
           const SizedBox(height: 8),
           
           if (_selectedRegionIds.isEmpty)
-            const Text('Selecciona al menos 2 regiones para comparar')
+            Text(AppLocalizations.of(context).selectAtLeast2RegionsToCompare)
           else
             Wrap(
               spacing: 8,
@@ -336,7 +337,7 @@ class _RegionalComparisonScreenState extends State<RegionalComparisonScreen> {
             ),
             const SizedBox(height: 16),
             Text(
-              'Selecciona al menos 2 regiones para comparar',
+              AppLocalizations.of(context).selectAtLeast2RegionsToCompare,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 18,
@@ -346,7 +347,7 @@ class _RegionalComparisonScreenState extends State<RegionalComparisonScreen> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _showRegionSelector,
-              child: const Text('Seleccionar Regiones'),
+              child: Text(AppLocalizations.of(context).selectRegions),
             ),
           ],
         ),
@@ -362,7 +363,7 @@ class _RegionalComparisonScreenState extends State<RegionalComparisonScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Resumen de Comparación',
+              AppLocalizations.of(context).comparisonSummary,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -373,7 +374,7 @@ class _RegionalComparisonScreenState extends State<RegionalComparisonScreen> {
               children: [
                 Expanded(
                   child: _buildSummaryCard(
-                    'Regiones',
+                    AppLocalizations.of(context).regions,
                     _comparison!.summary.totalRegions.toString(),
                     Icons.location_on,
                     Colors.blue,
@@ -382,7 +383,7 @@ class _RegionalComparisonScreenState extends State<RegionalComparisonScreen> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: _buildSummaryCard(
-                    'Total Horas',
+                    AppLocalizations.of(context).totalHours,
                     _comparison!.summary.totalHours.toStringAsFixed(1),
                     Icons.access_time,
                     Colors.green,
@@ -391,7 +392,7 @@ class _RegionalComparisonScreenState extends State<RegionalComparisonScreen> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: _buildSummaryCard(
-                    'Promedio/Región',
+                    AppLocalizations.of(context).averagePerRegion,
                     _comparison!.summary.averageHoursPerRegion.toStringAsFixed(1),
                     Icons.trending_up,
                     Colors.orange,
@@ -412,9 +413,9 @@ class _RegionalComparisonScreenState extends State<RegionalComparisonScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Comparación de Horas Totales',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context).totalHoursComparison,
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -486,9 +487,9 @@ class _RegionalComparisonScreenState extends State<RegionalComparisonScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Métricas Detalladas',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context).detailedMetrics,
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -498,14 +499,14 @@ class _RegionalComparisonScreenState extends State<RegionalComparisonScreen> {
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: DataTable(
-                columns: const [
-                  DataColumn(label: Text('Región')),
-                  DataColumn(label: Text('Horas'), numeric: true),
-                  DataColumn(label: Text('Entradas'), numeric: true),
-                  DataColumn(label: Text('Usuarios'), numeric: true),
-                  DataColumn(label: Text('Hrs/Usuario'), numeric: true),
-                  DataColumn(label: Text('País Principal')),
-                  DataColumn(label: Text('Idioma Principal')),
+                columns: [
+                  DataColumn(label: Text(AppLocalizations.of(context).region)),
+                  DataColumn(label: Text(AppLocalizations.of(context).hours), numeric: true),
+                  DataColumn(label: Text(AppLocalizations.of(context).entries), numeric: true),
+                  DataColumn(label: Text(AppLocalizations.of(context).users), numeric: true),
+                  DataColumn(label: Text(AppLocalizations.of(context).hrsPerUser), numeric: true),
+                  DataColumn(label: Text(AppLocalizations.of(context).topCountry)),
+                  DataColumn(label: Text(AppLocalizations.of(context).topLanguage)),
                 ],
                 rows: _comparison!.regions.map((region) => 
                   DataRow(cells: [
@@ -532,9 +533,9 @@ class _RegionalComparisonScreenState extends State<RegionalComparisonScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Destacados de Rendimiento',
-          style: TextStyle(
+        Text(
+          AppLocalizations.of(context).performanceHighlights,
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
@@ -561,7 +562,7 @@ class _RegionalComparisonScreenState extends State<RegionalComparisonScreen> {
                     children: [
                       Expanded(
                         child: _buildPerformanceCard(
-                          'Mejor Rendimiento',
+                          AppLocalizations.of(context).bestPerformance,
                           metric.bestPerformer.regionName,
                           metric.bestPerformer.value.toStringAsFixed(1),
                           Colors.green,
@@ -571,7 +572,7 @@ class _RegionalComparisonScreenState extends State<RegionalComparisonScreen> {
                       const SizedBox(width: 16),
                       Expanded(
                         child: _buildPerformanceCard(
-                          'Menor Rendimiento',
+                          AppLocalizations.of(context).worstPerformance,
                           metric.worstPerformer.regionName,
                           metric.worstPerformer.value.toStringAsFixed(1),
                           Colors.orange,
@@ -703,13 +704,13 @@ class _RegionSelectorDialogState extends State<_RegionSelectorDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Seleccionar Regiones'),
+      title: Text(AppLocalizations.of(context).selectRegions),
       content: SizedBox(
         width: double.maxFinite,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Selecciona entre 2 y 10 regiones (${_selectedIds.length} seleccionadas)'),
+            Text(AppLocalizations.of(context).selectBetween2And10Regions(_selectedIds.length)),
             const SizedBox(height: 16),
             Flexible(
               child: ListView.builder(
@@ -744,13 +745,13 @@ class _RegionSelectorDialogState extends State<_RegionSelectorDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancelar'),
+          child: Text(AppLocalizations.of(context).cancel),
         ),
         ElevatedButton(
           onPressed: _selectedIds.length >= 2
               ? () => Navigator.of(context).pop(_selectedIds)
               : null,
-          child: const Text('Comparar'),
+          child: Text(AppLocalizations.of(context).compare),
         ),
       ],
     );

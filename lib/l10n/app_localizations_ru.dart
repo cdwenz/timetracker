@@ -756,7 +756,7 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get dailyComparisonTitle => 'Ежедневное сравнение';
+  String get dailyComparisonTitle => 'ЕЖЕДНЕВНОЕ СРАВНЕНИЕ:';
 
   @override
   String get myEvolutionTitle => 'Эволюция (Я)';
@@ -846,7 +846,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get regionalReportsTitle => 'Региональные отчёты';
 
   @override
-  String get regionalSummaryTitle => 'Региональная сводка';
+  String get regionalSummaryTitle => 'РЕГИОНАЛЬНАЯ СВОДКА:';
 
   @override
   String get regionalComparisonTitle => 'Сравнение регионов';
@@ -889,7 +889,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get clearFilters => 'Очистить фильтры';
 
   @override
-  String get filterByRegion => 'Фильтровать по региону';
+  String get filterByRegion => 'Фильтровать по Региону';
 
   @override
   String get filterByDates => 'Фильтровать по датам';
@@ -898,7 +898,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get allRegions => 'Все регионы';
 
   @override
-  String get selectRegions => 'Выбрать регионы';
+  String get selectRegions => 'Выбрать Регионы';
 
   @override
   String get selectAtLeast2Regions =>
@@ -910,7 +910,7 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get totalHours => 'Всего часов';
+  String get totalHours => 'Всего Часов';
 
   @override
   String get totalEntries => 'Всего записей';
@@ -919,16 +919,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get activeUsers => 'Активные пользователи';
 
   @override
-  String get totalLanguages => 'Всего языков';
+  String get totalLanguages => 'Всего Языков';
 
   @override
-  String get totalCountries => 'Всего стран';
+  String get totalCountries => 'Всего Стран';
 
   @override
   String get totalRegions => 'Регионы';
 
   @override
-  String get averagePerRegion => 'Среднее/регион';
+  String get averagePerRegion => 'Среднее/Регион';
 
   @override
   String get averagePerCountry => 'Среднее/страна';
@@ -937,7 +937,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get averagePerLanguage => 'Среднее/язык';
 
   @override
-  String get topCountries => 'Топ стран';
+  String get topCountries => 'Топ Страны';
 
   @override
   String get languageBreakdown => 'Разбивка по языкам';
@@ -946,31 +946,31 @@ class AppLocalizationsRu extends AppLocalizations {
   String get performanceMetrics => 'Метрики производительности';
 
   @override
-  String get comparisonSummary => 'Сводка сравнения';
+  String get comparisonSummary => 'Сводка Сравнения';
 
   @override
-  String get detailedMetrics => 'Подробные метрики';
+  String get detailedMetrics => 'Подробные Метрики';
 
   @override
-  String get performanceHighlights => 'Основные показатели';
+  String get performanceHighlights => 'Основные Показатели';
 
   @override
-  String get mostUsed => 'Наиболее используемый';
+  String get mostUsed => 'Наиболее Используемый';
 
   @override
-  String get leastUsed => 'Наименее используемый';
+  String get leastUsed => 'Наименее Используемый';
 
   @override
-  String get mostActive => 'Наиболее активный';
+  String get mostActive => 'Наиболее Активный';
 
   @override
-  String get leastActive => 'Наименее активный';
+  String get leastActive => 'Наименее Активный';
 
   @override
-  String get bestPerformance => 'Лучшая производительность';
+  String get bestPerformance => 'Лучший Результат';
 
   @override
-  String get worstPerformance => 'Худшая производительность';
+  String get worstPerformance => 'Худший Результат';
 
   @override
   String get hoursPerUser => 'Часов/пользователь';
@@ -979,7 +979,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get entriesPerUser => 'Записей/пользователь';
 
   @override
-  String get languagesUsed => 'Используемые языки';
+  String languagesUsed(Object languages) {
+    return 'Используемые языки: $languages';
+  }
 
   @override
   String get countriesWithActivity => 'Страны с активностью';
@@ -988,7 +990,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get languagesWithActivity => 'Языки с активностью';
 
   @override
-  String get periodInformation => 'Информация о периоде';
+  String get periodInformation => 'Информация о Периоде';
 
   @override
   String fromDate(String date) {
@@ -1014,7 +1016,7 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get noDataAvailable => 'Данные недоступны';
+  String get noDataAvailable => 'Нет доступных данных';
 
   @override
   String get noDataForRegion => 'Данные для этого региона недоступны';
@@ -1053,10 +1055,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get detailsTable => 'Таблица деталей';
 
   @override
-  String get statisticsInsights => 'Статистика и аналитика';
+  String get statisticsInsights => 'Статистика и Аналитика';
 
   @override
-  String get regionalDistribution => 'Региональное распределение';
+  String get regionalDistribution => 'Региональное распределение:';
 
   @override
   String get selectItemsToExport => 'Выберите элементы для экспорта';
@@ -1171,5 +1173,329 @@ class AppLocalizationsRu extends AppLocalizations {
   String get updateData => 'Обновить данные';
 
   @override
-  String get hours => 'часов';
+  String get hours => 'Часы';
+
+  @override
+  String get dashboardComplete => 'Полная Панель';
+
+  @override
+  String get generalSummaryMetrics => 'Общее резюме и базовые метрики';
+
+  @override
+  String get regionalDataComparisons => 'Региональные данные и сравнения';
+
+  @override
+  String get noBasicDashboardDataAvailable => 'Нет данных базовой панели';
+
+  @override
+  String get noRegionalDataAvailable =>
+      'Нет региональных данных - Список регионов пуст';
+
+  @override
+  String get needAtLeast2RegionsCompare =>
+      'Необходимо минимум 2 региона для сравнения';
+
+  @override
+  String get updateDataTooltip => 'Обновить данные';
+
+  @override
+  String get myReports => 'Мои Отчёты';
+
+  @override
+  String get teamReports => 'Отчёты Команды';
+
+  @override
+  String get userRole => 'Пользователь';
+
+  @override
+  String get meLabel => 'Я';
+
+  @override
+  String get teamLabel => 'Команда';
+
+  @override
+  String errorLoadingReports(Object error) {
+    return 'Ошибка загрузки отчётов: $error';
+  }
+
+  @override
+  String get dashboardReport => 'Отчёт Панели';
+
+  @override
+  String get basicDashboardReport => 'Отчёт Базовой Панели';
+
+  @override
+  String get generated => 'Сгенерировано';
+
+  @override
+  String get user => 'Пользователь';
+
+  @override
+  String get role => 'Роль';
+
+  @override
+  String get unknown => 'Неизвестно';
+
+  @override
+  String get dashboardMetrics => 'Метрики Панели';
+
+  @override
+  String get teamCount => 'Счётчик Команды';
+
+  @override
+  String get meCount => 'Мой Счётчик';
+
+  @override
+  String get dailyComparison => 'Ежедневное Сравнение';
+
+  @override
+  String get day => 'День';
+
+  @override
+  String get myCount => 'Мой Счётчик';
+
+  @override
+  String get myTrend => 'Моя Тенденция';
+
+  @override
+  String get count => 'Счётчик';
+
+  @override
+  String get regionalDashboardReport => 'Отчёт Региональной Панели';
+
+  @override
+  String get regionalSummary => 'Региональная Сводка';
+
+  @override
+  String get country => 'Страна';
+
+  @override
+  String get percentage => 'Процент';
+
+  @override
+  String get topLanguages => 'Топ Языки';
+
+  @override
+  String get language => 'Язык';
+
+  @override
+  String get dashboardMetricsTitle => 'МЕТРИКИ ПАНЕЛИ:';
+
+  @override
+  String get myTrendTitle => 'МОЯ ТЕНДЕНЦИЯ:';
+
+  @override
+  String get topCountriesTitle => 'ТОП СТРАНЫ:';
+
+  @override
+  String get topLanguagesTitle => 'ТОП ЯЗЫКИ:';
+
+  @override
+  String get regionalComparison => 'Сравнение Регионов';
+
+  @override
+  String errorComparingRegions(Object error) {
+    return 'Ошибка при сравнении регионов: $error';
+  }
+
+  @override
+  String get regionalComparisonReportSubject => 'Отчёт Сравнения Регионов';
+
+  @override
+  String selectedRegions(Object count) {
+    return 'Выбранные Регионы ($count/10)';
+  }
+
+  @override
+  String get selectAtLeast2RegionsToCompare =>
+      'Выберите минимум 2 региона для сравнения';
+
+  @override
+  String get regions => 'Регионы';
+
+  @override
+  String get totalHoursComparison => 'Сравнение Общих Часов';
+
+  @override
+  String get region => 'Регион';
+
+  @override
+  String get entries => 'Записи';
+
+  @override
+  String get users => 'Пользователи';
+
+  @override
+  String get hrsPerUser => 'Час/Пользователь';
+
+  @override
+  String get topCountry => 'Топ Страна';
+
+  @override
+  String get topLanguage => 'Топ Язык';
+
+  @override
+  String get selectRegionsDialog => 'Выбрать Регионы';
+
+  @override
+  String selectBetween2And10Regions(Object count) {
+    return 'Выберите от 2 до 10 регионов ($count выбрано)';
+  }
+
+  @override
+  String get countryBreakdown => 'Разбивка по Странам';
+
+  @override
+  String errorLoadingData(Object error) {
+    return 'Ошибка загрузки данных: $error';
+  }
+
+  @override
+  String get countryBreakdownReportSubject => 'Отчёт Разбивки по Странам';
+
+  @override
+  String get activeFilters => 'Активные Фильтры';
+
+  @override
+  String get selectedRegion => 'Выбранный регион';
+
+  @override
+  String countries(Object countries) {
+    return 'Страны: $countries';
+  }
+
+  @override
+  String get generalSummary => 'Общая Сводка';
+
+  @override
+  String get countryDistribution => 'Распределение по Странам (Топ 10)';
+
+  @override
+  String countryDetails(Object count) {
+    return 'Детали по Странам ($count)';
+  }
+
+  @override
+  String get averageHrsPerUser => 'Среднее час/пользователь';
+
+  @override
+  String get averageEntriesPerUser => 'Среднее записей/пользователь';
+
+  @override
+  String get averageHoursPerCountry => 'Среднее Часов/Страна';
+
+  @override
+  String get activeCountries => 'Активные Страны';
+
+  @override
+  String from(Object date) {
+    return 'С: $date';
+  }
+
+  @override
+  String to(Object date) {
+    return 'До: $date';
+  }
+
+  @override
+  String get languageDistribution => 'Распределение Языков';
+
+  @override
+  String errorLoadingLanguageData(Object error) {
+    return 'Ошибка загрузки данных: $error';
+  }
+
+  @override
+  String get languageDistributionReportSubject => 'Отчёт Распределения Языков';
+
+  @override
+  String languages(Object languages) {
+    return 'Языки: $languages';
+  }
+
+  @override
+  String get hoursPerLanguage => 'Часов на Язык';
+
+  @override
+  String languageDetails(Object count) {
+    return 'Детали по Языкам ($count)';
+  }
+
+  @override
+  String countriesWhereUsed(Object countries) {
+    return 'Страны где используется: $countries';
+  }
+
+  @override
+  String get regionalLanguageDistribution =>
+      'Региональное Распределение Языков (Топ 5)';
+
+  @override
+  String get averageHoursPerLanguage => 'Среднее Часов/Язык';
+
+  @override
+  String get activeLanguages => 'Активные Языки';
+
+  @override
+  String countryFiltered(Object country) {
+    return 'Отфильтрованная страна: $country';
+  }
+
+  @override
+  String get regionalSummaryReport => 'Отчёт Региональной Сводки';
+
+  @override
+  String get regionalComparisonReport => 'Отчёт Сравнения Регионов';
+
+  @override
+  String get countryBreakdownReport => 'Отчёт Разбивки по Странам';
+
+  @override
+  String get languageDistributionReport => 'Отчёт Распределения Языков';
+
+  @override
+  String get topCountriesLabel => 'Топ Страны';
+
+  @override
+  String get languageBreakdownLabel => 'Разбивка по Языкам';
+
+  @override
+  String get countryDetailsLabel => 'Детали по Странам';
+
+  @override
+  String get languageDetailsLabel => 'Детали по Языкам';
+
+  @override
+  String get regionalDataLabel => 'Региональные Данные';
+
+  @override
+  String get rank => 'Ранг';
+
+  @override
+  String get avgHoursPerUser => 'Ср Часов/Пользователь';
+
+  @override
+  String get avgEntriesPerUser => 'Ср Записей/Пользователь';
+
+  @override
+  String get languageColumn => 'Языки';
+
+  @override
+  String get countryColumn => 'Страны';
+
+  @override
+  String get averageHoursPerRegion => 'Среднее Часов на Регион';
+
+  @override
+  String get generalSummaryAndMetrics => 'Общее резюме и базовые метрики';
+
+  @override
+  String get regionalDataAndComparisons => 'Региональные данные и сравнения';
+
+  @override
+  String get noRegionalDataAvailableMessage => 'Нет региональных данных';
+
+  @override
+  String get atLeast2RegionsRequired =>
+      'Необходимо минимум 2 региона для сравнения';
 }

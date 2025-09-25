@@ -51,7 +51,7 @@ class _CountryBreakdownScreenState extends State<CountryBreakdownScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error cargando datos: $e'),
+            content: Text(AppLocalizations.of(context).errorLoadingData(e)),
             backgroundColor: Colors.red,
           ),
         );
@@ -160,6 +160,7 @@ class _CountryBreakdownScreenState extends State<CountryBreakdownScreen> {
       final filePath = await ExportService.exportCountryBreakdown(
         _breakdown!,
         format,
+        AppLocalizations.of(context),
         includeCharts: true,
         includeRawData: true,
         includeSummary: true,
@@ -175,7 +176,7 @@ class _CountryBreakdownScreenState extends State<CountryBreakdownScreen> {
               label: AppLocalizations.of(context).shareReport,
               onPressed: () => ExportService.shareReport(
                 filePath,
-                subject: 'Country Breakdown Report',
+                subject: AppLocalizations.of(context).countryBreakdownReportSubject,
               ),
             ),
           ),
@@ -198,7 +199,7 @@ class _CountryBreakdownScreenState extends State<CountryBreakdownScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Desglose por Países'),
+        title: Text(AppLocalizations.of(context).countryBreakdown),
         backgroundColor: Colors.green.shade700,
         foregroundColor: Colors.white,
         actions: [
@@ -234,10 +235,10 @@ class _CountryBreakdownScreenState extends State<CountryBreakdownScreen> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _breakdown == null
-              ? const Center(
+              ? Center(
                   child: Text(
-                    'No hay datos disponibles',
-                    style: TextStyle(fontSize: 16),
+                    AppLocalizations.of(context).noDataAvailable,
+                    style: const TextStyle(fontSize: 16),
                   ),
                 )
               : SingleChildScrollView(
@@ -285,9 +286,9 @@ class _CountryBreakdownScreenState extends State<CountryBreakdownScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Filtros Activos',
-              style: TextStyle(fontWeight: FontWeight.bold),
+            Text(
+              AppLocalizations.of(context).activeFilters,
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             
@@ -296,15 +297,15 @@ class _CountryBreakdownScreenState extends State<CountryBreakdownScreen> {
                 children: [
                   const Icon(Icons.location_on, size: 16),
                   const SizedBox(width: 4),
-                  Text(_breakdown!.regionName ?? 'Región seleccionada'),
+                  Text(_breakdown!.regionName ?? AppLocalizations.of(context).selectedRegion),
                 ],
               ),
             ] else ...[
-              const Row(
+              Row(
                 children: [
-                  Icon(Icons.public, size: 16),
-                  SizedBox(width: 4),
-                  Text('Todas las regiones'),
+                  const Icon(Icons.public, size: 16),
+                  const SizedBox(width: 4),
+                  Text(AppLocalizations.of(context).allRegions),
                 ],
               ),
             ],
@@ -326,7 +327,7 @@ class _CountryBreakdownScreenState extends State<CountryBreakdownScreen> {
                 children: [
                   const Icon(Icons.flag, size: 16),
                   const SizedBox(width: 4),
-                  Text('Países: ${_selectedCountries.join(", ")}'),
+                  Text(AppLocalizations.of(context).countries(_selectedCountries.join(", "))),
                 ],
               ),
             ],
@@ -344,7 +345,7 @@ class _CountryBreakdownScreenState extends State<CountryBreakdownScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Resumen General',
+              AppLocalizations.of(context).generalSummary,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -355,7 +356,7 @@ class _CountryBreakdownScreenState extends State<CountryBreakdownScreen> {
               children: [
                 Expanded(
                   child: _buildMetricCard(
-                    'Total Países',
+                    AppLocalizations.of(context).totalCountries,
                     _breakdown!.totalCountries.toString(),
                     Icons.flag,
                     Colors.blue,
@@ -364,7 +365,7 @@ class _CountryBreakdownScreenState extends State<CountryBreakdownScreen> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: _buildMetricCard(
-                    'Total Horas',
+                    AppLocalizations.of(context).totalHours,
                     _breakdown!.totalHours.toStringAsFixed(1),
                     Icons.access_time,
                     Colors.green,
@@ -373,7 +374,7 @@ class _CountryBreakdownScreenState extends State<CountryBreakdownScreen> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: _buildMetricCard(
-                    'Total Entradas',
+                    AppLocalizations.of(context).totalEntries,
                     _breakdown!.totalEntries.toString(),
                     Icons.list_alt,
                     Colors.orange,
@@ -389,7 +390,7 @@ class _CountryBreakdownScreenState extends State<CountryBreakdownScreen> {
               children: [
                 Expanded(
                   child: _buildInsightCard(
-                    'Más Activo',
+                    AppLocalizations.of(context).mostActive,
                     _breakdown!.summary.mostActiveCountry,
                     Icons.trending_up,
                     Colors.green,
@@ -398,7 +399,7 @@ class _CountryBreakdownScreenState extends State<CountryBreakdownScreen> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: _buildInsightCard(
-                    'Menos Activo',
+                    AppLocalizations.of(context).leastActive,
                     _breakdown!.summary.leastActiveCountry,
                     Icons.trending_down,
                     Colors.orange,
@@ -424,9 +425,9 @@ class _CountryBreakdownScreenState extends State<CountryBreakdownScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Distribución por Países (Top 10)',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context).countryDistribution,
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -499,7 +500,7 @@ class _CountryBreakdownScreenState extends State<CountryBreakdownScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Detalle por Países (${_breakdown!.countries.length})',
+              AppLocalizations.of(context).countryDetails(_breakdown!.countries.length),
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -540,7 +541,7 @@ class _CountryBreakdownScreenState extends State<CountryBreakdownScreen> {
         style: const TextStyle(fontWeight: FontWeight.bold),
       ),
       subtitle: Text(
-        '${country.totalHours.toStringAsFixed(1)} horas • ${country.totalEntries} entradas • ${country.activeUsers} usuarios',
+        '${country.totalHours.toStringAsFixed(1)} ${AppLocalizations.of(context).hours} • ${country.totalEntries} ${AppLocalizations.of(context).entries} • ${country.activeUsers} ${AppLocalizations.of(context).users}',
       ),
       trailing: Text(
         '${country.percentage.toStringAsFixed(1)}%',
@@ -559,14 +560,14 @@ class _CountryBreakdownScreenState extends State<CountryBreakdownScreen> {
                 children: [
                   Expanded(
                     child: _buildDetailMetric(
-                      'Promedio hrs/usuario',
+                      AppLocalizations.of(context).averageHrsPerUser,
                       country.averageHoursPerUser.toStringAsFixed(1),
                       Icons.person,
                     ),
                   ),
                   Expanded(
                     child: _buildDetailMetric(
-                      'Promedio entradas/usuario',
+                      AppLocalizations.of(context).averageEntriesPerUser,
                       country.averageEntriesPerUser.toStringAsFixed(1),
                       Icons.list,
                     ),
@@ -580,7 +581,7 @@ class _CountryBreakdownScreenState extends State<CountryBreakdownScreen> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Idiomas utilizados: ${country.uniqueLanguages.join(", ")}',
+                    AppLocalizations.of(context).languagesUsed(country.uniqueLanguages.join(", ")),
                     style: const TextStyle(fontSize: 14),
                   ),
                 ),
@@ -599,9 +600,9 @@ class _CountryBreakdownScreenState extends State<CountryBreakdownScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Estadísticas e Insights',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context).statisticsInsights,
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -612,7 +613,7 @@ class _CountryBreakdownScreenState extends State<CountryBreakdownScreen> {
               children: [
                 Expanded(
                   child: _buildStatCard(
-                    'Promedio Horas/País',
+                    AppLocalizations.of(context).averageHoursPerCountry,
                     _breakdown!.summary.avgHoursPerCountry.toStringAsFixed(1),
                     Icons.bar_chart,
                     Colors.blue,
@@ -621,7 +622,7 @@ class _CountryBreakdownScreenState extends State<CountryBreakdownScreen> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: _buildStatCard(
-                    'Países Activos',
+                    AppLocalizations.of(context).activeCountries,
                     _breakdown!.summary.countriesWithActivity.toString(),
                     Icons.public,
                     Colors.green,
@@ -642,17 +643,17 @@ class _CountryBreakdownScreenState extends State<CountryBreakdownScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Información del Período',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  Text(
+                    AppLocalizations.of(context).periodInformation,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
-                  Text('Desde: ${_formatDate(_breakdown!.dateRange.startDate)}'),
-                  Text('Hasta: ${_formatDate(_breakdown!.dateRange.endDate)}'),
+                  Text(AppLocalizations.of(context).from(_formatDate(_breakdown!.dateRange.startDate))),
+                  Text(AppLocalizations.of(context).to(_formatDate(_breakdown!.dateRange.endDate))),
                   if (_breakdown!.regionName != null)
-                    Text('Región: ${_breakdown!.regionName}')
+                    Text(AppLocalizations.of(context).regionScope(_breakdown!.regionName!))
                   else
-                    const Text('Alcance: Todas las regiones'),
+                    Text(AppLocalizations.of(context).allRegionsScope),
                 ],
               ),
             ),
@@ -808,14 +809,14 @@ class _RegionSelectorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Filtrar por Región'),
+      title: Text(AppLocalizations.of(context).filterByRegion),
       content: SizedBox(
         width: double.maxFinite,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              title: const Text('Todas las regiones'),
+              title: Text(AppLocalizations.of(context).allRegions),
               leading: Radio<String?>(
                 value: null,
                 groupValue: selectedRegionId,
@@ -849,7 +850,7 @@ class _RegionSelectorDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancelar'),
+          child: Text(AppLocalizations.of(context).cancel),
         ),
       ],
     );

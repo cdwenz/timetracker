@@ -7,13 +7,15 @@ import 'package:excel/excel.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import '../models/regional_reports_models.dart';
+import '../l10n/app_localizations.dart';
 
 enum ExportFormat { pdf, excel, csv }
 
 class ExportService {
   static Future<String> exportRegionalSummary(
     RegionalSummary summary,
-    ExportFormat format, {
+    ExportFormat format,
+    AppLocalizations localizations, {
     bool includeCharts = true,
     bool includeRawData = true,
     bool includeSummary = true,
@@ -24,17 +26,17 @@ class ExportService {
       
       switch (format) {
         case ExportFormat.csv:
-          content = _generateCSVFromSummary(summary);
+          content = _generateCSVFromSummary(summary, localizations);
           fileName += '.csv';
           break;
         case ExportFormat.excel:
           // Para Excel, podríamos usar el paquete excel
-          content = _generateExcelFromSummary(summary);
+          content = _generateExcelFromSummary(summary, localizations);
           fileName += '.xlsx';
           break;
         case ExportFormat.pdf:
           // Para PDF, podríamos usar el paquete pdf
-          content = await _generatePDFFromSummary(summary);
+          content = await _generatePDFFromSummary(summary, localizations);
           fileName += '.pdf';
           break;
       }
@@ -48,7 +50,8 @@ class ExportService {
 
   static Future<String> exportRegionalComparison(
     RegionalComparison comparison,
-    ExportFormat format, {
+    ExportFormat format,
+    AppLocalizations localizations, {
     bool includeCharts = true,
     bool includeRawData = true,
     bool includeSummary = true,
@@ -59,15 +62,15 @@ class ExportService {
       
       switch (format) {
         case ExportFormat.csv:
-          content = _generateCSVFromComparison(comparison);
+          content = _generateCSVFromComparison(comparison, localizations);
           fileName += '.csv';
           break;
         case ExportFormat.excel:
-          content = _generateExcelFromComparison(comparison);
+          content = _generateExcelFromComparison(comparison, localizations);
           fileName += '.xlsx';
           break;
         case ExportFormat.pdf:
-          content = await _generatePDFFromComparison(comparison);
+          content = await _generatePDFFromComparison(comparison, localizations);
           fileName += '.pdf';
           break;
       }
@@ -81,7 +84,8 @@ class ExportService {
 
   static Future<String> exportCountryBreakdown(
     CountryBreakdown breakdown,
-    ExportFormat format, {
+    ExportFormat format,
+    AppLocalizations localizations, {
     bool includeCharts = true,
     bool includeRawData = true,
     bool includeSummary = true,
@@ -92,15 +96,15 @@ class ExportService {
       
       switch (format) {
         case ExportFormat.csv:
-          content = _generateCSVFromCountryBreakdown(breakdown);
+          content = _generateCSVFromCountryBreakdown(breakdown, localizations);
           fileName += '.csv';
           break;
         case ExportFormat.excel:
-          content = _generateExcelFromCountryBreakdown(breakdown);
+          content = _generateExcelFromCountryBreakdown(breakdown, localizations);
           fileName += '.xlsx';
           break;
         case ExportFormat.pdf:
-          content = await _generatePDFFromCountryBreakdown(breakdown);
+          content = await _generatePDFFromCountryBreakdown(breakdown, localizations);
           fileName += '.pdf';
           break;
       }
@@ -114,7 +118,8 @@ class ExportService {
 
   static Future<String> exportLanguageDistribution(
     LanguageDistribution distribution,
-    ExportFormat format, {
+    ExportFormat format,
+    AppLocalizations localizations, {
     bool includeCharts = true,
     bool includeRawData = true,
     bool includeSummary = true,
@@ -125,15 +130,15 @@ class ExportService {
       
       switch (format) {
         case ExportFormat.csv:
-          content = _generateCSVFromLanguageDistribution(distribution);
+          content = _generateCSVFromLanguageDistribution(distribution, localizations);
           fileName += '.csv';
           break;
         case ExportFormat.excel:
-          content = _generateExcelFromLanguageDistribution(distribution);
+          content = _generateExcelFromLanguageDistribution(distribution, localizations);
           fileName += '.xlsx';
           break;
         case ExportFormat.pdf:
-          content = await _generatePDFFromLanguageDistribution(distribution);
+          content = await _generatePDFFromLanguageDistribution(distribution, localizations);
           fileName += '.pdf';
           break;
       }
@@ -146,28 +151,28 @@ class ExportService {
   }
 
   // Funciones de generación de CSV
-  static String _generateCSVFromSummary(RegionalSummary summary) {
+  static String _generateCSVFromSummary(RegionalSummary summary, AppLocalizations localizations) {
     final buffer = StringBuffer();
     
     // Header
-    buffer.writeln('Regional Summary Report');
-    buffer.writeln('Region,${summary.regionName}');
-    buffer.writeln('Total Hours,${_formatNumber(summary.totalHours)}');
-    buffer.writeln('Total Entries,${summary.totalEntries}');
-    buffer.writeln('Active Users,${summary.activeUsers}');
+    buffer.writeln(localizations.regionalSummaryReport);
+    buffer.writeln('${localizations.region},${summary.regionName}');
+    buffer.writeln('${localizations.totalHours},${_formatNumber(summary.totalHours)}');
+    buffer.writeln('${localizations.totalEntries},${summary.totalEntries}');
+    buffer.writeln('${localizations.activeUsers},${summary.activeUsers}');
     buffer.writeln('');
     
     // Top Countries
-    buffer.writeln('Top Countries');
-    buffer.writeln('Country,Hours,Percentage');
+    buffer.writeln(localizations.topCountriesLabel);
+    buffer.writeln('${localizations.country},${localizations.hours},${localizations.percentage}');
     for (final country in summary.topCountries) {
       buffer.writeln('${country.country},${_formatNumber(country.totalHours)},${_formatPercentage(country.percentage)}');
     }
     buffer.writeln('');
     
     // Language Breakdown
-    buffer.writeln('Language Breakdown');
-    buffer.writeln('Language,Hours,Entries,Percentage');
+    buffer.writeln(localizations.languageBreakdownLabel);
+    buffer.writeln('${localizations.language},${localizations.hours},${localizations.entries},${localizations.percentage}');
     for (final lang in summary.languageBreakdown) {
       buffer.writeln('${lang.language},${_formatNumber(lang.totalHours)},${lang.totalEntries},${_formatPercentage(lang.percentage)}');
     }
@@ -175,21 +180,21 @@ class ExportService {
     return buffer.toString();
   }
 
-  static String _generateCSVFromComparison(RegionalComparison comparison) {
+  static String _generateCSVFromComparison(RegionalComparison comparison, AppLocalizations localizations) {
     final buffer = StringBuffer();
     
-    buffer.writeln('Regional Comparison Report');
-    buffer.writeln('Total Regions,${comparison.summary.totalRegions}');
-    buffer.writeln('Total Hours,${_formatNumber(comparison.summary.totalHours)}');
-    buffer.writeln('Average Hours per Region,${_formatNumber(comparison.summary.averageHoursPerRegion)}');
+    buffer.writeln(localizations.regionalComparisonReport);
+    buffer.writeln('${localizations.totalRegions},${comparison.summary.totalRegions}');
+    buffer.writeln('${localizations.totalHours},${_formatNumber(comparison.summary.totalHours)}');
+    buffer.writeln('${localizations.averageHoursPerRegion},${_formatNumber(comparison.summary.averageHoursPerRegion)}');
     buffer.writeln('');
     
-    buffer.writeln('Regional Data');
-    buffer.writeln('Region,Hours,Entries,Active Users,Avg Hours/User,Top Country,Top Language');
+    buffer.writeln(localizations.regionalDataLabel);
+    buffer.writeln('${localizations.region},${localizations.hours},${localizations.entries},${localizations.activeUsers},${localizations.avgHoursPerUser},${localizations.topCountry},${localizations.topLanguage}');
     
     
     if (comparison.regions.isEmpty) {
-      buffer.writeln('No regional data available - The regions list is empty');
+      buffer.writeln(localizations.noRegionalDataAvailable);
     } else {
       for (final region in comparison.regions) {
         buffer.writeln('${region.regionName},${_formatNumber(region.totalHours)},${region.totalEntries},${region.activeUsers},${_formatNumber(region.avgHoursPerUser)},${region.topCountry},${region.topLanguage}');
@@ -199,17 +204,17 @@ class ExportService {
     return buffer.toString();
   }
 
-  static String _generateCSVFromCountryBreakdown(CountryBreakdown breakdown) {
+  static String _generateCSVFromCountryBreakdown(CountryBreakdown breakdown, AppLocalizations localizations) {
     final buffer = StringBuffer();
     
-    buffer.writeln('Country Breakdown Report');
-    buffer.writeln('Total Countries,${breakdown.totalCountries}');
-    buffer.writeln('Total Hours,${_formatNumber(breakdown.totalHours)}');
-    buffer.writeln('Total Entries,${breakdown.totalEntries}');
+    buffer.writeln(localizations.countryBreakdownReport);
+    buffer.writeln('${localizations.totalCountries},${breakdown.totalCountries}');
+    buffer.writeln('${localizations.totalHours},${_formatNumber(breakdown.totalHours)}');
+    buffer.writeln('${localizations.totalEntries},${breakdown.totalEntries}');
     buffer.writeln('');
     
-    buffer.writeln('Country Details');
-    buffer.writeln('Rank,Country,Hours,Entries,Active Users,Percentage,Avg Hours/User,Avg Entries/User,Languages');
+    buffer.writeln(localizations.countryDetailsLabel);
+    buffer.writeln('${localizations.rank},${localizations.country},${localizations.hours},${localizations.entries},${localizations.activeUsers},${localizations.percentage},${localizations.avgHoursPerUser},${localizations.avgEntriesPerUser},${localizations.languageColumn}');
     for (final country in breakdown.countries) {
       buffer.writeln('${country.rank},${country.country},${_formatNumber(country.totalHours)},${country.totalEntries},${country.activeUsers},${_formatPercentage(country.percentage)},${_formatNumber(country.averageHoursPerUser)},${_formatNumber(country.averageEntriesPerUser)},"${country.uniqueLanguages.join(", ")}"');
     }
@@ -217,17 +222,17 @@ class ExportService {
     return buffer.toString();
   }
 
-  static String _generateCSVFromLanguageDistribution(LanguageDistribution distribution) {
+  static String _generateCSVFromLanguageDistribution(LanguageDistribution distribution, AppLocalizations localizations) {
     final buffer = StringBuffer();
     
-    buffer.writeln('Language Distribution Report');
-    buffer.writeln('Total Languages,${distribution.totalLanguages}');
-    buffer.writeln('Total Hours,${_formatNumber(distribution.totalHours)}');
-    buffer.writeln('Total Entries,${distribution.totalEntries}');
+    buffer.writeln(localizations.languageDistributionReport);
+    buffer.writeln('${localizations.totalLanguages},${distribution.totalLanguages}');
+    buffer.writeln('${localizations.totalHours},${_formatNumber(distribution.totalHours)}');
+    buffer.writeln('${localizations.totalEntries},${distribution.totalEntries}');
     buffer.writeln('');
     
-    buffer.writeln('Language Details');
-    buffer.writeln('Rank,Language,Hours,Entries,Active Users,Percentage,Avg Hours/User,Avg Entries/User,Countries');
+    buffer.writeln(localizations.languageDetailsLabel);
+    buffer.writeln('${localizations.rank},${localizations.language},${localizations.hours},${localizations.entries},${localizations.activeUsers},${localizations.percentage},${localizations.avgHoursPerUser},${localizations.avgEntriesPerUser},${localizations.countryColumn}');
     for (final lang in distribution.languages) {
       buffer.writeln('${lang.rank},${lang.language},${_formatNumber(lang.totalHours)},${lang.totalEntries},${lang.activeUsers},${_formatPercentage(lang.percentage)},${_formatNumber(lang.averageHoursPerUser)},${_formatNumber(lang.averageEntriesPerUser)},"${lang.countries.join(", ")}"');
     }
@@ -236,113 +241,113 @@ class ExportService {
   }
 
   // Generación de archivos Excel reales
-  static String _generateExcelFromSummary(RegionalSummary summary) {
-    return generateRealExcel('Regional Summary', [
-      ['Region', summary.regionName],
-      ['Total Hours', _formatNumber(summary.totalHours)],
-      ['Total Entries', summary.totalEntries.toString()],
-      ['Active Users', summary.activeUsers.toString()],
+  static String _generateExcelFromSummary(RegionalSummary summary, AppLocalizations localizations) {
+    return generateRealExcel(localizations.regionalSummaryReport, [
+      [localizations.region, summary.regionName],
+      [localizations.totalHours, _formatNumber(summary.totalHours)],
+      [localizations.totalEntries, summary.totalEntries.toString()],
+      [localizations.activeUsers, summary.activeUsers.toString()],
       [],
-      ['Top Countries', '', ''],
-      ['Country', 'Hours', 'Percentage'],
+      [localizations.topCountries, '', ''],
+      [localizations.country, localizations.hours, localizations.percentage],
       ...summary.topCountries.map((c) => [c.country, _formatNumber(c.totalHours), _formatPercentage(c.percentage)]),
       [],
-      ['Language Breakdown', '', '', ''],
-      ['Language', 'Hours', 'Entries', 'Percentage'],
+      [localizations.languageBreakdown, '', '', ''],
+      [localizations.language, localizations.hours, localizations.entries, localizations.percentage],
       ...summary.languageBreakdown.map((l) => [l.language, _formatNumber(l.totalHours), l.totalEntries.toString(), _formatPercentage(l.percentage)]),
     ]);
   }
 
-  static String _generateExcelFromComparison(RegionalComparison comparison) {
+  static String _generateExcelFromComparison(RegionalComparison comparison, AppLocalizations localizations) {
     final dataRows = comparison.regions.isEmpty 
-      ? [['No regional data available', '', '', '', '', '', '']]
+      ? [[localizations.noRegionalDataAvailable, '', '', '', '', '', '']]
       : comparison.regions.map((r) => [r.regionName, _formatNumber(r.totalHours), r.totalEntries.toString(), r.activeUsers.toString(), _formatNumber(r.avgHoursPerUser), r.topCountry, r.topLanguage]).toList();
     
-    return generateRealExcel('Regional Comparison', [
-      ['Total Regions', comparison.summary.totalRegions.toString()],
-      ['Total Hours', _formatNumber(comparison.summary.totalHours)],
-      ['Average Hours per Region', _formatNumber(comparison.summary.averageHoursPerRegion)],
+    return generateRealExcel(localizations.regionalComparisonReport, [
+      [localizations.totalRegions, comparison.summary.totalRegions.toString()],
+      [localizations.totalHours, _formatNumber(comparison.summary.totalHours)],
+      [localizations.averageHoursPerRegion, _formatNumber(comparison.summary.averageHoursPerRegion)],
       [],
-      ['Regional Data', '', '', '', '', '', ''],
-      ['Region', 'Hours', 'Entries', 'Active Users', 'Avg Hours/User', 'Top Country', 'Top Language'],
+      [localizations.regionalDataLabel, '', '', '', '', '', ''],
+      [localizations.region, localizations.hours, localizations.entries, localizations.activeUsers, localizations.avgHoursPerUser, localizations.topCountry, localizations.topLanguage],
       ...dataRows,
     ]);
   }
 
-  static String _generateExcelFromCountryBreakdown(CountryBreakdown breakdown) {
-    return generateRealExcel('Country Breakdown', [
-      ['Total Countries', breakdown.totalCountries.toString()],
-      ['Total Hours', _formatNumber(breakdown.totalHours)],
-      ['Total Entries', breakdown.totalEntries.toString()],
+  static String _generateExcelFromCountryBreakdown(CountryBreakdown breakdown, AppLocalizations localizations) {
+    return generateRealExcel(localizations.countryBreakdownReport, [
+      [localizations.totalCountries, breakdown.totalCountries.toString()],
+      [localizations.totalHours, _formatNumber(breakdown.totalHours)],
+      [localizations.totalEntries, breakdown.totalEntries.toString()],
       [],
-      ['Country Details', '', '', '', '', '', '', '', ''],
-      ['Rank', 'Country', 'Hours', 'Entries', 'Active Users', 'Percentage', 'Avg Hours/User', 'Avg Entries/User', 'Languages'],
+      [localizations.countryDetailsLabel, '', '', '', '', '', '', '', ''],
+      [localizations.rank, localizations.country, localizations.hours, localizations.entries, localizations.activeUsers, localizations.percentage, localizations.avgHoursPerUser, localizations.avgEntriesPerUser, localizations.languageColumn],
       ...breakdown.countries.map((c) => [c.rank.toString(), c.country, _formatNumber(c.totalHours), c.totalEntries.toString(), c.activeUsers.toString(), _formatPercentage(c.percentage), _formatNumber(c.averageHoursPerUser), _formatNumber(c.averageEntriesPerUser), c.uniqueLanguages.join(', ')]),
     ]);
   }
 
-  static String _generateExcelFromLanguageDistribution(LanguageDistribution distribution) {
-    return generateRealExcel('Language Distribution', [
-      ['Total Languages', distribution.totalLanguages.toString()],
-      ['Total Hours', _formatNumber(distribution.totalHours)],
-      ['Total Entries', distribution.totalEntries.toString()],
+  static String _generateExcelFromLanguageDistribution(LanguageDistribution distribution, AppLocalizations localizations) {
+    return generateRealExcel(localizations.languageDistributionReport, [
+      [localizations.totalLanguages, distribution.totalLanguages.toString()],
+      [localizations.totalHours, _formatNumber(distribution.totalHours)],
+      [localizations.totalEntries, distribution.totalEntries.toString()],
       [],
-      ['Language Details', '', '', '', '', '', '', '', ''],
-      ['Rank', 'Language', 'Hours', 'Entries', 'Active Users', 'Percentage', 'Avg Hours/User', 'Avg Entries/User', 'Countries'],
+      [localizations.languageDetailsLabel, '', '', '', '', '', '', '', ''],
+      [localizations.rank, localizations.language, localizations.hours, localizations.entries, localizations.activeUsers, localizations.percentage, localizations.avgHoursPerUser, localizations.avgEntriesPerUser, localizations.countryColumn],
       ...distribution.languages.map((l) => [l.rank.toString(), l.language, _formatNumber(l.totalHours), l.totalEntries.toString(), l.activeUsers.toString(), _formatPercentage(l.percentage), _formatNumber(l.averageHoursPerUser), _formatNumber(l.averageEntriesPerUser), l.countries.join(', ')]),
     ]);
   }
 
   // Generación de archivos PDF reales
-  static Future<String> _generatePDFFromSummary(RegionalSummary summary) async {
-    return await generateRealPDF('Regional Summary Report', [
-      'Region: ${summary.regionName}',
-      'Total Hours: ${_formatNumber(summary.totalHours)}',
-      'Total Entries: ${summary.totalEntries}',
-      'Active Users: ${summary.activeUsers}',
+  static Future<String> _generatePDFFromSummary(RegionalSummary summary, AppLocalizations localizations) async {
+    return await generateRealPDF(localizations.regionalSummaryReport, [
+      '${localizations.region}: ${summary.regionName}',
+      '${localizations.totalHours}: ${_formatNumber(summary.totalHours)}',
+      '${localizations.totalEntries}: ${summary.totalEntries}',
+      '${localizations.activeUsers}: ${summary.activeUsers}',
       '',
-      'TOP COUNTRIES:',
-      ...summary.topCountries.map((c) => '• ${c.country}: ${_formatNumber(c.totalHours)} hours (${_formatPercentage(c.percentage)})'),
+      '${localizations.topCountriesTitle}',
+      ...summary.topCountries.map((c) => '• ${c.country}: ${_formatNumber(c.totalHours)} ${localizations.hours} (${_formatPercentage(c.percentage)})'),
       '',
-      'LANGUAGE BREAKDOWN:',
-      ...summary.languageBreakdown.map((l) => '• ${l.language}: ${_formatNumber(l.totalHours)} hours, ${l.totalEntries} entries (${_formatPercentage(l.percentage)})'),
+      '${localizations.languageBreakdown}:',
+      ...summary.languageBreakdown.map((l) => '• ${l.language}: ${_formatNumber(l.totalHours)} ${localizations.hours}, ${l.totalEntries} ${localizations.entries} (${_formatPercentage(l.percentage)})'),
     ]);
   }
 
-  static Future<String> _generatePDFFromComparison(RegionalComparison comparison) async {
+  static Future<String> _generatePDFFromComparison(RegionalComparison comparison, AppLocalizations localizations) async {
     final regionalDataItems = comparison.regions.isEmpty 
-      ? ['• No regional data available']
-      : comparison.regions.map((r) => '• ${r.regionName}: ${_formatNumber(r.totalHours)} hours, ${r.totalEntries} entries, ${r.activeUsers} users (${_formatNumber(r.avgHoursPerUser)} hours/user)').toList();
+      ? ['• ${localizations.noRegionalDataAvailable}']
+      : comparison.regions.map((r) => '• ${r.regionName}: ${_formatNumber(r.totalHours)} ${localizations.hours}, ${r.totalEntries} ${localizations.entries}, ${r.activeUsers} ${localizations.users} (${_formatNumber(r.avgHoursPerUser)} ${localizations.hrsPerUser})').toList();
     
-    return await generateRealPDF('Regional Comparison Report', [
-      'Total Regions: ${comparison.summary.totalRegions}',
-      'Total Hours: ${_formatNumber(comparison.summary.totalHours)}',
-      'Average Hours per Region: ${_formatNumber(comparison.summary.averageHoursPerRegion)}',
+    return await generateRealPDF(localizations.regionalComparisonReport, [
+      '${localizations.totalRegions}: ${comparison.summary.totalRegions}',
+      '${localizations.totalHours}: ${_formatNumber(comparison.summary.totalHours)}',
+      '${localizations.averageHoursPerRegion}: ${_formatNumber(comparison.summary.averageHoursPerRegion)}',
       '',
-      'REGIONAL DATA:',
+      '${localizations.regionalDataLabel}:',
       ...regionalDataItems,
     ]);
   }
 
-  static Future<String> _generatePDFFromCountryBreakdown(CountryBreakdown breakdown) async {
-    return await generateRealPDF('Country Breakdown Report', [
-      'Total Countries: ${breakdown.totalCountries}',
-      'Total Hours: ${_formatNumber(breakdown.totalHours)}',
-      'Total Entries: ${breakdown.totalEntries}',
+  static Future<String> _generatePDFFromCountryBreakdown(CountryBreakdown breakdown, AppLocalizations localizations) async {
+    return await generateRealPDF(localizations.countryBreakdownReport, [
+      '${localizations.totalCountries}: ${breakdown.totalCountries}',
+      '${localizations.totalHours}: ${_formatNumber(breakdown.totalHours)}',
+      '${localizations.totalEntries}: ${breakdown.totalEntries}',
       '',
-      'COUNTRY DETAILS:',
-      ...breakdown.countries.map((c) => '${c.rank}. ${c.country}: ${_formatNumber(c.totalHours)} hours, ${c.totalEntries} entries (${_formatPercentage(c.percentage)})'),
+      '${localizations.countryDetailsLabel}:',
+      ...breakdown.countries.map((c) => '${c.rank}. ${c.country}: ${_formatNumber(c.totalHours)} ${localizations.hours}, ${c.totalEntries} ${localizations.entries} (${_formatPercentage(c.percentage)})'),
     ]);
   }
 
-  static Future<String> _generatePDFFromLanguageDistribution(LanguageDistribution distribution) async {
-    return await generateRealPDF('Language Distribution Report', [
-      'Total Languages: ${distribution.totalLanguages}',
-      'Total Hours: ${_formatNumber(distribution.totalHours)}',
-      'Total Entries: ${distribution.totalEntries}',
+  static Future<String> _generatePDFFromLanguageDistribution(LanguageDistribution distribution, AppLocalizations localizations) async {
+    return await generateRealPDF(localizations.languageDistributionReport, [
+      '${localizations.totalLanguages}: ${distribution.totalLanguages}',
+      '${localizations.totalHours}: ${_formatNumber(distribution.totalHours)}',
+      '${localizations.totalEntries}: ${distribution.totalEntries}',
       '',
-      'LANGUAGE DETAILS:',
-      ...distribution.languages.map((l) => '${l.rank}. ${l.language}: ${_formatNumber(l.totalHours)} hours, ${l.totalEntries} entries (${_formatPercentage(l.percentage)})'),
+      '${localizations.languageDetailsLabel}:',
+      ...distribution.languages.map((l) => '${l.rank}. ${l.language}: ${_formatNumber(l.totalHours)} ${localizations.hours}, ${l.totalEntries} ${localizations.entries} (${_formatPercentage(l.percentage)})'),
     ]);
   }
 

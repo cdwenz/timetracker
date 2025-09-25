@@ -759,7 +759,7 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get dailyComparisonTitle => 'Comparaison quotidienne';
+  String get dailyComparisonTitle => 'COMPARAISON QUOTIDIENNE :';
 
   @override
   String get myEvolutionTitle => 'Évolution (Moi)';
@@ -849,7 +849,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get regionalReportsTitle => 'Rapports Régionaux';
 
   @override
-  String get regionalSummaryTitle => 'Résumé Régional';
+  String get regionalSummaryTitle => 'RÉSUMÉ RÉGIONAL :';
 
   @override
   String get regionalComparisonTitle => 'Comparaison Régionale';
@@ -893,7 +893,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get clearFilters => 'Effacer les Filtres';
 
   @override
-  String get filterByRegion => 'Filtrer par région';
+  String get filterByRegion => 'Filtrer par Région';
 
   @override
   String get filterByDates => 'Filtrer par dates';
@@ -902,7 +902,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get allRegions => 'Toutes les régions';
 
   @override
-  String get selectRegions => 'Sélectionner des régions';
+  String get selectRegions => 'Sélectionner les Régions';
 
   @override
   String get selectAtLeast2Regions =>
@@ -914,7 +914,7 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get totalHours => 'Total d\'Heures';
+  String get totalHours => 'Total Heures';
 
   @override
   String get totalEntries => 'Total d\'Entrées';
@@ -923,10 +923,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get activeUsers => 'Utilisateurs Actifs';
 
   @override
-  String get totalLanguages => 'Total de Langues';
+  String get totalLanguages => 'Total Langues';
 
   @override
-  String get totalCountries => 'Total de Pays';
+  String get totalCountries => 'Total Pays';
 
   @override
   String get totalRegions => 'Régions';
@@ -941,7 +941,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get averagePerLanguage => 'Moyenne/Langue';
 
   @override
-  String get topCountries => 'Meilleurs Pays';
+  String get topCountries => 'Principaux Pays';
 
   @override
   String get languageBreakdown => 'Répartition des Langues';
@@ -956,25 +956,25 @@ class AppLocalizationsFr extends AppLocalizations {
   String get detailedMetrics => 'Métriques Détaillées';
 
   @override
-  String get performanceHighlights => 'Points Forts de Performance';
+  String get performanceHighlights => 'Faits Saillants de Performance';
 
   @override
-  String get mostUsed => 'Le Plus Utilisé';
+  String get mostUsed => 'Plus Utilisé';
 
   @override
-  String get leastUsed => 'Le Moins Utilisé';
+  String get leastUsed => 'Moins Utilisé';
 
   @override
-  String get mostActive => 'Le Plus Actif';
+  String get mostActive => 'Plus Actif';
 
   @override
-  String get leastActive => 'Le Moins Actif';
+  String get leastActive => 'Moins Actif';
 
   @override
   String get bestPerformance => 'Meilleure Performance';
 
   @override
-  String get worstPerformance => 'Moins Bonne Performance';
+  String get worstPerformance => 'Pire Performance';
 
   @override
   String get hoursPerUser => 'Heures/Utilisateur';
@@ -983,7 +983,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get entriesPerUser => 'Entrées/Utilisateur';
 
   @override
-  String get languagesUsed => 'Langues Utilisées';
+  String languagesUsed(Object languages) {
+    return 'Langues utilisées : $languages';
+  }
 
   @override
   String get countriesWithActivity => 'Pays avec Activité';
@@ -1006,11 +1008,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String regionScope(String region) {
-    return 'Région: $region';
+    return 'Région : $region';
   }
 
   @override
-  String get allRegionsScope => 'Portée: Toutes les régions';
+  String get allRegionsScope => 'Portée : Toutes les régions';
 
   @override
   String filteredCountry(String country) {
@@ -1057,10 +1059,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get detailsTable => 'Table des Détails';
 
   @override
-  String get statisticsInsights => 'Statistiques et Insights';
+  String get statisticsInsights => 'Statistiques et Analyses';
 
   @override
-  String get regionalDistribution => 'Distribution Régionale';
+  String get regionalDistribution => 'Distribution régionale :';
 
   @override
   String get selectItemsToExport => 'Sélectionner les éléments à exporter';
@@ -1179,5 +1181,334 @@ class AppLocalizationsFr extends AppLocalizations {
   String get updateData => 'Mettre à jour les données';
 
   @override
-  String get hours => 'heures';
+  String get hours => 'Heures';
+
+  @override
+  String get dashboardComplete => 'Tableau de Bord Complet';
+
+  @override
+  String get generalSummaryMetrics => 'Résumé général et métriques de base';
+
+  @override
+  String get regionalDataComparisons => 'Données régionales et comparaisons';
+
+  @override
+  String get noBasicDashboardDataAvailable =>
+      'Aucune donnée de tableau de bord de base disponible';
+
+  @override
+  String get noRegionalDataAvailable =>
+      'Aucune donnée régionale disponible - La liste des régions est vide';
+
+  @override
+  String get needAtLeast2RegionsCompare =>
+      'Au moins 2 régions nécessaires pour comparer';
+
+  @override
+  String get updateDataTooltip => 'Mettre à jour les données';
+
+  @override
+  String get myReports => 'Mes Rapports';
+
+  @override
+  String get teamReports => 'Rapports d\'Équipe';
+
+  @override
+  String get userRole => 'Utilisateur';
+
+  @override
+  String get meLabel => 'Moi';
+
+  @override
+  String get teamLabel => 'Équipe';
+
+  @override
+  String errorLoadingReports(Object error) {
+    return 'Erreur lors du chargement des rapports : $error';
+  }
+
+  @override
+  String get dashboardReport => 'Rapport de Tableau de Bord';
+
+  @override
+  String get basicDashboardReport => 'Rapport de Tableau de Bord de Base';
+
+  @override
+  String get generated => 'Généré';
+
+  @override
+  String get user => 'Utilisateur';
+
+  @override
+  String get role => 'Rôle';
+
+  @override
+  String get unknown => 'Inconnu';
+
+  @override
+  String get dashboardMetrics => 'Métriques du Tableau de Bord';
+
+  @override
+  String get teamCount => 'Compteur d\'Équipe';
+
+  @override
+  String get meCount => 'Mon Compteur';
+
+  @override
+  String get dailyComparison => 'Comparaison Quotidienne';
+
+  @override
+  String get day => 'Jour';
+
+  @override
+  String get myCount => 'Mon Compteur';
+
+  @override
+  String get myTrend => 'Ma Tendance';
+
+  @override
+  String get count => 'Compteur';
+
+  @override
+  String get regionalDashboardReport => 'Rapport de Tableau de Bord Régional';
+
+  @override
+  String get regionalSummary => 'Résumé Régional';
+
+  @override
+  String get country => 'Pays';
+
+  @override
+  String get percentage => 'Pourcentage';
+
+  @override
+  String get topLanguages => 'Principales Langues';
+
+  @override
+  String get language => 'Langue';
+
+  @override
+  String get dashboardMetricsTitle => 'MÉTRIQUES DU TABLEAU DE BORD :';
+
+  @override
+  String get myTrendTitle => 'MA TENDANCE :';
+
+  @override
+  String get topCountriesTitle => 'PRINCIPAUX PAYS :';
+
+  @override
+  String get topLanguagesTitle => 'PRINCIPALES LANGUES :';
+
+  @override
+  String get regionalComparison => 'Comparaison Régionale';
+
+  @override
+  String errorComparingRegions(Object error) {
+    return 'Erreur lors de la comparaison des régions : $error';
+  }
+
+  @override
+  String get regionalComparisonReportSubject =>
+      'Rapport de Comparaison Régionale';
+
+  @override
+  String selectedRegions(Object count) {
+    return 'Régions Sélectionnées ($count/10)';
+  }
+
+  @override
+  String get selectAtLeast2RegionsToCompare =>
+      'Sélectionnez au moins 2 régions à comparer';
+
+  @override
+  String get regions => 'Régions';
+
+  @override
+  String get totalHoursComparison => 'Comparaison des Heures Totales';
+
+  @override
+  String get region => 'Région';
+
+  @override
+  String get entries => 'Entrées';
+
+  @override
+  String get users => 'Utilisateurs';
+
+  @override
+  String get hrsPerUser => 'Hrs/Utilisateur';
+
+  @override
+  String get topCountry => 'Principal Pays';
+
+  @override
+  String get topLanguage => 'Principale Langue';
+
+  @override
+  String get selectRegionsDialog => 'Sélectionner les Régions';
+
+  @override
+  String selectBetween2And10Regions(Object count) {
+    return 'Sélectionnez entre 2 et 10 régions ($count sélectionnées)';
+  }
+
+  @override
+  String get countryBreakdown => 'Répartition par Pays';
+
+  @override
+  String errorLoadingData(Object error) {
+    return 'Erreur lors du chargement des données : $error';
+  }
+
+  @override
+  String get countryBreakdownReportSubject => 'Rapport de Répartition par Pays';
+
+  @override
+  String get activeFilters => 'Filtres Actifs';
+
+  @override
+  String get selectedRegion => 'Région sélectionnée';
+
+  @override
+  String countries(Object countries) {
+    return 'Pays : $countries';
+  }
+
+  @override
+  String get generalSummary => 'Résumé Général';
+
+  @override
+  String get countryDistribution => 'Distribution par Pays (Top 10)';
+
+  @override
+  String countryDetails(Object count) {
+    return 'Détails par Pays ($count)';
+  }
+
+  @override
+  String get averageHrsPerUser => 'Moyenne hrs/utilisateur';
+
+  @override
+  String get averageEntriesPerUser => 'Moyenne entrées/utilisateur';
+
+  @override
+  String get averageHoursPerCountry => 'Moyenne Heures/Pays';
+
+  @override
+  String get activeCountries => 'Pays Actifs';
+
+  @override
+  String from(Object date) {
+    return 'De : $date';
+  }
+
+  @override
+  String to(Object date) {
+    return 'À : $date';
+  }
+
+  @override
+  String get languageDistribution => 'Distribution des Langues';
+
+  @override
+  String errorLoadingLanguageData(Object error) {
+    return 'Erreur lors du chargement des données : $error';
+  }
+
+  @override
+  String get languageDistributionReportSubject =>
+      'Rapport de Distribution des Langues';
+
+  @override
+  String languages(Object languages) {
+    return 'Langues : $languages';
+  }
+
+  @override
+  String get hoursPerLanguage => 'Heures par Langue';
+
+  @override
+  String languageDetails(Object count) {
+    return 'Détails par Langues ($count)';
+  }
+
+  @override
+  String countriesWhereUsed(Object countries) {
+    return 'Pays où utilisé : $countries';
+  }
+
+  @override
+  String get regionalLanguageDistribution =>
+      'Distribution Régionale des Langues (Top 5)';
+
+  @override
+  String get averageHoursPerLanguage => 'Moyenne Heures/Langue';
+
+  @override
+  String get activeLanguages => 'Langues Actives';
+
+  @override
+  String countryFiltered(Object country) {
+    return 'Pays filtré : $country';
+  }
+
+  @override
+  String get regionalSummaryReport => 'Rapport de Résumé Régional';
+
+  @override
+  String get regionalComparisonReport => 'Rapport de Comparaison Régionale';
+
+  @override
+  String get countryBreakdownReport => 'Rapport de Répartition par Pays';
+
+  @override
+  String get languageDistributionReport =>
+      'Rapport de Distribution des Langues';
+
+  @override
+  String get topCountriesLabel => 'Principaux Pays';
+
+  @override
+  String get languageBreakdownLabel => 'Répartition des Langues';
+
+  @override
+  String get countryDetailsLabel => 'Détails par Pays';
+
+  @override
+  String get languageDetailsLabel => 'Détails par Langues';
+
+  @override
+  String get regionalDataLabel => 'Données Régionales';
+
+  @override
+  String get rank => 'Rang';
+
+  @override
+  String get avgHoursPerUser => 'Moy Heures/Utilisateur';
+
+  @override
+  String get avgEntriesPerUser => 'Moy Entrées/Utilisateur';
+
+  @override
+  String get languageColumn => 'Langues';
+
+  @override
+  String get countryColumn => 'Pays';
+
+  @override
+  String get averageHoursPerRegion => 'Moyenne d\'Heures par Région';
+
+  @override
+  String get generalSummaryAndMetrics => 'Résumé général et métriques de base';
+
+  @override
+  String get regionalDataAndComparisons => 'Données régionales et comparaisons';
+
+  @override
+  String get noRegionalDataAvailableMessage =>
+      'Aucune donnée régionale disponible';
+
+  @override
+  String get atLeast2RegionsRequired =>
+      'Au moins 2 régions nécessaires pour la comparaison';
 }

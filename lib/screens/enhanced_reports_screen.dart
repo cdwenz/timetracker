@@ -76,7 +76,7 @@ class _EnhancedReportsScreenState extends State<EnhancedReportsScreen> {
         _availableRegions = await _metricsService.getAccessibleRegions();
       }
     } catch (e) {
-      _showError('Error cargando reportes: $e');
+      _showError(AppLocalizations.of(context).errorLoadingReports(e.toString()));
     }
 
     setState(() => _isLoading = false);
@@ -105,15 +105,15 @@ class _EnhancedReportsScreenState extends State<EnhancedReportsScreen> {
           children: [
             ListTile(
               leading: const Icon(Icons.summarize),
-              title: const Text('Dashboard Completo'),
-              subtitle: const Text('Resumen general y métricas básicas'),
+              title: Text(AppLocalizations.of(context).dashboardComplete),
+              subtitle: Text(AppLocalizations.of(context).generalSummaryAndMetrics),
               onTap: () => Navigator.of(context).pop('dashboard'),
             ),
             if (_regionalDashboard != null) ...[
               ListTile(
                 leading: const Icon(Icons.analytics),
                 title: Text(AppLocalizations.of(context).regionalDashboard),
-                subtitle: const Text('Datos regionales y comparaciones'),
+                subtitle: Text(AppLocalizations.of(context).regionalDataAndComparisons),
                 onTap: () => Navigator.of(context).pop('regional'),
               ),
             ],
@@ -186,12 +186,12 @@ class _EnhancedReportsScreenState extends State<EnhancedReportsScreen> {
 
       if (type == 'dashboard' && _basicDashboard != null) {
         // Para dashboard básico, crear un CSV con los datos
+        subject = AppLocalizations.of(context).dashboardReport;
         filePath = await _exportBasicDashboard(format);
-        subject = 'Dashboard Report';
       } else if (type == 'regional' && _regionalDashboard != null) {
         // Para dashboard regional, crear un CSV con los datos
+        subject = AppLocalizations.of(context).regionalDashboardReport;
         filePath = await _exportRegionalDashboard(format);
-        subject = 'Regional Dashboard Report';
       }
 
       if (mounted && filePath.isNotEmpty) {
@@ -224,47 +224,51 @@ class _EnhancedReportsScreenState extends State<EnhancedReportsScreen> {
 
   Future<String> _exportBasicDashboard(ExportFormat format) async {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final userName = await AuthService.currentUserName() ?? 'Unknown';
+    final unknownText = AppLocalizations.of(context).unknown;
+    final userName = await AuthService.currentUserName() ?? unknownText;
 
     if (_basicDashboard == null) {
       throw Exception('No basic dashboard data available');
     }
 
+    // Get all necessary translations before async operations
+    final localizations = AppLocalizations.of(context);
+    
     switch (format) {
       case ExportFormat.csv:
-        return _exportBasicDashboardCSV(timestamp, userName);
+        return _exportBasicDashboardCSV(timestamp, userName, localizations);
       case ExportFormat.excel:
-        return _exportBasicDashboardExcel(timestamp, userName);
+        return _exportBasicDashboardExcel(timestamp, userName, localizations);
       case ExportFormat.pdf:
-        return _exportBasicDashboardPDF(timestamp, userName);
+        return _exportBasicDashboardPDF(timestamp, userName, localizations);
     }
   }
 
   Future<String> _exportBasicDashboardCSV(
-      int timestamp, String userName) async {
+      int timestamp, String userName, AppLocalizations localizations) async {
     final buffer = StringBuffer();
 
-    buffer.writeln('Basic Dashboard Report');
-    buffer.writeln('Generated: ${DateTime.now()}');
-    buffer.writeln('User: $userName');
-    buffer.writeln('Role: ${_userRole ?? 'Unknown'}');
+    buffer.writeln(localizations.basicDashboardReport);
+    buffer.writeln('${localizations.generated}: ${DateTime.now()}');
+    buffer.writeln('${localizations.user}: $userName');
+    buffer.writeln('${localizations.role}: ${_userRole ?? localizations.unknown}');
     buffer.writeln('');
 
-    buffer.writeln('Dashboard Metrics');
-    buffer.writeln('Team Count,${_basicDashboard!.teamCount}');
-    buffer.writeln('Me Count,${_basicDashboard!.meCount}');
+    buffer.writeln(localizations.dashboardMetrics);
+    buffer.writeln('${localizations.teamCount},${_basicDashboard!.teamCount}');
+    buffer.writeln('${localizations.meCount},${_basicDashboard!.meCount}');
     buffer.writeln('');
 
-    buffer.writeln('Daily Comparison');
-    buffer.writeln('Day,Team Count,My Count');
+    buffer.writeln(localizations.dailyComparison);
+    buffer.writeln('${localizations.day},${localizations.teamCount},${localizations.myCount}');
     for (final daily in _basicDashboard!.dailyCompare) {
       buffer.writeln(
           '${daily.day.day}/${daily.day.month},${daily.teamCount},${daily.myCount}');
     }
     buffer.writeln('');
 
-    buffer.writeln('My Trend');
-    buffer.writeln('Day,Count');
+    buffer.writeln(localizations.myTrend);
+    buffer.writeln('${localizations.day},${localizations.count}');
     for (final trend in _basicDashboard!.myTrend) {
       buffer.writeln('${trend.day.day}/${trend.day.month},${trend.count}');
     }
@@ -275,14 +279,14 @@ class _EnhancedReportsScreenState extends State<EnhancedReportsScreen> {
   }
 
   Future<String> _exportBasicDashboardExcel(
-      int timestamp, String userName) async {
-    return ExportService.generateRealExcel('Basic Dashboard', [
-      ['Basic Dashboard Report'],
-      ['Generated', DateTime.now().toString()],
-      ['User', userName],
-      ['Role', _userRole ?? 'Unknown'],
+      int timestamp, String userName, AppLocalizations localizations) async {
+    return ExportService.generateRealExcel(localizations.basicDashboardReport, [
+      [localizations.basicDashboardReport],
+      [localizations.generated, DateTime.now().toString()],
+      [localizations.user, userName],
+      [localizations.role, _userRole ?? localizations.unknown],
       [],
-      ['Dashboard Metrics'],
+      [localizations.dashboardMetrics],
       ['Team Count', _basicDashboard!.teamCount],
       ['Me Count', _basicDashboard!.meCount],
       [],
@@ -302,7 +306,7 @@ class _EnhancedReportsScreenState extends State<EnhancedReportsScreen> {
   }
 
   Future<String> _exportBasicDashboardPDF(
-      int timestamp, String userName) async {
+      int timestamp, String userName, AppLocalizations localizations) async {
     final content = [
       'Basic Dashboard Report',
       'Generated: ${DateTime.now()}',
@@ -328,7 +332,8 @@ class _EnhancedReportsScreenState extends State<EnhancedReportsScreen> {
 
   Future<String> _exportRegionalDashboard(ExportFormat format) async {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final userName = await AuthService.currentUserName() ?? 'Unknown';
+    final unknownText = AppLocalizations.of(context).unknown;
+    final userName = await AuthService.currentUserName() ?? unknownText;
 
     if (_regionalDashboard == null) {
       throw Exception('No regional dashboard data available');
@@ -448,7 +453,7 @@ class _EnhancedReportsScreenState extends State<EnhancedReportsScreen> {
 
   void _navigateToRegionalComparison() {
     if (_availableRegions.length < 2) {
-      _showError('Se necesitan al menos 2 regiones para comparar');
+      _showError(AppLocalizations.of(context).atLeast2RegionsRequired);
       return;
     }
 
@@ -493,14 +498,14 @@ class _EnhancedReportsScreenState extends State<EnhancedReportsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            '${AppLocalizations.of(context).enhancedReportsTitle}: - ${_userRole ?? 'Usuario'}'),
+            '${AppLocalizations.of(context).enhancedReportsTitle} - ${_userRole ?? AppLocalizations.of(context).user}'),
         // backgroundColor: Colors.blue.shade700,
         // foregroundColor: Colors.white,
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: _loadData,
-            tooltip: 'Actualizar datos',
+            tooltip: AppLocalizations.of(context).updateData,
           ),
         ],
       ),
@@ -597,10 +602,10 @@ class _EnhancedReportsScreenState extends State<EnhancedReportsScreen> {
 
   Widget _buildBasicDashboard() {
     if (_basicDashboard == null) {
-      return const Card(
+      return Card(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Text('No hay datos de dashboard básico disponibles'),
+          padding: const EdgeInsets.all(16.0),
+          child: Text(AppLocalizations.of(context).noBasicDashboardDataAvailable),
         ),
       );
     }
@@ -625,7 +630,7 @@ class _EnhancedReportsScreenState extends State<EnhancedReportsScreen> {
                 _basicDashboard!.meCount.toString(),
                 Icons.person,
                 Colors.blue,
-                () => _goToBasicDetail('Mis Reportes', ReportsDetailFilter.me),
+                () => _goToBasicDetail(AppLocalizations.of(context).myReports, ReportsDetailFilter.me),
               ),
             ),
             const SizedBox(width: 16),
@@ -636,7 +641,7 @@ class _EnhancedReportsScreenState extends State<EnhancedReportsScreen> {
                 Icons.group,
                 Colors.green,
                 () => _goToBasicDetail(
-                    'Reportes del Equipo', ReportsDetailFilter.team),
+                    AppLocalizations.of(context).teamReports, ReportsDetailFilter.team),
               ),
             ),
           ],
@@ -711,10 +716,10 @@ class _EnhancedReportsScreenState extends State<EnhancedReportsScreen> {
                 .map((region) => _buildTopRegionTile(region)),
           ],
         ] else ...[
-          const Card(
+          Card(
             child: Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text('No hay datos regionales disponibles'),
+              padding: const EdgeInsets.all(16.0),
+              child: Text(AppLocalizations.of(context).noRegionalDataAvailableMessage),
             ),
           ),
         ],

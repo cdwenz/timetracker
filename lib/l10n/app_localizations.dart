@@ -1451,7 +1451,7 @@ abstract class AppLocalizations {
   /// No description provided for @dailyComparisonTitle.
   ///
   /// In en, this message translates to:
-  /// **'Daily comparison'**
+  /// **'DAILY COMPARISON:'**
   String get dailyComparisonTitle;
 
   /// No description provided for @myEvolutionTitle.
@@ -1595,7 +1595,7 @@ abstract class AppLocalizations {
   /// No description provided for @regionalSummaryTitle.
   ///
   /// In en, this message translates to:
-  /// **'Regional Summary'**
+  /// **'REGIONAL SUMMARY:'**
   String get regionalSummaryTitle;
 
   /// No description provided for @regionalComparisonTitle.
@@ -1679,7 +1679,7 @@ abstract class AppLocalizations {
   /// No description provided for @filterByRegion.
   ///
   /// In en, this message translates to:
-  /// **'Filter by region'**
+  /// **'Filter by Region'**
   String get filterByRegion;
 
   /// No description provided for @filterByDates.
@@ -1697,7 +1697,7 @@ abstract class AppLocalizations {
   /// No description provided for @selectRegions.
   ///
   /// In en, this message translates to:
-  /// **'Select regions'**
+  /// **'Select Regions'**
   String get selectRegions;
 
   /// No description provided for @selectAtLeast2Regions.
@@ -1853,8 +1853,8 @@ abstract class AppLocalizations {
   /// No description provided for @languagesUsed.
   ///
   /// In en, this message translates to:
-  /// **'Languages Used'**
-  String get languagesUsed;
+  /// **'Languages used: {languages}'**
+  String languagesUsed(Object languages);
 
   /// No description provided for @countriesWithActivity.
   ///
@@ -1991,7 +1991,7 @@ abstract class AppLocalizations {
   /// No description provided for @regionalDistribution.
   ///
   /// In en, this message translates to:
-  /// **'Regional Distribution'**
+  /// **'Regional distribution:'**
   String get regionalDistribution;
 
   /// No description provided for @selectItemsToExport.
@@ -2213,8 +2213,590 @@ abstract class AppLocalizations {
   /// No description provided for @hours.
   ///
   /// In en, this message translates to:
-  /// **'hours'**
+  /// **'Hours'**
   String get hours;
+
+  /// No description provided for @dashboardComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete Dashboard'**
+  String get dashboardComplete;
+
+  /// No description provided for @generalSummaryMetrics.
+  ///
+  /// In en, this message translates to:
+  /// **'General summary and basic metrics'**
+  String get generalSummaryMetrics;
+
+  /// No description provided for @regionalDataComparisons.
+  ///
+  /// In en, this message translates to:
+  /// **'Regional data and comparisons'**
+  String get regionalDataComparisons;
+
+  /// No description provided for @noBasicDashboardDataAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No basic dashboard data available'**
+  String get noBasicDashboardDataAvailable;
+
+  /// No description provided for @noRegionalDataAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No regional data available - The regions list is empty'**
+  String get noRegionalDataAvailable;
+
+  /// No description provided for @needAtLeast2RegionsCompare.
+  ///
+  /// In en, this message translates to:
+  /// **'At least 2 regions needed to compare'**
+  String get needAtLeast2RegionsCompare;
+
+  /// No description provided for @updateDataTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Update data'**
+  String get updateDataTooltip;
+
+  /// No description provided for @myReports.
+  ///
+  /// In en, this message translates to:
+  /// **'My Reports'**
+  String get myReports;
+
+  /// No description provided for @teamReports.
+  ///
+  /// In en, this message translates to:
+  /// **'Team Reports'**
+  String get teamReports;
+
+  /// No description provided for @userRole.
+  ///
+  /// In en, this message translates to:
+  /// **'User'**
+  String get userRole;
+
+  /// No description provided for @meLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Me'**
+  String get meLabel;
+
+  /// No description provided for @teamLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Team'**
+  String get teamLabel;
+
+  /// No description provided for @errorLoadingReports.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading reports: {error}'**
+  String errorLoadingReports(Object error);
+
+  /// No description provided for @dashboardReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard Report'**
+  String get dashboardReport;
+
+  /// No description provided for @basicDashboardReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Basic Dashboard Report'**
+  String get basicDashboardReport;
+
+  /// No description provided for @generated.
+  ///
+  /// In en, this message translates to:
+  /// **'Generated'**
+  String get generated;
+
+  /// No description provided for @user.
+  ///
+  /// In en, this message translates to:
+  /// **'User'**
+  String get user;
+
+  /// No description provided for @role.
+  ///
+  /// In en, this message translates to:
+  /// **'Role'**
+  String get role;
+
+  /// No description provided for @unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get unknown;
+
+  /// No description provided for @dashboardMetrics.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard Metrics'**
+  String get dashboardMetrics;
+
+  /// No description provided for @teamCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Team Count'**
+  String get teamCount;
+
+  /// No description provided for @meCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Me Count'**
+  String get meCount;
+
+  /// No description provided for @dailyComparison.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Comparison'**
+  String get dailyComparison;
+
+  /// No description provided for @day.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get day;
+
+  /// No description provided for @myCount.
+  ///
+  /// In en, this message translates to:
+  /// **'My Count'**
+  String get myCount;
+
+  /// No description provided for @myTrend.
+  ///
+  /// In en, this message translates to:
+  /// **'My Trend'**
+  String get myTrend;
+
+  /// No description provided for @count.
+  ///
+  /// In en, this message translates to:
+  /// **'Count'**
+  String get count;
+
+  /// No description provided for @regionalDashboardReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Regional Dashboard Report'**
+  String get regionalDashboardReport;
+
+  /// No description provided for @regionalSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Regional Summary'**
+  String get regionalSummary;
+
+  /// No description provided for @country.
+  ///
+  /// In en, this message translates to:
+  /// **'Country'**
+  String get country;
+
+  /// No description provided for @percentage.
+  ///
+  /// In en, this message translates to:
+  /// **'Percentage'**
+  String get percentage;
+
+  /// No description provided for @topLanguages.
+  ///
+  /// In en, this message translates to:
+  /// **'Top Languages'**
+  String get topLanguages;
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// No description provided for @dashboardMetricsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'DASHBOARD METRICS:'**
+  String get dashboardMetricsTitle;
+
+  /// No description provided for @myTrendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'MY TREND:'**
+  String get myTrendTitle;
+
+  /// No description provided for @topCountriesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'TOP COUNTRIES:'**
+  String get topCountriesTitle;
+
+  /// No description provided for @topLanguagesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'TOP LANGUAGES:'**
+  String get topLanguagesTitle;
+
+  /// No description provided for @regionalComparison.
+  ///
+  /// In en, this message translates to:
+  /// **'Regional Comparison'**
+  String get regionalComparison;
+
+  /// No description provided for @errorComparingRegions.
+  ///
+  /// In en, this message translates to:
+  /// **'Error comparing regions: {error}'**
+  String errorComparingRegions(Object error);
+
+  /// No description provided for @regionalComparisonReportSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Regional Comparison Report'**
+  String get regionalComparisonReportSubject;
+
+  /// No description provided for @selectedRegions.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected Regions ({count}/10)'**
+  String selectedRegions(Object count);
+
+  /// No description provided for @selectAtLeast2RegionsToCompare.
+  ///
+  /// In en, this message translates to:
+  /// **'Select at least 2 regions to compare'**
+  String get selectAtLeast2RegionsToCompare;
+
+  /// No description provided for @regions.
+  ///
+  /// In en, this message translates to:
+  /// **'Regions'**
+  String get regions;
+
+  /// No description provided for @totalHoursComparison.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Hours Comparison'**
+  String get totalHoursComparison;
+
+  /// No description provided for @region.
+  ///
+  /// In en, this message translates to:
+  /// **'Region'**
+  String get region;
+
+  /// No description provided for @entries.
+  ///
+  /// In en, this message translates to:
+  /// **'Entries'**
+  String get entries;
+
+  /// No description provided for @users.
+  ///
+  /// In en, this message translates to:
+  /// **'Users'**
+  String get users;
+
+  /// No description provided for @hrsPerUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Hrs/User'**
+  String get hrsPerUser;
+
+  /// No description provided for @topCountry.
+  ///
+  /// In en, this message translates to:
+  /// **'Top Country'**
+  String get topCountry;
+
+  /// No description provided for @topLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Top Language'**
+  String get topLanguage;
+
+  /// No description provided for @selectRegionsDialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Regions'**
+  String get selectRegionsDialog;
+
+  /// No description provided for @selectBetween2And10Regions.
+  ///
+  /// In en, this message translates to:
+  /// **'Select between 2 and 10 regions ({count} selected)'**
+  String selectBetween2And10Regions(Object count);
+
+  /// No description provided for @countryBreakdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Country Breakdown'**
+  String get countryBreakdown;
+
+  /// No description provided for @errorLoadingData.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading data: {error}'**
+  String errorLoadingData(Object error);
+
+  /// No description provided for @countryBreakdownReportSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Country Breakdown Report'**
+  String get countryBreakdownReportSubject;
+
+  /// No description provided for @activeFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Filters'**
+  String get activeFilters;
+
+  /// No description provided for @selectedRegion.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected region'**
+  String get selectedRegion;
+
+  /// No description provided for @countries.
+  ///
+  /// In en, this message translates to:
+  /// **'Countries: {countries}'**
+  String countries(Object countries);
+
+  /// No description provided for @generalSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'General Summary'**
+  String get generalSummary;
+
+  /// No description provided for @countryDistribution.
+  ///
+  /// In en, this message translates to:
+  /// **'Country Distribution (Top 10)'**
+  String get countryDistribution;
+
+  /// No description provided for @countryDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Country Details ({count})'**
+  String countryDetails(Object count);
+
+  /// No description provided for @averageHrsPerUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Average hrs/user'**
+  String get averageHrsPerUser;
+
+  /// No description provided for @averageEntriesPerUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Average entries/user'**
+  String get averageEntriesPerUser;
+
+  /// No description provided for @averageHoursPerCountry.
+  ///
+  /// In en, this message translates to:
+  /// **'Average Hours/Country'**
+  String get averageHoursPerCountry;
+
+  /// No description provided for @activeCountries.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Countries'**
+  String get activeCountries;
+
+  /// No description provided for @from.
+  ///
+  /// In en, this message translates to:
+  /// **'From: {date}'**
+  String from(Object date);
+
+  /// No description provided for @to.
+  ///
+  /// In en, this message translates to:
+  /// **'To: {date}'**
+  String to(Object date);
+
+  /// No description provided for @languageDistribution.
+  ///
+  /// In en, this message translates to:
+  /// **'Language Distribution'**
+  String get languageDistribution;
+
+  /// No description provided for @errorLoadingLanguageData.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading data: {error}'**
+  String errorLoadingLanguageData(Object error);
+
+  /// No description provided for @languageDistributionReportSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Language Distribution Report'**
+  String get languageDistributionReportSubject;
+
+  /// No description provided for @languages.
+  ///
+  /// In en, this message translates to:
+  /// **'Languages: {languages}'**
+  String languages(Object languages);
+
+  /// No description provided for @hoursPerLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours per Language'**
+  String get hoursPerLanguage;
+
+  /// No description provided for @languageDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Language Details ({count})'**
+  String languageDetails(Object count);
+
+  /// No description provided for @countriesWhereUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Countries where used: {countries}'**
+  String countriesWhereUsed(Object countries);
+
+  /// No description provided for @regionalLanguageDistribution.
+  ///
+  /// In en, this message translates to:
+  /// **'Regional Language Distribution (Top 5)'**
+  String get regionalLanguageDistribution;
+
+  /// No description provided for @averageHoursPerLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Average Hours/Language'**
+  String get averageHoursPerLanguage;
+
+  /// No description provided for @activeLanguages.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Languages'**
+  String get activeLanguages;
+
+  /// No description provided for @countryFiltered.
+  ///
+  /// In en, this message translates to:
+  /// **'Country filtered: {country}'**
+  String countryFiltered(Object country);
+
+  /// No description provided for @regionalSummaryReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Regional Summary Report'**
+  String get regionalSummaryReport;
+
+  /// No description provided for @regionalComparisonReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Regional Comparison Report'**
+  String get regionalComparisonReport;
+
+  /// No description provided for @countryBreakdownReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Country Breakdown Report'**
+  String get countryBreakdownReport;
+
+  /// No description provided for @languageDistributionReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Language Distribution Report'**
+  String get languageDistributionReport;
+
+  /// No description provided for @topCountriesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Top Countries'**
+  String get topCountriesLabel;
+
+  /// No description provided for @languageBreakdownLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Language Breakdown'**
+  String get languageBreakdownLabel;
+
+  /// No description provided for @countryDetailsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Country Details'**
+  String get countryDetailsLabel;
+
+  /// No description provided for @languageDetailsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Language Details'**
+  String get languageDetailsLabel;
+
+  /// No description provided for @regionalDataLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Regional Data'**
+  String get regionalDataLabel;
+
+  /// No description provided for @rank.
+  ///
+  /// In en, this message translates to:
+  /// **'Rank'**
+  String get rank;
+
+  /// No description provided for @avgHoursPerUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg Hours/User'**
+  String get avgHoursPerUser;
+
+  /// No description provided for @avgEntriesPerUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg Entries/User'**
+  String get avgEntriesPerUser;
+
+  /// No description provided for @languageColumn.
+  ///
+  /// In en, this message translates to:
+  /// **'Languages'**
+  String get languageColumn;
+
+  /// No description provided for @countryColumn.
+  ///
+  /// In en, this message translates to:
+  /// **'Countries'**
+  String get countryColumn;
+
+  /// No description provided for @averageHoursPerRegion.
+  ///
+  /// In en, this message translates to:
+  /// **'Average Hours per Region'**
+  String get averageHoursPerRegion;
+
+  /// No description provided for @generalSummaryAndMetrics.
+  ///
+  /// In en, this message translates to:
+  /// **'General summary and basic metrics'**
+  String get generalSummaryAndMetrics;
+
+  /// No description provided for @regionalDataAndComparisons.
+  ///
+  /// In en, this message translates to:
+  /// **'Regional data and comparisons'**
+  String get regionalDataAndComparisons;
+
+  /// No description provided for @noRegionalDataAvailableMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No regional data available'**
+  String get noRegionalDataAvailableMessage;
+
+  /// No description provided for @atLeast2RegionsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'At least 2 regions required for comparison'**
+  String get atLeast2RegionsRequired;
 }
 
 class _AppLocalizationsDelegate
