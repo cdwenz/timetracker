@@ -764,6 +764,9 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get period => 'Período';
+
+  @override
   String get noReportsInPeriod => 'Nenhum relatório no período';
 
   @override
@@ -949,6 +952,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get performanceHighlights => 'Destaques de Desempenho';
+
+  @override
+  String get mainMetrics => 'Principais métricas';
 
   @override
   String get mostUsed => 'Mais Usado';
@@ -1262,6 +1268,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get regionalDashboardReport => 'Relatório de Dashboard Regional';
+
+  @override
+  String get summary => 'Resumo';
 
   @override
   String get regionalSummary => 'Resumo Regional';

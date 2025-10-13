@@ -370,6 +370,7 @@
   "dailyComparisonTitle": "Daily comparison",
   "myEvolutionTitle": "Evolution (Me)",
   "errorLabel": "Error: {error}",
+  "period": "Períod",
   "@errorLabel": {
     "description": "Generic error label",
     "placeholders": {
@@ -494,6 +495,7 @@
   "comparisonSummary": "Comparison Summary",
   "detailedMetrics": "Detailed Metrics",
   "performanceHighlights": "Performance Highlights",
+  "mainMetrics": "Main Metrics",
   
   "mostUsed": "Most Used",
   "leastUsed": "Least Used",
@@ -630,6 +632,7 @@
   "myTrend": "My Trend",
   "count": "Count",
   "regionalDashboardReport": "Regional Dashboard Report",
+  "summary": "Summary",
   "regionalSummary": "Regional Summary",
   "topCountries": "Top Countries",
   "country": "Country", 

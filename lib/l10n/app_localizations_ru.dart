@@ -767,6 +767,9 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get period => 'Период';
+
+  @override
   String get noReportsInPeriod => 'Нет отчётов за период';
 
   @override
@@ -953,6 +956,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get performanceHighlights => 'Основные Показатели';
+
+  @override
+  String get mainMetrics => 'PОсновные показатели';
 
   @override
   String get mostUsed => 'Наиболее Используемый';
@@ -1262,6 +1268,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get regionalDashboardReport => 'Отчёт Региональной Панели';
+
+  @override
+  String get summary => 'Резюме';
 
   @override
   String get regionalSummary => 'Региональная Сводка';

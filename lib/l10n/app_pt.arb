@@ -253,6 +253,7 @@
   "dailyComparisonTitle": "Comparação diária",
   "myEvolutionTitle": "Evolução (Eu)",
   "errorLabel": "Erro: {error}",
+  "period": "Período",
   "noReportsInPeriod": "Nenhum relatório no período",
   "reportIdLabel": "Relatório {id}…",
   "reportDateUserLabel": "Data: {date} • Usuário: {userId}…",
@@ -316,6 +317,7 @@
   "comparisonSummary": "Resumo da Comparação",
   "detailedMetrics": "Métricas Detalhadas",
   "performanceHighlights": "Destaques de Desempenho",
+  "mainMetrics": "Principais métricas",
   
   "mostUsed": "Mais Usado",
   "leastUsed": "Menos Usado",
@@ -422,6 +424,7 @@
   "myTrend": "Minha Tendência",
   "count": "Contador",
   "regionalDashboardReport": "Relatório de Dashboard Regional",
+  "summary": "Resumo",
   "regionalSummary": "Resumo Regional",
   "topCountries": "Principais Países",
   "country": "País",

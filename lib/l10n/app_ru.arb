@@ -253,6 +253,7 @@
   "dailyComparisonTitle": "Ежедневное сравнение",
   "myEvolutionTitle": "Эволюция (Я)",
   "errorLabel": "Ошибка: {error}",
+  "period": "Период",
   "noReportsInPeriod": "Нет отчётов за период",
   "reportIdLabel": "Отчёт {id}…",
   "reportDateUserLabel": "Дата: {date} • Пользователь: {userId}…",
@@ -316,6 +317,7 @@
   "comparisonSummary": "Сводка сравнения",
   "detailedMetrics": "Подробные метрики",
   "performanceHighlights": "Основные показатели",
+  "mainMetrics": "PОсновные показатели",
   
   "mostUsed": "Наиболее используемый",
   "leastUsed": "Наименее используемый",
@@ -422,6 +424,7 @@
   "myTrend": "Моя Тенденция",
   "count": "Счётчик",
   "regionalDashboardReport": "Отчёт Региональной Панели",
+  "summary": "Резюме",
   "regionalSummary": "Региональная Сводка",
   "topCountries": "Топ Страны",
   "country": "Страна",

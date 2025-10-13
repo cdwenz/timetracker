@@ -770,6 +770,9 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get period => 'Période';
+
+  @override
   String get noReportsInPeriod => 'Aucun rapport dans la période';
 
   @override
@@ -957,6 +960,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get performanceHighlights => 'Faits Saillants de Performance';
+
+  @override
+  String get mainMetrics => 'Principaux indicateurs';
 
   @override
   String get mostUsed => 'Plus Utilisé';
@@ -1271,6 +1277,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get regionalDashboardReport => 'Rapport de Tableau de Bord Régional';
+
+  @override
+  String get summary => 'Résumé';
 
   @override
   String get regionalSummary => 'Résumé Régional';

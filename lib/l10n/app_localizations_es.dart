@@ -766,6 +766,9 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get period => 'Período';
+
+  @override
   String get noReportsInPeriod => 'Sin reportes en el período';
 
   @override
@@ -942,7 +945,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get languageBreakdown => 'Distribución de Idiomas';
 
   @override
-  String get performanceMetrics => 'Métricas de Rendimiento';
+  String get performanceMetrics => 'Indicadores de Rendimiento';
 
   @override
   String get comparisonSummary => 'Resumen de Comparación';
@@ -952,6 +955,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get performanceHighlights => 'Destacados de Rendimiento';
+
+  @override
+  String get mainMetrics => 'Métricas Principales';
 
   @override
   String get mostUsed => 'Más Usado';
@@ -1265,6 +1271,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get regionalDashboardReport => 'Reporte de Dashboard Regional';
+
+  @override
+  String get summary => 'Resumen';
 
   @override
   String get regionalSummary => 'Resumen Regional';

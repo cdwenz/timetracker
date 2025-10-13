@@ -187,7 +187,7 @@ class _RegionalSummaryScreenState extends State<RegionalSummaryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Resumen: ${widget.regionName}'),
+        title: Text('${AppLocalizations.of(context).summary}: ${widget.regionName}'),
         backgroundColor: Colors.blue.shade700,
         foregroundColor: Colors.white,
         actions: [
@@ -289,7 +289,7 @@ class _RegionalSummaryScreenState extends State<RegionalSummaryScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Métricas Principales',
+              AppLocalizations.of(context).mainMetrics,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -300,7 +300,7 @@ class _RegionalSummaryScreenState extends State<RegionalSummaryScreen> {
               children: [
                 Expanded(
                   child: _buildMetricCard(
-                    'Total Horas',
+                    AppLocalizations.of(context).totalHours,
                     _summary!.totalHours.toStringAsFixed(1),
                     Icons.access_time,
                     Colors.blue,
@@ -309,7 +309,7 @@ class _RegionalSummaryScreenState extends State<RegionalSummaryScreen> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: _buildMetricCard(
-                    'Entradas',
+                    AppLocalizations.of(context).entries,
                     _summary!.totalEntries.toString(),
                     Icons.list_alt,
                     Colors.green,
@@ -318,7 +318,7 @@ class _RegionalSummaryScreenState extends State<RegionalSummaryScreen> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: _buildMetricCard(
-                    'Usuarios Activos',
+                    AppLocalizations.of(context).activeUsers,
                     _summary!.activeUsers.toString(),
                     Icons.people,
                     Colors.orange,
@@ -330,7 +330,7 @@ class _RegionalSummaryScreenState extends State<RegionalSummaryScreen> {
             const SizedBox(height: 16),
             
             Text(
-              'Período: ${_formatDate(_summary!.dateRange.startDate)} - ${_formatDate(_summary!.dateRange.endDate)}',
+              '${AppLocalizations.of(context).period}: ${_formatDate(_summary!.dateRange.startDate)} - ${_formatDate(_summary!.dateRange.endDate)}',
               style: const TextStyle(
                 fontSize: 14,
                 color: Colors.grey,
@@ -352,7 +352,7 @@ class _RegionalSummaryScreenState extends State<RegionalSummaryScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Indicadores de Rendimiento',
+              AppLocalizations.of(context).performanceMetrics,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -399,7 +399,7 @@ class _RegionalSummaryScreenState extends State<RegionalSummaryScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Países Principales',
+              AppLocalizations.of(context).topCountries,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -474,7 +474,7 @@ class _RegionalSummaryScreenState extends State<RegionalSummaryScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Distribución de Idiomas',
+              AppLocalizations.of(context).languageDistributionTitle,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -541,7 +541,7 @@ class _RegionalSummaryScreenState extends State<RegionalSummaryScreen> {
                   children: [
                     Text(language.language),
                     Text(
-                      '${language.totalHours.toStringAsFixed(1)}h (${language.totalEntries} entradas)',
+                      '${language.totalHours.toStringAsFixed(1)}h (${language.totalEntries} ${AppLocalizations.of(context).entries})',
                       style: const TextStyle(fontWeight: FontWeight.w500),
                     ),
                   ],

@@ -1466,6 +1466,12 @@ abstract class AppLocalizations {
   /// **'Error: {error}'**
   String errorLabel(String error);
 
+  /// No description provided for @period.
+  ///
+  /// In en, this message translates to:
+  /// **'Períod'**
+  String get period;
+
   /// No description provided for @noReportsInPeriod.
   ///
   /// In en, this message translates to:
@@ -1801,6 +1807,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Performance Highlights'**
   String get performanceHighlights;
+
+  /// No description provided for @mainMetrics.
+  ///
+  /// In en, this message translates to:
+  /// **'Main Metrics'**
+  String get mainMetrics;
 
   /// No description provided for @mostUsed.
   ///
@@ -2383,6 +2395,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Regional Dashboard Report'**
   String get regionalDashboardReport;
+
+  /// No description provided for @summary.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary'**
+  String get summary;
 
   /// No description provided for @regionalSummary.
   ///
