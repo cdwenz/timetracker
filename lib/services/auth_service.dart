@@ -7,7 +7,7 @@ class AuthService {
   // Configuración para diferentes plataformas
   static String get baseUrl {
     // Usando la IP local real para que funcione en emuladores y dispositivos físicos
-    return 'http://localhost:8000/api';
+    return 'http://192.168.0.109:8000/api';
 
     // Alternativas comentadas:
     // Para emulador Android (no funciona si backend está en localhost):

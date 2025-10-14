@@ -54,7 +54,7 @@ class _RegionalSummaryScreenState extends State<RegionalSummaryScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error cargando resumen: $e'),
+            content: Text(AppLocalizations.of(context).errorLoadingSummary(e.toString())),
             backgroundColor: Colors.red,
           ),
         );
@@ -218,10 +218,10 @@ class _RegionalSummaryScreenState extends State<RegionalSummaryScreen> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _summary == null
-              ? const Center(
+              ? Center(
                   child: Text(
-                    'No hay datos disponibles para esta región',
-                    style: TextStyle(fontSize: 16),
+                    AppLocalizations.of(context).noDataAvailableForRegion,
+                    style: const TextStyle(fontSize: 16),
                   ),
                 )
               : SingleChildScrollView(
@@ -264,17 +264,17 @@ class _RegionalSummaryScreenState extends State<RegionalSummaryScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Filtros Activos',
-              style: TextStyle(fontWeight: FontWeight.bold),
+            Text(
+              AppLocalizations.of(context).activeFilters,
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             if (_startDate != null && _endDate != null)
               Text('📅 ${_formatDate(_startDate!)} - ${_formatDate(_endDate!)}'),
             if (_selectedCountries.isNotEmpty)
-              Text('🌍 Países: ${_selectedCountries.join(", ")}'),
+              Text('🌍 ${AppLocalizations.of(context).countriesFilter(_selectedCountries.join(", "))}'),
             if (_selectedLanguages.isNotEmpty)
-              Text('🗣️ Idiomas: ${_selectedLanguages.join(", ")}'),
+              Text('🗣️ ${AppLocalizations.of(context).languagesFilter(_selectedLanguages.join(", "))}'),
           ],
         ),
       ),
@@ -367,12 +367,12 @@ class _RegionalSummaryScreenState extends State<RegionalSummaryScreen> {
                   children: [
                     Expanded(
                       child: Text(
-                        kpi.metric,
+                        _translateMetric(kpi.metric),
                         style: const TextStyle(fontSize: 14),
                       ),
                     ),
                     Text(
-                      '${kpi.value.toStringAsFixed(1)} ${kpi.unit}',
+                      '${kpi.value.toStringAsFixed(1)} ${_translateUnit(kpi.unit)}',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -595,6 +595,113 @@ class _RegionalSummaryScreenState extends State<RegionalSummaryScreen> {
       Colors.indigo,
     ];
     return colors[index % colors.length];
+  }
+
+  String _translateMetric(String metric) {
+    final l10n = AppLocalizations.of(context);
+    
+    final normalizedMetric = metric.trim().toLowerCase();
+    
+    switch (normalizedMetric) {
+      case 'total hours':
+        return l10n.metricTotalHours;
+      case 'total entries':
+        return l10n.metricTotalEntries;
+      case 'active users':
+        return l10n.metricActiveUsers;
+      case 'average hours per user':
+        return l10n.metricAverageHoursPerUser;
+      case 'average entries per user':
+        return l10n.averageEntriesPerUser;
+      case 'average hours per entry':
+        return l10n.metricAverageHoursPerEntry;
+      case 'productivity score':
+        return l10n.metricProductivityScore;
+      case 'completion rate':
+        return l10n.metricCompletionRate;
+      case 'response time':
+        return l10n.metricResponseTime;
+      case 'quality score':
+        return l10n.metricQualityScore;
+      case 'efficiency rating':
+        return l10n.metricEfficiencyRating;
+      case 'weekly hours':
+        return l10n.metricWeeklyHours;
+      case 'monthly hours':
+        return l10n.metricMonthlyHours;
+      case 'peak hours':
+        return l10n.metricPeakHours;
+      case 'off-peak hours':
+        return l10n.metricOffPeakHours;
+      case 'team collaboration':
+        return l10n.metricTeamCollaboration;
+      case 'resource utilization':
+        return l10n.metricResourceUtilization;
+      case 'task completion':
+        return l10n.metricTaskCompletion;
+      case 'performance index':
+        return l10n.metricPerformanceIndex;
+      case 'daily comparison':
+        return l10n.dailyComparisonTitle;
+      case 'daily productivity':
+        return l10n.dailyComparisonTitle;
+      case 'productivity daily':
+        return l10n.dailyComparisonTitle;
+      case 'promedio horas por usuario':
+        return l10n.averageHrsPerUser;
+      case 'promedio entradas por usuarios':
+        return l10n.averageEntriesPerUser;
+      case 'promedio entradas por usuario':
+        return l10n.averageEntriesPerUser;
+      case 'promedio de entradas por usuario':
+        return l10n.averageEntriesPerUser;
+      case 'promedio de entradas por usuarios':
+        return l10n.averageEntriesPerUser;
+      case 'average entries per user':
+        return l10n.averageEntriesPerUser;
+      case 'promedio registros por usuario':
+        return l10n.averageEntriesPerUser;
+      case 'entries per user':
+        return l10n.averageEntriesPerUser;
+      case 'entradas por usuario':
+        return l10n.averageEntriesPerUser;
+      case 'productividad diaria':
+        return l10n.dailyComparisonTitle;
+      default:
+        return metric;
+    }
+  }
+
+  String _translateUnit(String unit) {
+    final l10n = AppLocalizations.of(context);
+    
+    final normalizedUnit = unit.trim().toLowerCase();
+    
+    switch (normalizedUnit) {
+      case 'horas':
+      case 'hours':
+        return l10n.hours;
+      case 'entradas':
+      case 'entries':
+        return l10n.entries;
+      case 'horas/dia':
+      case 'horas/día':
+      case 'hours/day':
+        return '${l10n.hours}/${l10n.day}';
+      case 'usuarios':
+      case 'users':
+        return l10n.users;
+      case 'días':
+      case 'dias':
+      case 'days':
+        return l10n.day;
+      case '%':
+      case 'percent':
+      case 'porcentaje':
+        return '%';
+      default:
+        return unit;
+    }
   }
 
   String _formatDate(DateTime date) {

@@ -6,7 +6,7 @@ import 'package:ihadi_time_tracker/models/tracking.dart';
 import '../models/regional_reports_models.dart';
 
 class ReportsService {
-  static const String baseUrl = 'http://localhost:8000/api';
+  static const String baseUrl = 'http://192.168.0.109:8000/api';
 
   // ==== Helpers de sesión ====
   static Future<String?> _getToken() async {

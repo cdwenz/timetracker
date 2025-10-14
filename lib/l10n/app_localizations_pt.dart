@@ -753,7 +753,7 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get dailyComparisonTitle => 'COMPARAÇÃO DIÁRIA:';
+  String get dailyComparisonTitle => 'Comparação diária';
 
   @override
   String get myEvolutionTitle => 'Evolução (Eu)';
@@ -888,7 +888,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get clearFilters => 'Limpar Filtros';
 
   @override
-  String get filterByRegion => 'Filtrar por Região';
+  String get filterByRegion => 'Filtrar por região';
 
   @override
   String get filterByDates => 'Filtrar por datas';
@@ -918,10 +918,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get activeUsers => 'Usuários Ativos';
 
   @override
-  String get totalLanguages => 'Total Idiomas';
+  String get totalLanguages => 'Total de Idiomas';
 
   @override
-  String get totalCountries => 'Total Países';
+  String get totalCountries => 'Total de Países';
 
   @override
   String get totalRegions => 'Regiões';
@@ -955,6 +955,82 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mainMetrics => 'Principais métricas';
+
+  @override
+  String get metricTotalHours => 'Horas Totais';
+
+  @override
+  String get metricTotalEntries => 'Entradas Totais';
+
+  @override
+  String get metricActiveUsers => 'Usuários Ativos';
+
+  @override
+  String get metricAverageHoursPerUser => 'Horas Médias por Usuário';
+
+  @override
+  String get metricAverageHoursPerEntry => 'Horas Médias por Entrada';
+
+  @override
+  String get metricProductivityScore => 'Pontuação de Produtividade';
+
+  @override
+  String get metricCompletionRate => 'Taxa de Conclusão';
+
+  @override
+  String get metricResponseTime => 'Tempo de Resposta';
+
+  @override
+  String get metricQualityScore => 'Pontuação de Qualidade';
+
+  @override
+  String get metricEfficiencyRating => 'Classificação de Eficiência';
+
+  @override
+  String get metricWeeklyHours => 'Horas Semanais';
+
+  @override
+  String get metricMonthlyHours => 'Horas Mensais';
+
+  @override
+  String get metricPeakHours => 'Horas de Pico';
+
+  @override
+  String get metricOffPeakHours => 'Horas Fora de Pico';
+
+  @override
+  String get metricTeamCollaboration => 'Colaboração da Equipe';
+
+  @override
+  String get metricResourceUtilization => 'Utilização de Recursos';
+
+  @override
+  String get metricTaskCompletion => 'Conclusão de Tarefas';
+
+  @override
+  String get metricPerformanceIndex => 'Índice de Desempenho';
+
+  @override
+  String errorLoadingSummary(String error) {
+    return 'Erro carregando resumo: $error';
+  }
+
+  @override
+  String get noDataAvailableForRegion =>
+      'Nenhum dado disponível para esta região';
+
+  @override
+  String get activeFilters => 'Filtros Ativos';
+
+  @override
+  String countriesFilter(String countries) {
+    return 'Países: $countries';
+  }
+
+  @override
+  String languagesFilter(String languages) {
+    return 'Idiomas: $languages';
+  }
 
   @override
   String get mostUsed => 'Mais Usado';
@@ -1010,7 +1086,7 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get allRegionsScope => 'Abrangência: Todas as regiões';
+  String get allRegionsScope => 'Alcance: Todas as regiões';
 
   @override
   String filteredCountry(String country) {
@@ -1060,7 +1136,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get statisticsInsights => 'Estatísticas e Insights';
 
   @override
-  String get regionalDistribution => 'Distribuição regional:';
+  String get regionalDistribution => 'Distribuição Regional';
 
   @override
   String get selectItemsToExport => 'Selecionar itens para exportar';
@@ -1194,8 +1270,7 @@ class AppLocalizationsPt extends AppLocalizations {
       'Nenhum dado de dashboard básico disponível';
 
   @override
-  String get noRegionalDataAvailable =>
-      'Nenhum dado regional disponível - A lista de regiões está vazia';
+  String get noRegionalDataAvailable => 'Nenhum dado regional disponível';
 
   @override
   String get needAtLeast2RegionsCompare =>
@@ -1208,7 +1283,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get myReports => 'Meus Relatórios';
 
   @override
-  String get teamReports => 'Relatórios da Equipe';
+  String get teamReports => 'Relatórios da Equipa';
 
   @override
   String get userRole => 'Usuário';
@@ -1221,7 +1296,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String errorLoadingReports(Object error) {
-    return 'Erro carregando relatórios: $error';
+    return 'Erro ao carregar relatórios: $error';
   }
 
   @override
@@ -1291,6 +1366,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dashboardMetricsTitle => 'MÉTRICAS DO DASHBOARD:';
 
   @override
+  String get dailyComparisonTitleHeader => 'COMPARAÇÃO DIÁRIA:';
+
+  @override
   String get myTrendTitle => 'MINHA TENDÊNCIA:';
 
   @override
@@ -1353,7 +1431,27 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get countryBreakdown => 'Detalhamento por País';
+  String get countryBreakdown => 'Divisão por Países';
+
+  @override
+  String get averageHrsPerUser => 'Média hrs/usuário';
+
+  @override
+  String get averageEntriesPerUser => 'Média entradas/usuário';
+
+  @override
+  String get generalSummaryAndMetrics => 'Resumo geral e métricas básicas';
+
+  @override
+  String get regionalDataAndComparisons => 'Dados regionais e comparações';
+
+  @override
+  String get atLeast2RegionsRequired =>
+      'Pelo menos 2 regiões necessárias para comparação';
+
+  @override
+  String get noRegionalDataAvailableMessage =>
+      'Nenhum dado regional disponível';
 
   @override
   String errorLoadingData(Object error) {
@@ -1361,11 +1459,7 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get countryBreakdownReportSubject =>
-      'Relatório de Detalhamento por País';
-
-  @override
-  String get activeFilters => 'Filtros Ativos';
+  String get countryBreakdownReportSubject => 'Relatório de Divisão por Países';
 
   @override
   String get selectedRegion => 'Região selecionada';
@@ -1387,12 +1481,6 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get averageHrsPerUser => 'Média hrs/usuário';
-
-  @override
-  String get averageEntriesPerUser => 'Média entradas/usuário';
-
-  @override
   String get averageHoursPerCountry => 'Média Horas/País';
 
   @override
@@ -1409,9 +1497,6 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get languageDistribution => 'Distribuição de Idiomas';
-
-  @override
   String errorLoadingLanguageData(Object error) {
     return 'Erro ao carregar dados: $error';
   }
@@ -1419,6 +1504,9 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get languageDistributionReportSubject =>
       'Relatório de Distribuição de Idiomas';
+
+  @override
+  String get languageDistribution => 'Distribuição de Idiomas';
 
   @override
   String languages(Object languages) {
@@ -1435,7 +1523,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String countriesWhereUsed(Object countries) {
-    return 'Países onde é usado: $countries';
+    return 'Países onde usado: $countries';
   }
 
   @override
@@ -1457,35 +1545,31 @@ class AppLocalizationsPt extends AppLocalizations {
   String get regionalSummaryReport => 'Relatório de Resumo Regional';
 
   @override
-  String get regionalComparisonReport => 'Relatório de Comparação Regional';
-
-  @override
-  String get countryBreakdownReport => 'Relatório de Detalhamento por País';
-
-  @override
-  String get languageDistributionReport =>
-      'Relatório de Distribuição de Idiomas';
-
-  @override
   String get topCountriesLabel => 'Principais Países';
 
   @override
-  String get languageBreakdownLabel => 'Detalhamento de Idiomas';
+  String get languageBreakdownLabel => 'Divisão de Idiomas';
 
   @override
-  String get countryDetailsLabel => 'Detalhes por Países';
+  String get regionalComparisonReport => 'Relatório de Comparação Regional';
 
   @override
-  String get languageDetailsLabel => 'Detalhes por Idiomas';
+  String get averageHoursPerRegion => 'Média de Horas por Região';
 
   @override
   String get regionalDataLabel => 'Dados Regionais';
 
   @override
-  String get rank => 'Posição';
+  String get avgHoursPerUser => 'Méd Horas/Usuário';
 
   @override
-  String get avgHoursPerUser => 'Méd Horas/Usuário';
+  String get countryBreakdownReport => 'Relatório de Divisão por Países';
+
+  @override
+  String get countryDetailsLabel => 'Detalhes por Países';
+
+  @override
+  String get rank => 'Posição';
 
   @override
   String get avgEntriesPerUser => 'Méd Entradas/Usuário';
@@ -1494,22 +1578,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get languageColumn => 'Idiomas';
 
   @override
+  String get languageDistributionReport =>
+      'Relatório de Distribuição de Idiomas';
+
+  @override
+  String get languageDetailsLabel => 'Detalhes por Idiomas';
+
+  @override
   String get countryColumn => 'Países';
-
-  @override
-  String get averageHoursPerRegion => 'Média de Horas por Região';
-
-  @override
-  String get generalSummaryAndMetrics => 'Resumo geral e métricas básicas';
-
-  @override
-  String get regionalDataAndComparisons => 'Dados regionais e comparações';
-
-  @override
-  String get noRegionalDataAvailableMessage =>
-      'Nenhum dado regional disponível';
-
-  @override
-  String get atLeast2RegionsRequired =>
-      'Pelo menos 2 regiões necessárias para comparar';
 }

@@ -75,20 +75,20 @@ class ReportsMetricsService {
       'page': page,
       'pageSize': pageSize,
       'returnMeta': false,  // Devolver array simple sin metadatos
-      if (userId != null && userId.isNotEmpty) 'createdBy': userId,  // Backend usa 'createdBy' no 'userId'
+      if (userId != null && userId.isNotEmpty) 'userId': userId,  // Backend filtra por userId
       if (supportedCountry != null && supportedCountry.isNotEmpty)
         'supportedCountry': supportedCountry,
       if (myTeam == true) 'myTeam': 'true', // Nuevo filtro de equipo
     };
 
-    // print("🔍 FETCHING ENTRIES:");
-    // print("   Query: $query");
+    print("🔍 FETCHING ENTRIES:");
+    print("   Query: $query");
 
     final json = await ApiService.getRequest('/time-tracker', query: query);
 
-    // print("📥 API RESPONSE:");
-    // print("   Type: ${json.runtimeType}");
-    // print("   Content: $json");
+    print("📥 API RESPONSE:");
+    print("   Type: ${json.runtimeType}");
+    print("   Content: $json");
 
     // Tolerante a { data, result, results, items, entries, timeEntries } o List
     if (json is Map<String, dynamic>) {
@@ -111,7 +111,7 @@ class ReportsMetricsService {
     }
     if (json is List) {
       final result = json.cast<Map<String, dynamic>>();
-      // print("✅ PARSED AS LIST: ${result.length} items");
+      print("✅ PARSED AS LIST: ${result.length} items");
       if (result.isNotEmpty) {
         print("   First item keys: ${result.first.keys.toList()}");
       }
@@ -124,6 +124,7 @@ class ReportsMetricsService {
 
   Map<String, int> _countByDay(List<Map<String, dynamic>> list) {
     final map = <String, int>{};
+    print("🗓️ COUNTING BY DAY: ${list.length} entries");
     for (final e in list) {
       // Campos de fecha del backend NestJS: startDate, createdAt, updatedAt
       final raw = (e['startDate'] ?? e['createdAt'] ?? e['updatedAt'] ?? e['date'] ?? '').toString();
@@ -132,7 +133,9 @@ class ReportsMetricsService {
       if (dt == null) continue;
       final k = _isoDateOnly(dt);
       map[k] = (map[k] ?? 0) + 1;
+      print("   Entry: $k -> ${map[k]}");
     }
+    print("   Final counts: $map");
     return map;
   }
 
@@ -207,12 +210,13 @@ class ReportsMetricsService {
     final from = range.from;
     final to = range.to;
 
-    // print("📊 DASHBOARD DATA (REAL BACKEND CALLS):");
-    // print("   Current user ID: $uid");
-    // print("   Current user role: $userRole");
+    print("📊 DASHBOARD DATA (REAL BACKEND CALLS):");
+    print("   Current user ID: $uid");
+    print("   Current user role: $userRole");
 
     // Obtener MIS datos (llamada sin myTeam)
     final mine = await _fetchEntries(
+      userId: uid, // FILTRAR POR MI USUARIO
       fromDate: from,
       toDate: to,
       supportedCountry: supportedCountry,
@@ -221,6 +225,7 @@ class ReportsMetricsService {
     
     // Obtener datos del EQUIPO (llamada con myTeam=true)
     final team = await _fetchEntries(
+      userId: userRole == 'ADMIN' ? null : uid, // ADMIN ve todos, otros solo equipo
       fromDate: from,
       toDate: to,
       supportedCountry: supportedCountry,
@@ -286,6 +291,7 @@ class ReportsMetricsService {
       case ReportsDetailFilter.team:
         // Datos del equipo - llamada con myTeam=true
         final teamEntries = await _fetchEntries(
+          userId: userRole == 'ADMIN' ? null : uid, // ADMIN ve todos
           fromDate: from,
           toDate: to,
           supportedCountry: supportedCountry,
@@ -299,6 +305,7 @@ class ReportsMetricsService {
       case ReportsDetailFilter.trend:
         // Solo mis datos - llamada sin myTeam
         final myEntries = await _fetchEntries(
+          userId: uid, // FILTRAR POR MI USUARIO
           fromDate: from,
           toDate: to,
           supportedCountry: supportedCountry,
