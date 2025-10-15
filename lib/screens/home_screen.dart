@@ -45,7 +45,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void _loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _username = prefs.getString('name') ?? AppLocalizations.of(context).defaultUserName;
+      _username = prefs.getString('name') ??
+          AppLocalizations.of(context).defaultUserName;
       _role = prefs.getString('role') ?? AppLocalizations.of(context).guestRole;
     });
   }
@@ -57,9 +58,9 @@ class _HomeScreenState extends State<HomeScreen> {
       drawerEnableOpenDragGesture: true,
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).dashboardTitle),
-        actions: [
-          const OfflineStatusWidget(compact: true),
-          const SizedBox(width: 16),
+        actions: const [
+          OfflineStatusWidget(compact: true),
+          SizedBox(width: 16),
         ],
       ),
       body: SafeArea(
@@ -67,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             // Widget de notificación de sincronización
             _buildSyncNotification(),
-            
+
             Expanded(
               child: LayoutBuilder(
                 builder: (context, constraints) {
@@ -85,29 +86,32 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisSpacing: 16,
                     childAspectRatio: 1.35,
                     children: [
-                _DashboardTile(
-                  title: AppLocalizations.of(context).trackingTileTitle,
-                  subtitle: AppLocalizations.of(context).trackingTileSubtitle,
-                  icon: Icons.timer_outlined,
-                  onTap: () =>
-                      _go(context, const StepOneScreen(), replace: true),
-                ),
-                _DashboardTile(
-                  title: AppLocalizations.of(context).reportsTileTitle,
-                  subtitle: AppLocalizations.of(context).reportsTileSubtitle,
-                  icon: Icons.bar_chart_rounded,
-                  onTap: () =>
-                      _go(context, const ReportsScreen(), replace: true),
-                ),
-                _DashboardTile(
-                  title: AppLocalizations.of(context).accountTileTitle,
-                  subtitle: AppLocalizations.of(context).accountTileSubtitle,
-                  icon: Icons.person_rounded,
-                  onTap: () =>
-                      _go(context, const AccountScreen(), replace: true),
-                ),
-              ],
-            );
+                      _DashboardTile(
+                        title: AppLocalizations.of(context).trackingTileTitle,
+                        subtitle:
+                            AppLocalizations.of(context).trackingTileSubtitle,
+                        icon: Icons.timer_outlined,
+                        onTap: () =>
+                            _go(context, const StepOneScreen(), replace: true),
+                      ),
+                      _DashboardTile(
+                        title: AppLocalizations.of(context).reportsTileTitle,
+                        subtitle:
+                            AppLocalizations.of(context).reportsTileSubtitle,
+                        icon: Icons.bar_chart_rounded,
+                        onTap: () =>
+                            _go(context, const ReportsScreen(), replace: true),
+                      ),
+                      _DashboardTile(
+                        title: AppLocalizations.of(context).accountTileTitle,
+                        subtitle:
+                            AppLocalizations.of(context).accountTileSubtitle,
+                        icon: Icons.person_rounded,
+                        onTap: () =>
+                            _go(context, const AccountScreen(), replace: true),
+                      ),
+                    ],
+                  );
                 },
               ),
             ),
@@ -117,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  /// Construir notificación unificada de sincronización  
+  /// Construir notificación unificada de sincronización
   Widget _buildSyncNotification() {
     return Consumer2<SyncService, ConnectivityService>(
       builder: (context, syncService, connectivityService, child) {
@@ -125,17 +129,18 @@ class _HomeScreenState extends State<HomeScreen> {
         final failedCount = syncService.failedSyncCount;
         final totalPending = pendingCount + failedCount;
         final isConnected = connectivityService.isConnected;
-        
+
         // Caso 1: Sin conexión - mostrar estado offline
         if (!isConnected) {
           return _buildOfflineStatus(connectivityService);
         }
-        
+
         // Caso 2: Conectado con registros pendientes
         if (isConnected && totalPending > 0) {
-          return _buildSyncNotificationWithTokenCheck(syncService, pendingCount, failedCount, totalPending);
+          return _buildSyncNotificationWithTokenCheck(
+              syncService, pendingCount, failedCount, totalPending);
         }
-        
+
         // Caso 3: Todo sincronizado - no mostrar nada
         return const SizedBox.shrink();
       },
@@ -143,17 +148,20 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   /// Verificar token antes de mostrar notificación de sincronización
-  Widget _buildSyncNotificationWithTokenCheck(SyncService syncService, int pendingCount, int failedCount, int totalPending) {
+  Widget _buildSyncNotificationWithTokenCheck(SyncService syncService,
+      int pendingCount, int failedCount, int totalPending) {
     return FutureBuilder<String?>(
-      future: SharedPreferences.getInstance().then((prefs) => prefs.getString('access_token')),
+      future: SharedPreferences.getInstance()
+          .then((prefs) => prefs.getString('access_token')),
       builder: (context, snapshot) {
         final hasToken = snapshot.data?.isNotEmpty ?? false;
-        
+
         if (!hasToken) {
           return _buildLoginRequiredNotification(totalPending);
         }
-        
-        return _buildPendingSyncNotification(syncService, pendingCount, failedCount);
+
+        return _buildPendingSyncNotification(
+            syncService, pendingCount, failedCount);
       },
     );
   }
@@ -237,7 +245,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      AppLocalizations.of(context).loginRequiredMessage(totalPending),
+                      AppLocalizations.of(context)
+                          .loginRequiredMessage(totalPending),
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey[700],
@@ -269,7 +278,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   /// Notificación de registros pendientes
-  Widget _buildPendingSyncNotification(SyncService syncService, int pendingCount, int failedCount) {
+  Widget _buildPendingSyncNotification(
+      SyncService syncService, int pendingCount, int failedCount) {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 16),
@@ -277,19 +287,19 @@ class _HomeScreenState extends State<HomeScreen> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            failedCount > 0 
-              ? Colors.red.withValues(alpha: 0.1)
-              : Colors.blue.withValues(alpha: 0.1),
-            failedCount > 0 
-              ? Colors.red.withValues(alpha: 0.05)
-              : Colors.blue.withValues(alpha: 0.05),
+            failedCount > 0
+                ? Colors.red.withValues(alpha: 0.1)
+                : Colors.blue.withValues(alpha: 0.1),
+            failedCount > 0
+                ? Colors.red.withValues(alpha: 0.05)
+                : Colors.blue.withValues(alpha: 0.05),
           ],
         ),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: failedCount > 0 
-            ? Colors.red.withValues(alpha: 0.3)
-            : Colors.blue.withValues(alpha: 0.3),
+          color: failedCount > 0
+              ? Colors.red.withValues(alpha: 0.3)
+              : Colors.blue.withValues(alpha: 0.3),
         ),
       ),
       child: Column(
@@ -307,9 +317,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      failedCount > 0 
-                        ? AppLocalizations.of(context).syncErrorTitle
-                        : AppLocalizations.of(context).pendingSyncTitle,
+                      failedCount > 0
+                          ? AppLocalizations.of(context).syncErrorTitle
+                          : AppLocalizations.of(context).pendingSyncTitle,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -319,8 +329,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 4),
                     Text(
                       failedCount > 0
-                        ? AppLocalizations.of(context).syncErrorMessage(failedCount, pendingCount)
-                        : AppLocalizations.of(context).pendingSyncMessage(pendingCount),
+                          ? AppLocalizations.of(context)
+                              .syncErrorMessage(failedCount, pendingCount)
+                          : AppLocalizations.of(context)
+                              .pendingSyncMessage(pendingCount),
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey[700],
@@ -336,22 +348,22 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Expanded(
                 child: ElevatedButton.icon(
-                  onPressed: syncService.status == SyncStatus.syncing 
-                    ? null 
-                    : () async {
-                        await syncService.forcSync();
-                      },
+                  onPressed: syncService.status == SyncStatus.syncing
+                      ? null
+                      : () async {
+                          await syncService.forcSync();
+                        },
                   icon: syncService.status == SyncStatus.syncing
-                    ? const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Icon(Icons.sync),
+                      ? const SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Icon(Icons.sync),
                   label: Text(
-                    syncService.status == SyncStatus.syncing 
-                      ? AppLocalizations.of(context).synchronizing
-                      : AppLocalizations.of(context).syncNowButton,
+                    syncService.status == SyncStatus.syncing
+                        ? AppLocalizations.of(context).synchronizing
+                        : AppLocalizations.of(context).syncNowButton,
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: failedCount > 0 ? Colors.red : Colors.blue,
@@ -388,9 +400,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(AppLocalizations.of(context).logoutDialogTitle),
-        content: Text(
-          AppLocalizations.of(context).logoutDialogMessage
-        ),
+        content: Text(AppLocalizations.of(context).logoutDialogMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
@@ -402,7 +412,8 @@ class _HomeScreenState extends State<HomeScreen> {
               await _logout();
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: Text(AppLocalizations.of(context).logoutDialogTitle, style: const TextStyle(color: Colors.white)),
+            child: Text(AppLocalizations.of(context).logoutDialogTitle,
+                style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -414,7 +425,7 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.clear();
-      
+
       if (mounted) {
         // Navegar a login screen - necesitarás importar la screen de login
         Navigator.of(context).pushReplacementNamed('/login');
@@ -422,7 +433,9 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context).logoutErrorMessage(e.toString()))),
+          SnackBar(
+              content: Text(AppLocalizations.of(context)
+                  .logoutErrorMessage(e.toString()))),
         );
       }
     }

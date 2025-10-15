@@ -9,7 +9,7 @@ import 'connectivity_service.dart';
 import 'sync_service.dart';
 
 class TimeTrackerService {
-  static const String baseUrl = 'http://192.168.0.109:8000/api';
+  static const String baseUrl = 'https://timetracker-nest-mvp-production.up.railway.app/api';
 
   static Future<bool> submitTimeTracker({
     required String supportedPerson,

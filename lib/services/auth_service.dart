@@ -7,14 +7,14 @@ class AuthService {
   // Configuración para diferentes plataformas
   static String get baseUrl {
     // Usando la IP local real para que funcione en emuladores y dispositivos físicos
-    return 'http://192.168.0.109:8000/api';
+    return 'https://timetracker-nest-mvp-production.up.railway.app/api';
 
     // Alternativas comentadas:
     // Para emulador Android (no funciona si backend está en localhost):
     // return 'http://10.0.2.2:8000/api';
 
     // Para desarrollo web:
-    // return 'http://localhost:8000/api';
+    // return 'https://timetracker-nest-mvp-production.up.railway.app/api';
   }
 
   static Future<bool> login(String email, String password) async {
