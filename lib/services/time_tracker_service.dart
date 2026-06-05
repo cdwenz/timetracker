@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,13 +26,8 @@ class TimeTrackerService {
     required String taskDescription,
   }) async {
     try {
-      // Verificar conectividad PRIMERO
-      final isConnected = await ConnectivityService.quickConnectivityCheck();
-      
-      if (isConnected) {
-        // CON INTERNET: Enviar directamente al servidor
-        print('📡 Enviando directamente al servidor (hay conexión)...');
-        
+      // En web: siempre envio directo. No hay BD local ni cola offline.
+      if (kIsWeb) {
         final result = await _submitDirectlyWithErrorHandling(
           supportedPerson: supportedPerson,
           supportedCountry: supportedCountry,
@@ -45,32 +41,48 @@ class TimeTrackerService {
           tasks: tasks,
           taskDescription: taskDescription,
         );
-        
+        return result['success'] == true;
+      }
+
+      // Verificar conectividad PRIMERO
+      final isConnected = await ConnectivityService.quickConnectivityCheck();
+
+      if (isConnected) {
+        // CON INTERNET: Enviar directamente al servidor
+        final result = await _submitDirectlyWithErrorHandling(
+          supportedPerson: supportedPerson,
+          supportedCountry: supportedCountry,
+          workingLanguage: workingLanguage,
+          startDate: startDate,
+          endDate: endDate,
+          recipient: recipient,
+          note: note,
+          startTimeOfDay: startTimeOfDay,
+          endTimeOfDay: endTimeOfDay,
+          tasks: tasks,
+          taskDescription: taskDescription,
+        );
+
         if (result['success'] == true) {
-          print('✅ Entry enviado exitosamente al servidor');
           return true;
         } else if (result['shouldSaveLocally'] == true) {
-          print('⚠️ Error de conectividad, guardando localmente...');
           return await _saveLocallyAsFallback(
             supportedPerson, supportedCountry, workingLanguage, startDate,
             endDate, recipient, note, startTimeOfDay, endTimeOfDay, tasks, taskDescription
           );
         } else {
-          print('❌ Error del servidor: ${result['error']}');
-          // TODO: Mostrar error al usuario en la UI
           throw Exception(result['error'] ?? 'Error desconocido del servidor');
         }
       } else {
         // SIN INTERNET: Guardar localmente para sincronizar después
-        print('📵 Sin conexión - Guardando localmente para sincronización posterior');
         return await _saveLocallyAsFallback(
           supportedPerson, supportedCountry, workingLanguage, startDate,
           endDate, recipient, note, startTimeOfDay, endTimeOfDay, tasks, taskDescription
         );
       }
-      
+
     } catch (e) {
-      print('❌ Error en submitTimeTracker: $e');
+      print('Error en submitTimeTracker: $e');
       return false;
     }
   }

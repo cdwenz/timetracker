@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -52,8 +53,15 @@ class SyncService extends ChangeNotifier {
     try {
       if (_isInitialized) return;
 
+      // En web no hay BD local ni cola offline: el envio es directo al backend.
+      if (kIsWeb) {
+        _isInitialized = true;
+        _updateStatus(SyncStatus.idle, 'Modo web: envio directo, sin cola offline');
+        return;
+      }
+
       _updateStatus(SyncStatus.idle, 'Inicializando servicio de sincronización...');
-      
+
       // Inicializar base de datos
       await LocalDatabase.database;
       
@@ -187,8 +195,13 @@ class SyncService extends ChangeNotifier {
 
   /// Sincronizar todas las entradas pendientes
   Future<bool> syncPendingEntries() async {
+    if (kIsWeb) {
+      // En web no hay cola: cada submit va directo al backend.
+      return true;
+    }
+
     if (_status == SyncStatus.syncing) {
-      print('⚠️ Sincronización ya en progreso');
+      print('Sincronizacion ya en progreso');
       return false;
     }
 

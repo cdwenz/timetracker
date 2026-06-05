@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ihadi_time_tracker/screens/reports_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../l10n/app_localizations.dart';
+import '../services/auth_service.dart';
 import 'language_picker.dart';
 
 import 'package:ihadi_time_tracker/screens/login_screen.dart';
@@ -21,13 +21,9 @@ class CustomDrawer extends StatelessWidget {
   }
 
   Future<void> _logout(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    // Limpia cualquier token/flag de sesión que estés usando
-    await prefs.remove('access_token');
-    await prefs.remove('token');
-    await prefs.remove('refresh_token');
+    // Centraliza el logout en AuthService — limpia token, isLoggedIn y datos de usuario
+    await AuthService.logout();
 
-    // Cierra el drawer (si aún está abierto) y navega al Login
     if (context.mounted) {
       Navigator.of(context).pop();
       Navigator.pushAndRemoveUntil(

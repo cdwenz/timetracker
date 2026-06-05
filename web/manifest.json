@@ -1,11 +1,11 @@
 {
-    "name": "ihadi_time_tracker",
-    "short_name": "ihadi_time_tracker",
+    "name": "Ihadi Time Tracker",
+    "short_name": "TimeTracker",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#FFFFFF",
+    "theme_color": "#FC6502",
+    "description": "Daily work log app.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
