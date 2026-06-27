@@ -21,7 +21,7 @@ class ReportsDetailScreen extends StatelessWidget {
     final svc = ReportsMetricsService(ApiService());
     return svc.loadDetailLast30Days(
       filter: args.filter,
-      supportedCountry: null,  // No filtrar por país por defecto
+      supportedCountry: null, // No filtrar por país por defecto
     );
   }
 
@@ -36,51 +36,195 @@ class ReportsDetailScreen extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
           if (snap.hasError) {
-            return Center(child: Text(AppLocalizations.of(context).errorLabel(snap.error.toString())));
+            return Center(
+              child: Text(
+                AppLocalizations.of(context).errorLabel(snap.error.toString()),
+              ),
+            );
           }
           final list = snap.data ?? const [];
           if (list.isEmpty) {
-            return Center(child: Text(AppLocalizations.of(context).noReportsInPeriod));
+            return Center(
+              child: Text(AppLocalizations.of(context).noReportsInPeriod),
+            );
           }
 
           return ListView.separated(
             padding: const EdgeInsets.all(16),
             itemCount: list.length,
-            separatorBuilder: (_, __) => const Divider(height: 1),
+            separatorBuilder: (_, __) => const SizedBox(height: 0),
             itemBuilder: (ctx, i) {
               final e = list[i];
-              
-              // Obtener información legible para mostrar
+
               final personName = (e['personName'] ?? '').toString();
               final taskDescription = (e['taskDescription'] ?? '').toString();
               final note = (e['note'] ?? '').toString();
-              final startedAt = DateTime.tryParse((e['startDate'] ?? e['createdAt'] ?? e['updatedAt'] ?? '').toString());
-              final startedStr = startedAt != null ? DateFormat('yyyy-MM-dd HH:mm').format(startedAt) : '—';
-              
-              // Título: Mostrar persona o descripción como identificador principal
-              final title = personName.isNotEmpty 
-                  ? personName
-                  : (taskDescription.isNotEmpty 
-                      ? taskDescription 
-                      : (note.isNotEmpty ? note : 'Registro'));
-              
-              // Subtítulo: Mostrar fecha y contexto adicional
-              final subtitle = startedStr != '—' ? 'Fecha: $startedStr' : 'Sin fecha';
 
-              return ListTile(
-                title: Text(title),
-                subtitle: Text(subtitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  showModalBottomSheet(
-                    context: ctx,
-                    isScrollControlled: true,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+              final startedAt = DateTime.tryParse(
+                (e['startDate'] ?? e['createdAt'] ?? e['updatedAt'] ?? '')
+                    .toString(),
+              );
+
+              final title = personName.isNotEmpty
+                  ? personName
+                  : taskDescription.isNotEmpty
+                  ? taskDescription
+                  : note.isNotEmpty
+                  ? note
+                  : "Registro";
+
+              final initials = title
+                  .trim()
+                  .split(" ")
+                  .where((e) => e.isNotEmpty)
+                  .take(2)
+                  .map((e) => e[0].toUpperCase())
+                  .join();
+
+              final tasks = (e['tasks'] as List<dynamic>? ?? [])
+                  .map((x) => x.toString())
+                  .toList();
+
+              return Card(
+                elevation: 1,
+                margin: const EdgeInsets.only(bottom: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: ctx,
+                      isScrollControlled: true,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20),
+                        ),
+                      ),
+                      builder: (_) => _ReportDetailSheet(entry: e),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 24,
+                              backgroundColor: Theme.of(
+                                context,
+                              ).colorScheme.primaryContainer,
+                              child: Text(
+                                initials,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimaryContainer,
+                                ),
+                              ),
+                            ),
+
+                            const SizedBox(width: 14),
+
+                            Expanded(
+                              child: Text(
+                                title,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+
+                            const Icon(Icons.chevron_right),
+                          ],
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        Wrap(
+                          spacing: 20,
+                          runSpacing: 8,
+                          children: [
+                            if (startedAt != null)
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    Icons.calendar_today,
+                                    size: 16,
+                                    color: Colors.grey,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    DateFormat("dd MMM yyyy").format(startedAt),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                            if (e['startTimeOfDay'] != null &&
+                                e['endTimeOfDay'] != null)
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    Icons.schedule,
+                                    size: 16,
+                                    color: Colors.grey,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    "${e['startTimeOfDay']} - ${e['endTimeOfDay']}",
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                          ],
+                        ),
+
+                        if (tasks.isNotEmpty) ...[
+                          const SizedBox(height: 14),
+
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: tasks
+                                .map(
+                                  (task) => Chip(
+                                    label: Text(task),
+                                    visualDensity: VisualDensity.compact,
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        ],
+
+                        if (note.isNotEmpty) ...[
+                          const SizedBox(height: 14),
+
+                          Text(
+                            note,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.grey.shade700,
+                              height: 1.35,
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
-                    builder: (_) => _ReportDetailSheet(entry: e),
-                  );
-                },
+                  ),
+                ),
               );
             },
           );
@@ -96,8 +240,13 @@ class _ReportDetailSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final startedAt = DateTime.tryParse((entry['startDate'] ?? entry['createdAt'] ?? entry['updatedAt'] ?? '').toString());
-    final startedStr = startedAt != null ? DateFormat('yyyy-MM-dd HH:mm').format(startedAt) : '—';
+    final startedAt = DateTime.tryParse(
+      (entry['startDate'] ?? entry['createdAt'] ?? entry['updatedAt'] ?? '')
+          .toString(),
+    );
+    final startedStr = startedAt != null
+        ? DateFormat('yyyy-MM-dd HH:mm').format(startedAt)
+        : '—';
 
     return DraggableScrollableSheet(
       expand: false,
@@ -110,65 +259,112 @@ class _ReportDetailSheet extends StatelessWidget {
           child: ListView(
             controller: controller,
             children: [
-              Text(AppLocalizations.of(context).reportDetailTitle, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Text(
+                AppLocalizations.of(context).reportDetailTitle,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               const SizedBox(height: 12),
-              
+
               // Información básica
-              if (entry['userName'] != null) 
-                _detailRow(AppLocalizations.of(context).defaultUserName, entry['userName'].toString()),
-              if (entry['personName'] != null) 
-                _detailRow(AppLocalizations.of(context).personLabel, entry['personName'].toString()),
-              
+              if (entry['userName'] != null)
+                _detailRow(
+                  AppLocalizations.of(context).defaultUserName,
+                  entry['userName'].toString(),
+                ),
+              if (entry['personName'] != null)
+                _detailRow(
+                  AppLocalizations.of(context).personLabel,
+                  entry['personName'].toString(),
+                ),
+
               const SizedBox(height: 8),
               const Divider(),
               const SizedBox(height: 8),
-              
+
               // Fechas y horarios
               if (startedStr != '—')
-                _detailRow(AppLocalizations.of(context).startDateLabel, startedStr),
+                _detailRow(
+                  AppLocalizations.of(context).startDateLabel,
+                  startedStr,
+                ),
               if (entry['endDate'] != null) ...[
                 () {
-                  final endDate = DateTime.tryParse(entry['endDate'].toString());
-                  final endStr = endDate != null ? DateFormat('yyyy-MM-dd HH:mm').format(endDate) : '—';
-                  return endStr != '—' ? _detailRow(AppLocalizations.of(context).endDateLabel, endStr) : const SizedBox.shrink();
+                  final endDate = DateTime.tryParse(
+                    entry['endDate'].toString(),
+                  );
+                  final endStr = endDate != null
+                      ? DateFormat('yyyy-MM-dd HH:mm').format(endDate)
+                      : '—';
+                  return endStr != '—'
+                      ? _detailRow(
+                          AppLocalizations.of(context).endDateLabel,
+                          endStr,
+                        )
+                      : const SizedBox.shrink();
                 }(),
               ],
-              if (entry['startTimeOfDay'] != null) 
-                _detailRow(AppLocalizations.of(context).startTimeLabel, entry['startTimeOfDay'].toString()),
-              if (entry['endTimeOfDay'] != null) 
-                _detailRow(AppLocalizations.of(context).endTimeLabel, entry['endTimeOfDay'].toString()),
-              
+              if (entry['startTimeOfDay'] != null)
+                _detailRow(
+                  AppLocalizations.of(context).startTimeLabel,
+                  entry['startTimeOfDay'].toString(),
+                ),
+              if (entry['endTimeOfDay'] != null)
+                _detailRow(
+                  AppLocalizations.of(context).endTimeLabel,
+                  entry['endTimeOfDay'].toString(),
+                ),
+
               const SizedBox(height: 8),
               const Divider(),
               const SizedBox(height: 8),
-              
+
               // Detalles del trabajo
-              if (entry['supportedCountry'] != null) 
-                _detailRow(AppLocalizations.of(context).countryFieldLabel, entry['supportedCountry'].toString()),
-              if (entry['workingLanguage'] != null) 
-                _detailRow(AppLocalizations.of(context).languageSelectionTitle, entry['workingLanguage'].toString()),
-              if (entry['recipient'] != null) 
-                _detailRow(AppLocalizations.of(context).recipientLabel, entry['recipient'].toString()),
-              
+              if (entry['supportedCountry'] != null)
+                _detailRow(
+                  AppLocalizations.of(context).countryFieldLabel,
+                  entry['supportedCountry'].toString(),
+                ),
+              if (entry['workingLanguage'] != null)
+                _detailRow(
+                  AppLocalizations.of(context).languageSelectionTitle,
+                  entry['workingLanguage'].toString(),
+                ),
+              if (entry['recipient'] != null)
+                _detailRow(
+                  AppLocalizations.of(context).recipientLabel,
+                  entry['recipient'].toString(),
+                ),
+
               const SizedBox(height: 8),
               const Divider(),
               const SizedBox(height: 8),
-              
+
               // Tareas y descripción
-              if (entry['tasks'] != null && entry['tasks'] is List) 
-                _detailRow(AppLocalizations.of(context).tasksLabel, (entry['tasks'] as List).join(', ')),
-              if (entry['taskDescription'] != null) 
-                _detailRow(AppLocalizations.of(context).descriptionLabel, entry['taskDescription'].toString()),
-              if (entry['note'] != null) 
-                _detailRow(AppLocalizations.of(context).noteLabel, entry['note'].toString()),
-              
+              if (entry['tasks'] != null && entry['tasks'] is List)
+                _detailRow(
+                  AppLocalizations.of(context).tasksLabel,
+                  (entry['tasks'] as List).join(', '),
+                ),
+              if (entry['taskDescription'] != null)
+                _detailRow(
+                  AppLocalizations.of(context).descriptionLabel,
+                  entry['taskDescription'].toString(),
+                ),
+              if (entry['note'] != null)
+                _detailRow(
+                  AppLocalizations.of(context).noteLabel,
+                  entry['note'].toString(),
+                ),
             ],
           ),
         );
       },
     );
   }
-  
+
   Widget _detailRow(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -179,12 +375,13 @@ class _ReportDetailSheet extends StatelessWidget {
             width: 120,
             child: Text(
               '$label:',
-              style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.grey),
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                color: Colors.grey,
+              ),
             ),
           ),
-          Expanded(
-            child: Text(value),
-          ),
+          Expanded(child: Text(value)),
         ],
       ),
     );

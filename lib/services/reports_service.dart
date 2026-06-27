@@ -110,6 +110,7 @@ class ReportsService {
       'supportedCountry': supportedCountry,
       'page': page,
       'pageSize': pageSize,
+      'returnMeta': true,
     });
 
     final res = await http.get(uri, headers: _authHeaders(token));
